@@ -1,0 +1,68 @@
+<p>MatchBox implements a growing subset of BoxLang. These examples introduce the core language; consult <a href="compatibility.html">compatibility</a> before bringing over a JVM application.</p>
+<h2 id="variables">Variables & strings</h2>
+<pre><code>name = "MatchBox";
+active = true;
+versionCount = 3;
+println("Hello, #name#!");
+println("Built with " &amp; name);</code></pre>
+<p>Variables are dynamically typed. Use <code>&amp;</code> for string concatenation and <code>#expression#</code> for interpolation. Inside a quoted string, double the quote delimiter to include it literally. Backslashes remain literal.</p>
+<h2 id="collections">Arrays & structs</h2>
+<pre><code>targets = ["native", "browser", "embedded"];
+println(targets[1]); // native: arrays are 1-indexed
+arrayAppend(targets, "wasi");
+
+project = { name: "Hello", ready: true };
+println(project.NAME); // struct keys are case-insensitive
+
+lengths = arrayMap(targets, (target) => len(target));</code></pre>
+<h2 id="control-flow">Control flow</h2>
+<pre><code>for (target in targets) {
+    if (target == "native") {
+        println("Build an executable");
+    } else {
+        println("Explore " &amp; target);
+    }
+}
+
+for (i = 1; i &lt;= 3; i++) {
+    println(i);
+}</code></pre>
+<p>Other supported constructs include <code>while</code>, <code>switch</code>, <code>break</code>, <code>continue</code>, and conditional expressions.</p>
+<h2 id="functions">Functions & closures</h2>
+<pre><code>function greet(name = "world") {
+    var greeting = "Hello, " &amp; name;
+    return greeting;
+}
+
+double = (n) => n * 2;
+println(greet());
+println(double(21));</code></pre>
+<p>Functions can have default arguments and type hints. Use <code>var</code> for function-local variables. Functions can be passed as values and can capture surrounding state.</p>
+<h2 id="classes">Classes & interfaces</h2>
+<pre><code>class Product accessors="true" {
+    property name;
+    property price;
+}
+
+product = new Product();
+product.setName("Widget");
+product.setPrice(9.99);
+println(product.getName());</code></pre>
+<p>MatchBox supports inheritance, interfaces, default interface methods, and <code>onMissingMethod</code>. For multi-file projects, use the repository examples and test class resolution in your target build.</p>
+<h2 id="async">Asynchronous work</h2>
+<pre><code>future = runAsync(() => {
+    sleep(100);
+    return "done";
+});
+
+println(future.get());</code></pre>
+<p>The VM schedules work using cooperative fibers. <code>sleep()</code> accepts milliseconds; native <a href="http.html">HTTP request deadlines</a> use seconds. Do not assume fibers behave exactly like JVM threads or that every target supports the same asynchronous I/O.</p>
+<h2 id="errors">Handle failures</h2>
+<pre><code>try {
+    throw "Something went wrong";
+} catch (any error) {
+    println(error.message);
+} finally {
+    println("Finished");
+}</code></pre>
+<p>For the broader language, see the <a href="https://boxlang.ortusbooks.com">BoxLang reference</a>. JVM-specific APIs are not automatically available in MatchBox.</p>

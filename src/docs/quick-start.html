@@ -1,0 +1,30 @@
+<p>First, <a href="installation.html">install the MatchBox CLI</a>. This walkthrough uses a terminal and a single file.</p>
+<h2 id="write-a-script">1. Write a script</h2>
+<p>Create <code>hello.bxs</code>:</p>
+<pre><code>function greet(name) {
+    return "Hello, #name#!";
+}
+
+println(greet("world"));</code></pre>
+<p><code>.bxs</code> is the BoxLang script extension. The expression between <code>#</code> characters is interpolated into the string.</p>
+<h2 id="run-it">2. Run it</h2>
+<pre><code>matchbox hello.bxs</code></pre>
+<p>MatchBox parses, compiles, and executes the file. The expected output is:</p>
+<pre class="output"><code>Hello, world!</code></pre>
+<h2 id="build-native">3. Make it standalone</h2>
+<pre><code>matchbox --target native hello.bxs
+./hello</code></pre>
+<p>On Windows, run <code>.\hello.exe</code>. Share the resulting executable with someone on the matching OS and architecture: they do not need MatchBox or Java installed. The VM is included in the executable; this is not a translation of every BoxLang operation into machine code.</p>
+<h2 id="portable-bytecode">Compile to bytecode instead</h2>
+<pre><code>matchbox --build hello.bxs
+matchbox hello.bxb</code></pre>
+<p>A <code>.bxb</code> file contains precompiled bytecode, not a standalone runtime. Its destination still needs a compatible MatchBox runner. Keep compiler and runtime versions aligned.</p>
+<p>To omit embedded source text from the artifact:</p>
+<pre><code>matchbox --build --strip-source hello.bxs</code></pre>
+<p>Errors still retain file and line information. Removing source reduces diagnostic context; it is not an encryption or intellectual-property protection mechanism.</p>
+<h2 id="try-the-repl">Try the REPL</h2>
+<p>Run <code>matchbox</code> without a filename, then experiment interactively:</p>
+<pre><code>numbers = [1, 2, 3];
+println(arrayMap(numbers, (n) => n * 2));</code></pre>
+<h2 id="next-steps">Where next?</h2>
+<div class="doc-card-grid"><a class="doc-card" href="language.html"><h3>Learn the language →</h3><p>Collections, functions, classes, and async.</p></a><a class="doc-card" href="webassembly.html"><h3>Take it to the browser →</h3><p>Export BoxLang functions as a JavaScript module.</p></a><a class="doc-card" href="web-server.html"><h3>Serve a website →</h3><p>Use the native webroot server and BXM templates.</p></a><a class="doc-card" href="cli.html"><h3>Explore the CLI →</h3><p>Find targets and build options.</p></a></div>

@@ -1,0 +1,25 @@
+<p>MatchBox has two web hosting models. The <strong>webroot server</strong> serves static files and <code>.bxm</code> templates. The <a href="app-server.html">routed app server</a> uses explicit routes and middleware. This guide covers the webroot model.</p>
+<h2 id="webroot">Create a webroot</h2>
+<p>Create a directory called <code>www</code>, then save this as <code>www/index.bxm</code>:</p>
+<pre><code>&lt;bx:set name = "MatchBox"&gt;
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Hello MatchBox&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;bx:output&gt;&lt;h1&gt;Hello, #name#!&lt;/h1&gt;&lt;/bx:output&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>BoxLang Markup combines HTML with BoxLang tags and expressions. MatchBox transpiles BXM into executable bytecode. Static files such as CSS and images can live beside your templates.</p>
+<h2 id="start">Start the server</h2>
+<pre><code>matchbox --serve --host 127.0.0.1 --port 8080 --webroot ./www</code></pre>
+<p>Visit <code>http://localhost:8080</code>. The default host is loopback and the default port is 8080. Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the process.</p>
+<p>With the standalone server distribution:</p>
+<pre><code>matchbox-server --port 8080 --webroot ./www</code></pre>
+<p>Or from the source repository:</p>
+<pre><code>cargo run -p matchbox_server -- --port 8080 --webroot ./www</code></pre>
+<h2 id="scopes">Request scopes</h2>
+<div class="table-wrap"><table><thead><tr><th>Scope</th><th>Purpose</th></tr></thead><tbody><tr><td><code>url</code></td><td>Query-string parameters.</td></tr><tr><td><code>form</code></td><td>Submitted form data.</td></tr><tr><td><code>cookie</code></td><td>Request cookies.</td></tr><tr><td><code>session</code></td><td>In-memory session state.</td></tr><tr><td><code>cgi</code></td><td>Request and server metadata.</td></tr></tbody></table></div>
+<p>These scopes belong to web requests, not ordinary CLI scripts. In-memory sessions are not a distributed or durable persistence layer.</p>
+<h2 id="production">Deployment considerations</h2>
+<ul><li>Only place public assets and intended templates in the webroot. Keep credentials and private source outside it.</li><li>Validate input and encode untrusted values for their output context; interpolation alone is not safe HTML escaping.</li><li>Use an appropriate TLS reverse proxy and process supervision for a public deployment.</li><li>Bind to <code>0.0.0.0</code> only when you intentionally need access beyond loopback or from a container port mapping.</li></ul>
+<p>See the <a href="docker.html#serve">Docker webroot example</a> or move to <a href="app-server.html">routing & middleware</a> for explicit API endpoints.</p>

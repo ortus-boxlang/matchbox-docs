@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="$description">
+  <meta name="theme-color" content="#071218">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MatchBox">
+  <meta property="og:title" content="$title">
+  <meta property="og:description" content="$description">
+  <meta name="twitter:card" content="summary">
+  <title>$title</title>
+  <link rel="icon" href="${root}assets/matchbox.svg" type="image/svg+xml">
+  <link rel="preload" href="${root}assets/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try { if (localStorage.getItem('matchbox-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}</script>
+  <link rel="stylesheet" href="${root}assets/site.css">
+  <script src="${root}assets/site.js" type="module"></script>
+</head>
+<body class="$page_class" data-root="$root">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner wrap">
+      <a class="brand" href="${root}index.html" aria-label="MatchBox home"><img src="${root}assets/matchbox.svg" alt="" width="34" height="34"><span>Match<span class="brand-light">Box</span><small>BY BOXLANG</small></span></a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="${root}index.html#features">Why MatchBox</a>
+        <a href="${root}index.html#targets">Targets</a>
+        <a href="${root}docs/index.html" $docs_current>Documentation</a>
+        <a href="${root}index.html#community">Community</a>
+      </nav>
+      <div class="header-actions">
+        <a class="search-trigger" href="${root}docs/index.html" data-search aria-label="Search documentation"><svg class="icon"><use href="${root}assets/icons.svg#search"/></svg><span>Search docs</span><kbd>⌘ K</kbd></a>
+        <button class="icon-button theme-toggle" type="button" aria-label="Switch to light theme" hidden><svg class="icon"><use href="${root}assets/icons.svg#sun"/></svg></button>
+        <a class="icon-button github-link" href="https://github.com/ortus-boxlang/matchbox" aria-label="MatchBox on GitHub"><svg class="icon"><use href="${root}assets/icons.svg#github"/></svg></a>
+        <details class="mobile-nav">
+          <summary aria-label="Navigation menu"><svg class="icon"><use href="${root}assets/icons.svg#menu"/></svg></summary>
+          <nav aria-label="Mobile navigation"><a href="${root}index.html#features">Why MatchBox</a><a href="${root}index.html#targets">Deployment targets</a><a href="${root}docs/index.html">Documentation</a><a href="${root}index.html#community">Community</a><a href="https://github.com/ortus-boxlang/matchbox">GitHub ↗</a></nav>
+        </details>
+      </div>
+    </div>
+  </header>
+  $content
+  <footer class="site-footer">
+    <div class="wrap footer-main">
+      <div class="footer-brand"><a class="brand" href="${root}index.html"><img src="${root}assets/matchbox.svg" alt="" width="32" height="32"><span>Match<span class="brand-light">Box</span></span></a><p>BoxLang power. Native freedom.<br>Built by Ortus Solutions and the community.</p><a class="text-link" href="https://www.ortussolutions.com">Meet Ortus Solutions ↗</a></div>
+      <div><h2>Build</h2><a href="${root}docs/installation.html">Get started</a><a href="${root}docs/index.html">Documentation</a><a href="${root}docs/examples.html">Examples</a><a href="https://github.com/ortus-boxlang/matchbox/releases">Releases ↗</a></div>
+      <div><h2>Connect</h2><a href="https://github.com/ortus-boxlang/matchbox">GitHub ↗</a><a href="https://www.ortussolutions.com/community/slack">Community Slack ↗</a><a href="https://community.ortussolutions.com">Discussions ↗</a><a href="https://www.ortussolutions.com/services">Professional services ↗</a></div>
+      <div><h2>Ecosystem</h2><a href="https://boxlang.io">BoxLang ↗</a><a href="https://ai.boxlang.io">BoxLang AI ↗</a><a href="https://bxsites.io">BxSites ↗</a><a href="https://bxagents.ai">BxAgents ↗</a></div>
+    </div>
+    <div class="wrap footer-bottom"><span>© $year Ortus Solutions, Corp.</span><span>Made for developers. Built for possibility.</span><a href="https://boxlang.io/privacy-policy">Privacy</a></div>
+  </footer>
+  <dialog class="search-dialog" aria-labelledby="search-title">
+    <div class="search-heading"><h2 id="search-title">Search documentation</h2><button class="icon-button" data-close-search type="button" aria-label="Close search">✕</button></div>
+    <label class="search-field"><svg class="icon"><use href="${root}assets/icons.svg#search"/></svg><span class="sr-only">Search terms</span><input id="search-input" type="search" placeholder="Try “native”, “Docker”, or “HTTP”…" autocomplete="off" autofocus></label>
+    <p id="search-status" class="search-status" role="status"></p>
+    <ul id="search-results" class="search-results"></ul>
+    <div class="search-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> navigate <kbd>↵</kbd> open <kbd>esc</kbd> close</span><span>Local search. No tracking.</span></div>
+  </dialog>
+  <div id="copy-status" class="sr-only" role="status"></div>
+</body>
+</html>

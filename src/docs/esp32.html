@@ -1,0 +1,30 @@
+<div class="callout note"><strong>Hardware and toolchains matter</strong><p>MatchBox compiles your script to bytecode and runs it inside ESP32 firmware. The chip, ESP-IDF environment, available memory, and runner capabilities all affect what your application can do.</p></div>
+<h2 id="prerequisites">Prepare your environment</h2>
+<ul><li>Install the Espressif Rust toolchain using <code>espup</code>.</li><li>Install and activate a full ESP-IDF checkout.</li><li>Install <code>espflash</code> 3.3.0+ and <code>ldproxy</code>.</li><li>Install ESP-IDF prerequisites, including C build tools, Python, CMake, and Ninja.</li><li>Connect a supported ESP32 board and ensure your user can access its serial device.</li></ul>
+<pre><code>cargo install espup
+espup install
+cargo install espflash ldproxy
+
+source /path/to/esp-idf/export.sh
+export RUSTUP_TOOLCHAIN=esp</code></pre>
+<p>Replace the ESP-IDF path with your installation. Run MatchBox in the same activated shell. Avoid layering competing ESP export scripts; the runner build prefers the activated environment.</p>
+<pre><code>matchbox esp32-doctor</code></pre>
+<h2 id="first-flash">First-time firmware flash</h2>
+<p>Create <code>app.bxs</code>:</p>
+<pre><code>println("Hello from ESP32!");</code></pre>
+<p>For an ESP32-S3 board:</p>
+<pre><code>matchbox app.bxs --target esp32 --chip esp32s3 --full-flash</code></pre>
+<p><code>--full-flash</code> installs the runner and partition layout as well as the program. It changes the firmware on the device; back up anything you need first. Use your actual chip type, not this example blindly. If a healthy prebuilt stub is unavailable, MatchBox builds the runner locally.</p>
+<h2 id="iterate">Update bytecode & watch changes</h2>
+<pre><code>matchbox app.bxs --target esp32 --chip esp32s3 --flash
+
+matchbox app.bxs --target esp32 --chip esp32s3 --watch</code></pre>
+<p>After the initial full flash, <code>--flash</code> updates bytecode rather than replacing the full firmware. Watch mode monitors source changes and coordinates bytecode flashing with the serial monitor.</p>
+<h2 id="web-capabilities">Embedded web capabilities</h2>
+<p>The embedded routed web direction is intentionally lean. Opt into its build flavor with <code>--esp32-web</code>. It is not the complete native app server, and route definitions should not be mistaken for a fully equivalent native transport.</p>
+<p>The compiler rejects unsupported features such as <code>app.listen()</code>, disk-backed templates, static-file middleware, native webhook helpers, cookies, and sessions. Without <code>--esp32-web</code>, <code>web.server()</code> usage is rejected for this target.</p>
+<h2 id="resources">Memory & hardware access</h2>
+<p>SRAM and flash are limited. Avoid large in-memory collections and measure the application on the actual board. Hardware wrappers and Native Fusion can expose GPIO, I²C, Wi-Fi, and other capabilities; available features depend on your runner and modules.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul><li><strong>Missing <code>ldproxy</code>:</strong> install it with <code>cargo install ldproxy</code>.</li><li><strong>Serial permission denied:</strong> check your distribution's serial-device group, often <code>dialout</code> or <code>uucp</code>. Log out and back in after changing membership.</li><li><strong>WSL cannot see USB:</strong> attach the device to WSL using <code>usbipd-win</code>.</li><li><strong>Build works, flash fails:</strong> fix serial access rather than rerunning the entire compiler as root.</li></ul>
+<p>The upstream <a href="https://github.com/ortus-boxlang/matchbox/tree/master/docs/agent-skills">ESP32 skills</a> and <a href="https://github.com/ortus-boxlang/matchbox/tree/master/docs/examples/esp32">embedded examples</a> cover board-specific workflows and debugging.</p>

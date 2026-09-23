@@ -1,0 +1,25 @@
+<h2 id="quick-install">Quick install</h2>
+<p>The official installer offers a release or snapshot and installs the <strong>Fat CLI</strong>, including embedded runners for deployment targets. Running ordinary BoxLang code does not require a JVM.</p>
+<h3 id="linux-macos">Linux / macOS</h3>
+<pre class="wrap-code"><code>curl -sSL https://raw.githubusercontent.com/ortus-boxlang/matchbox/master/install/install.sh | bash</code></pre>
+<h3 id="windows">Windows PowerShell</h3>
+<pre class="wrap-code"><code>iex (Invoke-RestMethod -Uri https://raw.githubusercontent.com/ortus-boxlang/matchbox/master/install/install.ps1)</code></pre>
+<p>These commands download and execute a script. You can inspect the <a href="https://github.com/ortus-boxlang/matchbox/blob/master/install/install.sh">shell installer</a> or <a href="https://github.com/ortus-boxlang/matchbox/blob/master/install/install.ps1">PowerShell installer</a> first, or use a release archive instead. Follow the installer's PATH instructions and open a new terminal if necessary.</p>
+<h2 id="verify">Verify your installation</h2>
+<pre><code>matchbox --version
+matchbox --help
+matchbox</code></pre>
+<p>The last command opens the interactive REPL. Try:</p>
+<pre><code>println("Hello from MatchBox!");</code></pre>
+<p>Press <kbd>Ctrl</kbd> + <kbd>D</kbd> to leave the REPL.</p>
+<h2 id="choose-a-variant">Choose a distribution</h2>
+<div class="table-wrap"><table><thead><tr><th>Distribution</th><th>Use it for</th></tr></thead><tbody><tr><td><strong>Fat CLI</strong> · <code>matchbox</code></td><td>Development, compilation, REPL, and bundled target runners. The recommended starting point.</td></tr><tr><td><strong>Slim CLI</strong> · <code>matchbox-slim</code></td><td>Local execution and CI where embedded cross-target stubs are not needed.</td></tr><tr><td><strong>Server</strong> · <code>matchbox-server</code></td><td>Native webroot and routed app-server deployments.</td></tr><tr><td><strong>Docker</strong></td><td>A containerized CLI without installing MatchBox on the host.</td></tr></tbody></table></div>
+<h2 id="release-archives">Release archives</h2>
+<p>Download an archive matching your operating system and architecture from <a href="https://github.com/ortus-boxlang/matchbox/releases">GitHub Releases</a>. Extract it and place the executable on your PATH. On Linux and macOS, make sure the file is executable with <code>chmod +x matchbox</code>.</p>
+<p>Use a pinned release for repeatable builds. Snapshots include newer changes but may have different capabilities from the stable release.</p>
+<h2 id="docker">Use Docker instead</h2>
+<pre class="wrap-code"><code>docker pull ghcr.io/ortus-boxlang/matchbox:latest
+docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --help</code></pre>
+<p>The volume example uses a Unix-style shell. In other shells, replace <code>$PWD</code> with the absolute path to your project. See the <a href="docker.html">Docker guide</a> for builds and web serving.</p>
+<h2 id="extra-toolchains">Do I need Rust?</h2>
+<p>Not to run the prebuilt CLI or ordinary standalone applications. You do need Rust to <a href="build-from-source.html">build MatchBox from source</a> or compile <a href="native-fusion.html">Native Fusion</a> code. Some targets need additional tools: browser packaging may need a matching <code>wasm-bindgen-cli</code>, and ESP32 requires its own Rust and ESP-IDF environment.</p>

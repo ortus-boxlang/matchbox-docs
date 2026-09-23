@@ -1,0 +1,30 @@
+<h2 id="requirements">Requirements</h2>
+<p>Use a recent stable <a href="https://rustup.rs">Rust toolchain</a> supporting the 2024 edition and the repository's dependencies, plus a platform C linker. Rust 1.85 introduced the edition, but dependency versions may require newer Rust.</p>
+<p>The build orchestrates runner stubs as well as the CLI. Install the WASI target used by the standard runner path:</p>
+<pre><code>rustup target add wasm32-wasip1</code></pre>
+<h2 id="build">Clone and build</h2>
+<pre><code>git clone https://github.com/ortus-boxlang/matchbox.git
+cd matchbox
+cargo build --release
+./target/release/matchbox --version</code></pre>
+<p>Use <code>target\release\matchbox.exe</code> on Windows. Add the containing directory to PATH if you want to invoke <code>matchbox</code> from elsewhere. Pin a tag or commit for repeatable builds.</p>
+<h2 id="features">Feature selection</h2>
+<div class="table-wrap"><table><thead><tr><th>Feature</th><th>Purpose</th></tr></thead><tbody><tr><td><code>jit</code></td><td>Native Cranelift JIT.</td></tr><tr><td><code>server</code></td><td>Built-in web server support.</td></tr><tr><td><code>cross-compile</code></td><td>Build/embed additional target stubs; needs the corresponding toolchains.</td></tr><tr><td><code>bif-io</code></td><td>Filesystem functions.</td></tr><tr><td><code>bif-http</code></td><td>Native HTTP requests.</td></tr><tr><td><code>bif-crypto</code></td><td>Cryptographic functions.</td></tr><tr><td><code>bif-cli</code></td><td>Terminal utilities.</td></tr><tr><td><code>bif-jni</code></td><td>Experimental native Java interoperability.</td></tr><tr><td><code>bif-zip</code></td><td>ZIP support.</td></tr><tr><td><code>bif-datasource</code></td><td>Datasource functionality.</td></tr><tr><td><code>qoq</code></td><td>Query-of-Queries compiler and VM support.</td></tr></tbody></table></div>
+<p>Consult <code>Cargo.toml</code> for exact defaults. Cargo features are additive, and workspace dependencies can enable features of their own.</p>
+<pre><code>cargo build --release --features cross-compile
+
+cargo build --release --no-default-features --features bif-io,bif-http</code></pre>
+<h2 id="server">Build the separate server</h2>
+<pre><code>cargo build --release -p matchbox_server
+./target/release/matchbox_server --help</code></pre>
+<p>The Cargo binary uses <code>matchbox_server</code>; downloaded server distributions may use <code>matchbox-server</code>.</p>
+<h2 id="other-toolchains">Target-specific tooling</h2>
+<ul><li><strong>Browser WASM:</strong> add <code>wasm32-unknown-unknown</code> and install <code>wasm-bindgen-cli</code> matching the workspace crate version (currently pinned to <code>0.2.114</code> in the reviewed checkout).</li><li><strong>WASI HTTP:</strong> add <code>wasm32-wasip2</code>.</li><li><strong>ESP32:</strong> prepare the Espressif toolchain and activate ESP-IDF as described in <a href="esp32.html">the embedded guide</a>.</li></ul>
+<pre><code>rustup target add wasm32-unknown-unknown wasm32-wasip2
+cargo install wasm-bindgen-cli --version 0.2.114</code></pre>
+<p>Older instructions mention a <code>js</code> Cargo feature. It is not present in the reviewed root manifest; do not copy that flag into current builds.</p>
+<h2 id="validate">Validate your checkout</h2>
+<pre><code>cargo test
+cargo clippy
+cargo test --test boxlang_compat_tests</code></pre>
+<p>See the repository's contributor instructions for target-specific tests. Cross builds need an appropriate linker and libraries in addition to the Rust target.</p>

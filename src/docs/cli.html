@@ -1,0 +1,19 @@
+<h2 id="usage">Usage</h2>
+<pre><code>matchbox [options] [file.bxs|file.bxb|directory]
+matchbox --help
+matchbox --version</code></pre>
+<p>Without a file, MatchBox starts the REPL. Options vary by version and enabled Cargo features; your executable's <code>--help</code> is the final reference.</p>
+<h2 id="compilation">Compilation</h2>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Purpose</th></tr></thead><tbody><tr><td><code>--build</code></td><td>Compile to <code>.bxb</code> bytecode without executing.</td></tr><tr><td><code>--target native</code></td><td>Bundle a standalone native executable.</td></tr><tr><td><code>--target js</code></td><td>Build a browser JavaScript module and WASM package.</td></tr><tr><td><code>--target wasm</code></td><td>Build raw browser-oriented WASM.</td></tr><tr><td><code>--target wasi</code></td><td>Build a server-side WASI command.</td></tr><tr><td><code>--target wasi-http</code></td><td>Build a WASI HTTP component from <code>--webroot</code>.</td></tr><tr><td><code>--target esp32</code></td><td>Produce firmware/bytecode for an ESP32 device.</td></tr><tr><td><code>--output &lt;path&gt;</code></td><td>Override the artifact output path.</td></tr><tr><td><code>--strip-source</code></td><td>Remove embedded source text, retaining file/line metadata.</td></tr><tr><td><code>--keep &lt;symbols&gt;</code></td><td>Preserve a comma-separated list of functions during tree-shaking.</td></tr><tr><td><code>--no-shaking</code></td><td>Keep the full prelude.</td></tr><tr><td><code>--no-std-lib</code></td><td>Exclude the prelude entirely.</td></tr><tr><td><code>--module &lt;path&gt;</code></td><td>Load a module directory; may be repeated.</td></tr><tr><td><code>--verbose</code></td><td>Emit verbose build logging.</td></tr></tbody></table></div>
+<h2 id="web">Webroot server</h2>
+<pre><code>matchbox --serve --host 127.0.0.1 --port 8080 --webroot ./www</code></pre>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Default / purpose</th></tr></thead><tbody><tr><td><code>--serve</code></td><td>Start the built-in webroot server.</td></tr><tr><td><code>--host &lt;address&gt;</code></td><td><code>127.0.0.1</code></td></tr><tr><td><code>--port &lt;number&gt;</code></td><td><code>8080</code></td></tr><tr><td><code>--webroot &lt;path&gt;</code></td><td>Current directory.</td></tr></tbody></table></div>
+<p>The routed server's <code>--app</code> option belongs to the separate server executable, not the main CLI's webroot mode:</p>
+<pre><code>matchbox-server --app app.bxs</code></pre>
+<h2 id="embedded">Embedded tools</h2>
+<div class="table-wrap"><table><thead><tr><th>Option / command</th><th>Purpose</th></tr></thead><tbody><tr><td><code>esp32-doctor</code></td><td>Check build/flash prerequisites.</td></tr><tr><td><code>--chip &lt;name&gt;</code></td><td>Select the board's chip, such as <code>esp32s3</code>.</td></tr><tr><td><code>--full-flash</code></td><td>Flash the full runner/firmware and program.</td></tr><tr><td><code>--flash</code></td><td>Update bytecode after the initial firmware installation.</td></tr><tr><td><code>--watch</code></td><td>Watch source changes and coordinate flashing/monitoring.</td></tr><tr><td><code>--esp32-web</code></td><td>Opt into the embedded routed web build flavor.</td></tr></tbody></table></div>
+<p><code>--fast-deploy</code> is deprecated; use <code>--flash</code>. See <a href="esp32.html">ESP32 & embedded</a> before flashing hardware.</p>
+<h2 id="lambda">Lambda commands</h2>
+<pre><code>matchbox lambda invoke Lambda.bx --event event.json
+matchbox lambda deploy Lambda.bx --function my-function --bootstrap /path/to/bootstrap</code></pre>
+<p>Deployment additionally needs configured AWS access and an execution role when creating a function. See <a href="aws-lambda.html">AWS Lambda</a> for architecture, profile, region, and Function URL choices. Deployment changes cloud resources; local invocation does not.</p>

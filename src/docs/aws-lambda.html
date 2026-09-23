@@ -1,0 +1,29 @@
+<div class="callout note"><strong>Development workflow</strong><p>The reviewed implementation supports local invocation and deployment, but deployment still requires an explicit Linux bootstrap binary. Do not assume every published release includes this command or an embedded Lambda runner.</p></div>
+<h2 id="handler">Write a handler</h2>
+<p>Create <code>Lambda.bx</code> with a class exposing <code>run(event, context, response)</code>:</p>
+<pre><code>class {
+    function run(event, context, response) {
+        response.statusCode = 200;
+        response.headers = { "Content-Type": "application/json" };
+        response.body = { "message": "Hello from MatchBox" };
+    }
+}</code></pre>
+<p>The runtime provides the raw AWS event, an AWS-style context, and a mutable proxy response. The application chooses status, headers, and body.</p>
+<h2 id="local">Invoke locally</h2>
+<p>Create <code>event.json</code> containing <code>{}</code> for this minimal handler:</p>
+<pre><code>matchbox lambda invoke Lambda.bx --event event.json</code></pre>
+<p>From a MatchBox source checkout, you can use <code>cargo run -- lambda invoke …</code> instead. Local invocation returns the proxy response; it does not create cloud infrastructure.</p>
+<h2 id="deploy">Deployment prerequisites</h2>
+<ul><li>AWS CLI v2, configured credentials/profile, and a region.</li><li>An existing Lambda execution role with appropriate permissions.</li><li>A Linux Lambda bootstrap built for the function's architecture.</li></ul>
+<p>Deploying creates or updates AWS resources and may incur charges. Replace every example value before using this command:</p>
+<pre><code>matchbox lambda deploy Lambda.bx \
+  --function my-matchbox-function \
+  --role arn:aws:iam::123456789012:role/my-lambda-role \
+  --profile my-profile \
+  --region us-east-1 \
+  --arch arm64 \
+  --bootstrap /path/to/linux-arm64-bootstrap \
+  --url</code></pre>
+<p><code>--url</code> requests an IAM-authenticated Function URL. <code>--public</code> instead requests an unauthenticated URL that anyone can invoke; only enable that deliberately with appropriate application controls.</p>
+<h2 id="resources">Complete example</h2>
+<p>The <a href="https://github.com/ortus-boxlang/matchbox/tree/master/docs/examples/aws_lambda_single_file">single-file Lambda example</a> includes event handling and expected response shapes. Follow the upstream <a href="https://github.com/ortus-boxlang/matchbox/blob/master/docs/building-and-deploying/aws-lambda-aws-cli-setup.md">AWS CLI setup guide</a> for credentials and execution-role configuration.</p>

@@ -1,0 +1,42 @@
+<p>The native app server is built around <code>web.server()</code> and ColdBox-style handlers. Use it for JSON APIs, microservices, explicit template routes, middleware pipelines, and WebSockets.</p>
+<h2 id="first-route">Your first route</h2>
+<p>Create <code>app.bxs</code>:</p>
+<pre><code>import boxlang.web;
+
+app = web.server();
+
+app.get("/hello/:name", function(event, rc, prc) {
+    event.renderJson({ "message": "Hello, " &amp; rc.name });
+});
+
+app.listen(8080);</code></pre>
+<p>The <code>web</code> namespace is host-provided, but scripts must explicitly import it.</p>
+<h2 id="run">Run the app server</h2>
+<pre><code>matchbox-server --app app.bxs</code></pre>
+<p>From a source checkout, the package is named with an underscore:</p>
+<pre><code>cargo run -p matchbox_server -- --app /path/to/app.bxs</code></pre>
+<p>Visit <code>http://localhost:8080/hello/MatchBox</code>. The server distribution and Cargo-built binary may use different filenames; use the executable you built or downloaded.</p>
+<h2 id="handlers">Understand the handler</h2>
+<ul><li><code>event</code> provides request and response helpers.</li><li><code>rc</code> is the public request collection, combining route, query, form, and top-level JSON object data.</li><li><code>prc</code> is private request state for communication between middleware and handlers.</li></ul>
+<p>Treat <code>rc</code> as untrusted input. Validate the fields your application expects before using them.</p>
+<h2 id="middleware">Middleware</h2>
+<p>Register middleware before calling <code>app.listen()</code>. The fourth argument continues the pipeline:</p>
+<pre><code>app.use(function(event, rc, prc, next) {
+    prc.requestStarted = true;
+    next.run();
+});</code></pre>
+<p>Middleware can affect headers, response bodies, status, cookies, and session state. Calling <code>next.run()</code> hands control to the next stage.</p>
+<h2 id="templates-assets">Templates & static assets</h2>
+<pre><code>app.use(app.middleware.buildStaticFiles("/assets", "public"));
+
+app.get("/", function(event, rc, prc) {
+    event.setView("views/home.bxm", { "title": "MatchBox" });
+});</code></pre>
+<p>The static directory is resolved relative to the application script. Missing files fall through to routing. Templates receive <code>event</code>, <code>rc</code>, <code>prc</code>, <code>session</code>, and <code>viewArgs</code>.</p>
+<h2 id="websockets">WebSockets</h2>
+<p>Register a configured listener instance with <code>app.enableWebSockets("/ws", listener)</code>. SocketBox-style lifecycle methods include <code>onConnect(channel)</code>, <code>onMessage(message, channel)</code>, and <code>onClose(channel)</code>.</p>
+<p>Channels support text, JSON, and binary messages, broadcasts, and closing the connection. The <a href="https://github.com/ortus-boxlang/matchbox/tree/master/docs/examples/websocket_counter">WebSocket counter example</a> includes a listener and browser client:</p>
+<pre><code>cargo run -p matchbox_server -- --app docs/examples/websocket_counter/app.bxs</code></pre>
+<p>Open <code>http://localhost:8099</code> in two tabs to try the shared counter.</p>
+<h2 id="native-scope">Native runtime scope</h2>
+<p>The native app server also supports route groups, cookies, in-memory sessions, and webhook builders. These features are not all available on ESP32. See the <a href="esp32.html#web-capabilities">embedded limitations</a> before moving an application to hardware.</p>

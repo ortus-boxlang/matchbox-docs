@@ -1,0 +1,42 @@
+<p>Native Fusion lets you expose Rust functions and objects as BoxLang built-ins, then link them into the application. Use it for a measured hot path, a Rust library, or native capabilities that the standard runtime does not provide.</p>
+<h2 id="project">Project layout</h2>
+<pre class="output"><code>hello-fusion/
+├── app.bxs
+└── native/
+    └── math.rs</code></pre>
+<p>MatchBox detects a neighboring <code>native/</code> directory and uses the fusion build path. Unlike an ordinary prebuilt-runner build, this needs a working Rust toolchain and suitable linker.</p>
+<h2 id="function">Expose a Rust function</h2>
+<p>In <code>native/math.rs</code>:</p>
+<pre><code>use matchbox_vm::{matchbox_fn, types::BxNativeFunction};
+use std::collections::HashMap;
+
+#[matchbox_fn]
+pub fn add(a: f64, b: f64) -> f64 {
+    a + b
+}
+
+pub fn register_bifs() -> HashMap&lt;String, BxNativeFunction&gt; {
+    let mut functions = HashMap::new();
+    functions.insert("add".to_string(), add_wrapper as BxNativeFunction);
+    functions
+}</code></pre>
+<p>The macro generates <code>add_wrapper</code>, including argument-count checks and conversions. Register the wrapper, not the original Rust function. Function names should be unique across your native modules.</p>
+<h2 id="call">Call it from BoxLang</h2>
+<p>In <code>app.bxs</code>:</p>
+<pre><code>println(add(10, 20)); // 30</code></pre>
+<p>Build and run:</p>
+<pre><code>matchbox --target native app.bxs
+./app</code></pre>
+<h2 id="types">Conversions & return values</h2>
+<p>The documented <code>matchbox_fn</code> macro supports parameters such as <code>f64</code>, <code>i32</code>, <code>bool</code>, <code>String</code>, and <code>BxValue</code>. Its documented wrapper uses a numeric return conversion. Use a manual BIF for other return types or validation that needs richer semantics.</p>
+<p>A manual BIF has this shape:</p>
+<pre><code>fn my_function(
+    vm: &amp;mut dyn BxVM,
+    args: &amp;[BxValue],
+) -> Result&lt;BxValue, String&gt;</code></pre>
+<p>Validate inputs at the Rust boundary instead of assuming every BoxLang call has the expected type or range.</p>
+<h2 id="objects">Native objects</h2>
+<p><code>#[matchbox_class]</code> and <code>#[matchbox_methods]</code> provide class/method integration. A <code>register_classes()</code> function registers constructors using a <code>module.ClassName</code> key. BoxLang can then instantiate them with syntax such as <code>new rust:counter.Counter(0)</code>.</p>
+<h2 id="targets">Target support</h2>
+<p>This guide demonstrates native builds. Current compiler source also includes target-specific fusion paths, but a Rust module and its dependencies must support the destination. Do not assume OS libraries, JNI, threads, or host I/O compile unchanged for WASM or embedded targets.</p>
+<p>The original <a href="https://boxlang.ortusbooks.com/boxlang-framework/matchbox/native-fusion-builds">Native Fusion reference</a> has more extensive macro examples, but its older native-only target statement does not describe every current compiler path. Prefer your checked-out implementation and test the final artifact.</p>

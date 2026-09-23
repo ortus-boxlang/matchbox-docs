@@ -1,0 +1,21 @@
+<h2 id="image">The official image</h2>
+<pre><code>docker pull ghcr.io/ortus-boxlang/matchbox:latest</code></pre>
+<p>The image uses <code>matchbox</code> as its entrypoint and <code>/app</code> as its working directory. Arguments after the image name go directly to the CLI.</p>
+<h2 id="run">Run a script</h2>
+<pre class="wrap-code"><code>docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest hello.bxs</code></pre>
+<p>These examples use a Unix shell. Substitute an absolute host path when using another shell. Mount a project directory, not an entire home directory; the program can access files in the mount.</p>
+<h2 id="build">Build into the mounted directory</h2>
+<pre class="wrap-code"><code>docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --build hello.bxs
+
+docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target native hello.bxs</code></pre>
+<p>A native executable produced by the Linux container targets Linux, not the host's macOS or Windows environment. Match the target architecture and system requirements as well.</p>
+<h2 id="serve">Serve a webroot</h2>
+<pre><code>docker run --rm \
+  -p 127.0.0.1:8080:8080 \
+  -v "$PWD/www:/app" \
+  ghcr.io/ortus-boxlang/matchbox:latest \
+  --serve --host 0.0.0.0 --port 8080 --webroot /app</code></pre>
+<p>Open <code>http://localhost:8080</code>. The process binds to <code>0.0.0.0</code> inside the container so Docker can forward requests. This example publishes the port only on the host's loopback address. Change the host binding deliberately when exposing the service to other machines.</p>
+<h2 id="tags">Choose a tag</h2>
+<div class="table-wrap"><table><thead><tr><th>Tag</th><th>Meaning</th></tr></thead><tbody><tr><td><code>latest</code></td><td>Most recent stable release image.</td></tr><tr><td><code>vX.Y.Z</code></td><td>A specific published release. Replace with an existing tag.</td></tr><tr><td><code>develop</code></td><td>Rolling development image.</td></tr><tr><td><code>snapshot</code>, <code>be</code></td><td>Rolling development aliases.</td></tr></tbody></table></div>
+<p>Pin a release tag or image digest for CI and production. Do not depend on a moving tag for reproducible builds. Use <a href="wasi.html">WASI & containers</a> if you specifically want a WASM-native container runtime rather than this native Linux image.</p>

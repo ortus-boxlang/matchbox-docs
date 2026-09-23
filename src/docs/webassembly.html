@@ -1,0 +1,37 @@
+<div class="callout"><strong>Browser WASM and server-side WASI are different targets.</strong><p>Use <code>--target js</code> for the browser integration below. For Wasmtime or WASI workloads, use the <a href="wasi.html">WASI guide</a>, not the browser artifact.</p></div>
+<h2 id="export-functions">Export BoxLang functions</h2>
+<p>Create <code>greetings.bxs</code>:</p>
+<pre><code>function greet(name) {
+    return "Hello, " &amp; name &amp; "!";
+}
+
+function multiply(a, b) {
+    return a * b;
+}</code></pre>
+<p>Top-level functions become exports in the generated ES module. Do not treat BoxLang access modifiers as a browser security boundary; the generated module exposes top-level functions.</p>
+<h2 id="compile">Compile an ES module</h2>
+<pre><code>matchbox --target js greetings.bxs</code></pre>
+<p>The browser package includes <code>greetings.js</code> and <code>greetings.wasm</code>. Keep generated companion files together. Packaging may require <code>wasm-bindgen-cli</code> matching the compiler's <code>wasm-bindgen</code> version; the reviewed repository pins <code>0.2.114</code>.</p>
+<h2 id="use-in-html">Use it in HTML</h2>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Hello MatchBox&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;p id="greeting"&gt;Loading…&lt;/p&gt;
+  &lt;script type="module"&gt;
+    import { greet } from './greetings.js';
+    document.getElementById('greeting').textContent = await greet('browser');
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>Importing the module initializes the runtime automatically. The browser contract also exposes <code>window.MatchBox.modules["greetings"]</code>, <code>window.MatchBox.ready("greetings")</code>, and a framework-agnostic <code>MatchBox.State()</code> helper for state-snapshot applications.</p>
+<h2 id="browser-bridge">Access browser APIs</h2>
+<pre><code>js.document.getElementById("greeting").innerText = "Updated by BoxLang";
+js.console.log("Hello from the browser");</code></pre>
+<p>Plain JavaScript values cross the boundary as BoxLang values. Browser objects such as DOM nodes, functions, and <code>window</code> remain JavaScript handles. The <code>js</code> bridge is browser-only, not a native CLI API.</p>
+<h2 id="serve">Serve and deploy</h2>
+<pre><code>python3 -m http.server 8080</code></pre>
+<p>Open <code>http://localhost:8080</code>. Do not open the page directly with <code>file://</code>; browsers restrict module and WASM loading. Deploy the HTML and generated files to a static host that serves <code>.wasm</code> with <code>Content-Type: application/wasm</code>.</p>
+<h2 id="other-modes">Other WASM modes</h2>
+<ul><li><code>--target wasm</code> produces raw browser-oriented WASM. You supply the loader and required imports; it is not a drop-in WASI command.</li><li>A source-built runtime package exposes <code>run_boxlang()</code> to execute source strings and <code>BoxLangVM</code> for persistent instances.</li></ul>
+<p>The generated JS wrapper is browser-focused. Node.js, edge-worker globals, filesystem access, and native HTTP future completion are not interchangeable with a browser host. Validate those environments separately rather than assuming compatibility.</p>

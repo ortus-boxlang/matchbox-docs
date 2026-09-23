@@ -1,0 +1,25 @@
+<h2 id="build">Build a standalone executable</h2>
+<pre><code>matchbox --target native hello.bxs</code></pre>
+<p>This produces <code>hello</code> on Linux/macOS or <code>hello.exe</code> on Windows. The executable bundles your bytecode with a native MatchBox runner.</p>
+<pre><code>./hello</code></pre>
+<div class="callout"><strong>No separate language runtime to install</strong><p>Ordinary standalone applications do not require Java or a separate MatchBox installation. OS/architecture compatibility and system-library requirements still apply. Optional JNI integrations need a compatible JVM.</p></div>
+<h2 id="output">Control the output</h2>
+<pre><code>matchbox --target native --output hello-app --strip-source hello.bxs</code></pre>
+<p><code>--output</code> overrides the artifact path. <code>--strip-source</code> omits source snippets while preserving file/line metadata. Create any output directory before building into it.</p>
+<h2 id="runners">How runner stubs work</h2>
+<ol><li>The compiler produces bytecode from your source.</li><li>A prebuilt runner supplies the VM for a particular platform.</li><li>MatchBox appends the program to the runner.</li><li>At startup, the runner loads and executes the embedded program.</li></ol>
+<p>Binary size depends on enabled features, target, and application code. Older documentation's roughly 500 KB figure describes lean runner configurations, not a fixed size for every application or the full CLI.</p>
+<h2 id="cross-compilation">Cross-platform distribution</h2>
+<p>Native output is platform-specific. Build and test for each intended OS and CPU architecture. The Fat CLI includes deployment stubs, but <code>--target native</code> does not take an arbitrary Rust target triple.</p>
+<p>For a reliable release pipeline, run the build on each target platform, or build the appropriate MatchBox toolchain and runner using Rust cross-compilation. Installing a Rust target alone may not provide the required linker and system libraries.</p>
+<pre><code>rustup target add x86_64-unknown-linux-gnu
+cargo build --release --target x86_64-unknown-linux-gnu</code></pre>
+<p>The command above builds MatchBox from its source checkout; it is not a direct cross-compilation flag for a BoxLang script. See <a href="build-from-source.html">building from source</a>.</p>
+<h2 id="tree-shaking">Tree-shaking & dynamic calls</h2>
+<p>MatchBox removes unused prelude functions from compiled programs. If a function is reached dynamically and the compiler cannot infer that use, preserve it explicitly:</p>
+<pre><code>matchbox --target native --keep arrayMap,arrayFilter hello.bxs</code></pre>
+<p>Use <code>--no-shaking</code> to retain the full prelude while diagnosing missing-function issues. <code>--no-std-lib</code> removes the prelude entirely and is an advanced size-control option.</p>
+<h2 id="fusion">Add Rust where you need it</h2>
+<p><a href="native-fusion.html">Native Fusion</a> compiles Rust code from a neighboring <code>native/</code> directory and exposes it to BoxLang. Fusion builds need a Rust toolchain; plain stub-based builds are the simpler path when you do not need custom native code.</p>
+<h2 id="jit">Is the JIT included?</h2>
+<p>The standard native CLI enables JIT compilation, while lean runner stubs are built without it. Do not use CLI timing as a promise of identical standalone performance. See <a href="jit.html">JIT & architecture</a> and benchmark the artifact you actually ship.</p>

@@ -1,0 +1,25 @@
+<h2 id="choose-the-target">Choose the correct target</h2>
+<div class="table-wrap"><table><thead><tr><th>Target</th><th>Purpose</th></tr></thead><tbody><tr><td><code>js</code> / <code>wasm</code></td><td>Browser-oriented WebAssembly. See <a href="webassembly.html">the browser guide</a>.</td></tr><tr><td><code>wasi</code></td><td>Server-side command workloads using the WASI Preview 1 runner.</td></tr><tr><td><code>wasi-http</code></td><td>A WASI HTTP component built from a webroot, using the Preview 2 target.</td></tr></tbody></table></div>
+<div class="callout note"><strong>A correction to older guides</strong><p>Some early documentation used <code>--target wasm</code> for both browser and container use. The current CLI distinguishes <code>wasm</code> from <code>wasi</code>. Check your installed version's <code>--help</code>.</p></div>
+<h2 id="build-wasi">Build a WASI command</h2>
+<p>Create <code>service.bxs</code> containing <code>println("Hello from WASI");</code>, then build:</p>
+<pre><code>matchbox --target wasi service.bxs</code></pre>
+<p>Run the generated <code>service.wasm</code> with a compatible WASI runtime such as <a href="https://wasmtime.dev">Wasmtime</a>:</p>
+<pre><code>wasmtime run service.wasm</code></pre>
+<p>If the application needs file access, grant only the required directory:</p>
+<pre><code>wasmtime run --dir=. service.wasm</code></pre>
+<p>WASI permissions are host-controlled. Network APIs and other platform capabilities depend on both the MatchBox build and the host; native CLI capabilities do not imply identical WASI behavior.</p>
+<h2 id="wasi-http">Package a WASI HTTP webroot</h2>
+<pre><code>matchbox --target wasi-http --webroot ./www --output site.wasm</code></pre>
+<p>This packages a prepared webroot into a WASI HTTP component. The source-build path needs the server feature, Rust's <code>wasm32-wasip2</code> target, and the WASI HTTP runner:</p>
+<pre><code>rustup target add wasm32-wasip2</code></pre>
+<p>Run the output on a host that supports the appropriate WASI HTTP component interfaces. This is not the same as a normal Preview 1 command, and a plain <code>wasmtime run</code> command is not an HTTP hosting configuration.</p>
+<h2 id="oci">WASM in OCI containers</h2>
+<p>A minimal image can contain just a WASI command:</p>
+<pre><code>FROM scratch
+COPY service.wasm /service.wasm
+ENTRYPOINT ["/service.wasm"]</code></pre>
+<p>You need a WASM-aware container runtime, such as an appropriate <a href="https://github.com/containerd/runwasi">containerd runwasi</a> shim. A default Docker runtime does not execute WASM simply because it is inside a container. Configure your chosen runtime according to its current documentation.</p>
+<h2 id="limits">Portability is not identical capability</h2>
+<ul><li>No JNI or JVM access in WASI.</li><li>No browser DOM or <code>js.*</code> bridge.</li><li>File and network access are constrained by the runtime and its permissions.</li><li>Cloudflare, Fastly, and other edge hosts have their own interfaces and packaging contracts. A generic WASI file is not a guaranteed one-command deployment to every provider.</li></ul>
+<p>If you simply need to run MatchBox inside a standard Linux container, the <a href="docker.html">official native Docker image</a> is the more direct path.</p>

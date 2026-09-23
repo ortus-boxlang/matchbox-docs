@@ -1,0 +1,40 @@
+<p>Native MatchBox includes <code>http()</code> when built with <code>bif-http</code>, which is enabled by default. Requests run in-process and return futures; no curl executable is required.</p>
+<h2 id="request">Make a request</h2>
+<pre><code>response = jsonDeserialize(http({
+    url: "https://example.com/",
+    timeout: 10
+}).get());
+
+println(response.status);
+if (response.status == 200) {
+    println(response.body);
+}</code></pre>
+<p><code>.get()</code> waits for completion. Its result is JSON text describing the response. For a JSON API, deserialize <code>response.body</code> separately to obtain the API payload. HTTP 4xx and 5xx responses are returned normally; always inspect the status.</p>
+<h2 id="response">Response fields</h2>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr><td><code>status</code></td><td>Numeric HTTP status code.</td></tr><tr><td><code>body</code></td><td>Response text when not downloading to a file.</td></tr><tr><td><code>file_content</code></td><td>The same response text as <code>body</code>.</td></tr><tr><td><code>file_path</code></td><td>Download destination when using <code>path</code>.</td></tr></tbody></table></div>
+<h2 id="options">Request options</h2>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>Default</th><th>Behavior</th></tr></thead><tbody><tr><td><code>url</code></td><td>Required</td><td>HTTP or HTTPS address.</td></tr><tr><td><code>method</code></td><td><code>GET</code></td><td>GET, POST, PUT, or DELETE; case-insensitive.</td></tr><tr><td><code>headers</code></td><td>None</td><td>A struct of header names and values.</td></tr><tr><td><code>body</code></td><td>None</td><td>Request text. Serialize JSON explicitly.</td></tr><tr><td><code>path</code></td><td>None</td><td>Download into a file instead of returning body text.</td></tr><tr><td><code>timeout</code></td><td><code>30</code></td><td>Total deadline in seconds, including redirects and body reads. Zero disables it.</td></tr><tr><td><code>connectionTimeout</code></td><td><code>0</code></td><td>Connection deadline in seconds, including DNS, TCP, and TLS. Zero means no separate deadline.</td></tr><tr><td><code>redirect</code></td><td><code>true</code></td><td>Follow up to 10 redirects.</td></tr><tr><td><code>noProxy</code></td><td><code>false</code></td><td>Bypass system/environment proxies for this request.</td></tr><tr><td><code>ipv4Only</code></td><td><code>false</code></td><td>Restrict this machine's outgoing connection to IPv4.</td></tr></tbody></table></div>
+<p>Keys are case-insensitive. Deadlines must be finite, non-negative numbers and may be fractional. Boolean controls require actual booleans, not strings or numbers. Explicit <code>null</code> is invalid for these controls; omit the key to use its default.</p>
+<p>The total deadline is not an inactivity timeout: receiving data does not reset it. With a proxy, <code>ipv4Only</code> affects your connection to the proxy, not the proxy's upstream connection.</p>
+<h2 id="errors">Handle failures</h2>
+<pre><code>try {
+    response = jsonDeserialize(http({
+        url: "https://example.com/",
+        timeout: 5,
+        connectionTimeout: 2,
+        redirect: false
+    }).get());
+    println("HTTP status: " &amp; response.status);
+} catch (any error) {
+    println("Request failed: " &amp; error.message);
+}</code></pre>
+<p>Invalid options throw before a request starts. Transport, timeout, and file failures reject the future and throw when <code>.get()</code> is called. TLS certificate verification remains enabled. Do not log credentials, request headers, or sensitive bodies.</p>
+<h2 id="downloads">Download safely</h2>
+<pre><code>response = jsonDeserialize(http({
+    url: "https://example.com/archive.zip",
+    path: "archive.zip.tmp",
+    timeout: 60
+}).get());</code></pre>
+<p>The destination can be overwritten once headers arrive, and an interrupted download can leave a partial file. Download to a temporary path, verify the status and expected checksum, then move the file into place.</p>
+<h2 id="runtime">Runtime compatibility</h2>
+<p>This is the native MatchBox request-struct API, not the JVM runtime's fluent HTTP client. Successful HTTP future completion is not implemented for WASM/browser builds. These examples and request controls do not add browser HTTP support.</p>

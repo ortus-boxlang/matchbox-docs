@@ -1,0 +1,21 @@
+[
+  {"slug":"index","title":"Welcome to MatchBox","group":"Getting started","description":"Get to know the native BoxLang runtime. Write familiar code, choose your target, and ship beyond the JVM.","source":"README.md"},
+  {"slug":"installation","title":"Installation","group":"Getting started","description":"Install MatchBox on Linux, macOS, or Windows, or run the CLI in Docker.","source":"README.md"},
+  {"slug":"quick-start","title":"Your first application","group":"Getting started","description":"Go from a BoxLang script to a standalone native application in a few commands.","source":"docs/getting-started/building.md"},
+  {"slug":"language","title":"Language essentials","group":"Getting started","description":"A practical introduction to BoxLang syntax, collections, functions, classes, and asynchronous work.","source":"docs/getting-started/features-overview.md"},
+  {"slug":"native","title":"Native binaries","group":"Build & deploy","description":"Package your BoxLang application as a single executable for its target operating system.","source":"docs/building-and-deploying/native-builds.md"},
+  {"slug":"webassembly","title":"JavaScript & WebAssembly","group":"Build & deploy","description":"Bring BoxLang into the browser with generated ES modules and the JavaScript bridge.","source":"docs/building-and-deploying/javascript-and-wasm.md"},
+  {"slug":"wasi","title":"WASI & containers","group":"Build & deploy","description":"Build server-side WebAssembly workloads and WASI HTTP components with the right deployment target.","source":"src/lib.rs"},
+  {"slug":"docker","title":"Docker","group":"Build & deploy","description":"Run scripts, produce build artifacts, and serve a webroot using the official container image.","source":"docs/building-and-deploying/docker-image.md"},
+  {"slug":"esp32","title":"ESP32 & embedded","group":"Build & deploy","description":"Build, flash, and iterate on BoxLang applications for ESP32 microcontrollers.","source":"docs/building-and-deploying/esp32.md"},
+  {"slug":"aws-lambda","title":"AWS Lambda","group":"Build & deploy","description":"Invoke a Lambda handler locally and understand the requirements for deploying it to AWS.","source":"docs/examples/aws_lambda_single_file/README.md"},
+  {"slug":"web-server","title":"Web server & templates","group":"Web development","description":"Serve static assets and dynamic BoxLang Markup templates with the built-in webroot server.","source":"docs/getting-started/features-overview.md"},
+  {"slug":"app-server","title":"Routing & middleware","group":"Web development","description":"Build native HTTP applications with explicit routes, middleware, templates, and WebSockets.","source":"docs/examples/app_server/README.md"},
+  {"slug":"http","title":"HTTP requests","group":"Web development","description":"Make native HTTP requests with futures, request deadlines, redirects, and download controls.","source":"docs/http.md"},
+  {"slug":"cli","title":"CLI reference","group":"Reference","description":"Commands, compilation targets, build flags, web server options, and embedded tools.","source":"src/lib.rs"},
+  {"slug":"compatibility","title":"BoxLang compatibility","group":"Reference","description":"Understand the relationship between MatchBox and BoxLang on the JVM, including target-specific limitations.","source":"CHANGELOG.md"},
+  {"slug":"native-fusion","title":"Native Fusion","group":"Reference","description":"Expose Rust functions to BoxLang and link them into a standalone native application.","source":"docs/building-and-deploying/native-fusion.md"},
+  {"slug":"jit","title":"JIT & architecture","group":"Reference","description":"From source to bytecode to execution: understand the VM, runner stubs, and tiered JIT compiler.","source":"docs/building-and-deploying/jit.md"},
+  {"slug":"build-from-source","title":"Building from source","group":"Reference","description":"Build MatchBox locally, choose Cargo features, and prepare target-specific toolchains.","source":"Cargo.toml"},
+  {"slug":"examples","title":"Examples & resources","group":"Reference","description":"Start with real examples from the MatchBox repository and connect with the BoxLang community.","source":"docs/examples"}
+]

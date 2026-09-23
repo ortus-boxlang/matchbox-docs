@@ -1,0 +1,14 @@
+<h2 id="pipeline">The execution pipeline</h2>
+<ol><li><strong>Parser:</strong> a Pest PEG grammar produces an abstract syntax tree.</li><li><strong>Compiler:</strong> converts that representation into VM bytecode with source location metadata.</li><li><strong>VM:</strong> executes instructions on a stack-based engine, using cooperative fibers and garbage collection.</li><li><strong>Packaging:</strong> embeds bytecode in the selected runner or browser module.</li></ol>
+<p>Native executables include the VM. Compilation to a standalone artifact and JIT compilation of a hot code path are separate steps.</p>
+<h2 id="availability">Where the JIT runs</h2>
+<div class="table-wrap"><table><thead><tr><th>Runtime</th><th>JIT behavior</th></tr></thead><tbody><tr><td>Native CLI</td><td>Cranelift JIT is enabled in the default feature set.</td></tr><tr><td>Lean native runner stubs</td><td>Built without JIT to keep packaged runtimes smaller.</td></tr><tr><td>Browser / WASI</td><td>No MatchBox Cranelift JIT. The host handles WASM execution.</td></tr><tr><td>ESP32</td><td>No Cranelift dependency in the embedded runner.</td></tr></tbody></table></div>
+<h2 id="tiers">Tiered compilation</h2>
+<p>The runtime profiles execution and only compiles eligible hot sites. The documented tiers cover:</p>
+<ol><li><strong>Empty-loop elimination:</strong> replace eligible repeated empty work.</li><li><strong>Numeric loops:</strong> translate supported arithmetic bodies to Cranelift IR.</li><li><strong>Array iteration:</strong> optimize eligible numeric array loops.</li><li><strong>Hot functions:</strong> compile supported function bodies and direct calls.</li></ol>
+<p>Not every function is eligible. Unsupported operations remain interpreted. Type guards allow optimized code to return to the interpreter when runtime values do not match its assumptions.</p>
+<h2 id="size-performance">Size versus performance</h2>
+<p>Including a JIT increases binary size. MatchBox separates the development CLI from lean deployment stubs so that a standalone program does not automatically include the full compiler infrastructure.</p>
+<p>Measure startup time, memory, artifact size, and throughput with your own application and target build. Tiny demonstration runners and local CLI benchmarks are not universal performance guarantees.</p>
+<h2 id="features">Build-time features</h2>
+<p>The <code>jit</code> Cargo feature enables Cranelift. It is included by default in the main CLI, while the VM library keeps it opt-in. See <a href="build-from-source.html">building from source</a> to choose features deliberately.</p>
