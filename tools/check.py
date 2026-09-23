@@ -32,7 +32,7 @@ class Page(HTMLParser):
         if tag == "img":
             assert "alt" in attrs, f"Image missing alt: {self.path}"
         if tag == "button":
-            assert attrs.get("type") == "button", f"Button missing type: {self.path}"
+            assert attrs.get("type") in {"button", "submit", "reset"}, f"Button missing valid type: {self.path}"
         for attribute in ("href", "src"):
             if attribute in attrs:
                 self.links.append(attrs[attribute])

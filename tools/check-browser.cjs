@@ -37,11 +37,105 @@ const { chromium } = require('playwright');
     await page.reload();
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
 
+    await page.goto(new URL('playground.html', base).href);
+    const ready = () => page.waitForFunction(() => document.querySelector('#runtime-status').dataset.state === 'ready');
+    const evaluate = async source => {
+      await page.locator('#repl-input').fill(source);
+      await page.locator('#repl-input').press('Enter');
+      await ready();
+    };
+    await ready();
+    const { demos } = await import('../assets/playground-demos.js');
+    for (const demo of demos) {
+      await page.locator(`[data-demo="${demo.id}"]`).click();
+      await ready();
+      assert.equal(await page.locator('#source-code').inputValue(), demo.code);
+      await page.locator('#run-code').click();
+      await ready();
+      assert.equal(await page.locator('.console-error').count(), 0, demo.id);
+      assert.ok((await page.locator('.console-stdout').innerText()).length > 0);
+      if (demo.id === 'hello') assert.ok((await page.locator('.console-stdout').boundingBox()).height < 80, 'Output entries must not inherit console-panel dimensions');
+    }
+    await page.locator('[data-demo="classes"]').click();
+    await ready();
+    await page.locator('#run-code').click();
+    await ready();
+    await evaluate('counter.increment()');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 4');
+    await context.setOffline(true);
+    await evaluate('counter.increment()');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 5');
+    await context.setOffline(false);
+    await page.locator('#repl-input').fill('draft');
+    await page.locator('#repl-input').press('ArrowUp');
+    assert.equal(await page.locator('#repl-input').inputValue(), 'counter.increment()');
+    await page.locator('#repl-input').press('ArrowDown');
+    assert.equal(await page.locator('#repl-input').inputValue(), 'draft');
+    await page.locator('#clear-console').click();
+    await evaluate('counter.count');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 5');
+    await evaluate('function broken(');
+    assert.match(await page.locator('.console-error').last().innerText(), /error:/i);
+    await evaluate('counter.increment()');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 6');
+    await evaluate('println("<img src=x onerror=alert(1)>");');
+    assert.match(await page.locator('.console-stdout').last().innerText(), /<img/);
+    assert.equal(await page.locator('#console-output img').count(), 0, 'Output must be inert text');
+    await page.locator('#reset-session').click();
+    await ready();
+    await evaluate('isNull(counter)');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> true');
+
+    await page.locator('#source-code').fill('println("Keyboard run"); checkpoint = 123;');
+    await page.locator('#source-code').press('Control+Enter');
+    await ready();
+    assert.match(await page.locator('.console-stdout').last().innerText(), /Keyboard run/);
+    await evaluate('checkpoint');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 123');
+    page.once('dialog', dialog => dialog.dismiss());
+    await page.locator('[data-demo="hello"]').click();
+    assert.match(await page.locator('#source-code').inputValue(), /checkpoint/);
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('[data-demo="hello"]').click();
+    await ready();
+    assert.equal(await page.locator('#source-code').inputValue(), demos[0].code);
+    await page.locator('#source-code').fill('// ' + '🦀'.repeat(20_000));
+    await page.locator('#run-code').click();
+    assert.match(await page.locator('.console-error').last().innerText(), /64 KiB/);
+
+    await page.locator('#source-code').fill('while (true) {}');
+    await page.locator('#run-code').click();
+    await page.locator('[data-search]').click();
+    await page.locator('.search-dialog').waitFor({ state: 'visible' });
+    await page.keyboard.press('Escape');
+    await page.locator('#stop-code').click();
+    await ready();
+    assert.match(await page.locator('.console-error').last().innerText(), /Stopped by you/);
+    assert.equal(await page.locator('#source-code').inputValue(), 'while (true) {}');
+    await page.locator('#run-code').click();
+    await ready();
+    assert.match(await page.locator('.console-error').last().innerText(), /5-second execution limit/);
+    await evaluate('getTickCount()'); // This snapshot's native clock traps on bare WASM.
+    assert.match(await page.locator('.console-error').last().innerText(), /runtime stopped/);
+    await evaluate('6 * 7');
+    assert.equal(await page.locator('.console-value').last().innerText(), '=> 42');
+
+    const blocked = await browser.newContext();
+    await blocked.route('**/runtime/*.wasm', route => route.abort());
+    const failedPage = await blocked.newPage();
+    await failedPage.goto(new URL('playground.html', base).href);
+    await failedPage.waitForFunction(() => document.querySelector('#runtime-status').dataset.state === 'error');
+    assert.ok(await failedPage.locator('#run-code').isDisabled());
+    await blocked.unroute('**/runtime/*.wasm');
+    await failedPage.locator('#reset-session').click();
+    await failedPage.waitForFunction(() => document.querySelector('#runtime-status').dataset.state === 'ready');
+    await blocked.close();
+
     const response = await context.request.get(new URL('search-index.json', base).href);
     const docs = await response.json();
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const path of ['index.html', ...docs.map(doc => doc.url)]) {
+      for (const path of ['index.html', 'playground.html', ...docs.map(doc => doc.url)]) {
         await page.goto(new URL(path, base).href);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
         assert.equal(overflow, false, `Horizontal overflow at ${width}px: ${path}`);
@@ -65,8 +159,11 @@ const { chromium } = require('playwright');
     await nojs.locator('[data-search]').click();
     await nojs.waitForURL('**/docs/index.html');
     assert.ok(await nojs.locator('.article').isVisible());
+    await nojs.goto(new URL('playground.html', base).href);
+    assert.ok(await nojs.locator('noscript .callout').isVisible());
+    assert.ok(await nojs.locator('#run-code').isDisabled());
     assert.deepEqual(errors, []);
-    console.log('PASS: browser search, Escape/focus, clipboard, tabs, themes, all-page responsive layout, mobile and no-JS navigation.');
+    console.log('PASS: browser search, clipboard, themes, responsive/no-JS navigation; six WASM demos, REPL state/history, offline execution, inert output, limits, Stop, trap and loading recovery.');
   } finally {
     await browser.close();
   }

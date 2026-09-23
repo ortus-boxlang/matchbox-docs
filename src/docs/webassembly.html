@@ -1,4 +1,5 @@
 <div class="callout"><strong>Browser WASM and server-side WASI are different targets.</strong><p>Use <code>--target js</code> for the browser integration below. For Wasmtime or WASI workloads, use the <a href="wasi.html">WASI guide</a>, not the browser artifact.</p></div>
+<div class="callout note"><strong>Try it without installing anything.</strong><p>The <a href="../playground.html">MatchBox playground</a> runs a real compiler and VM locally in your browser, with a stateful REPL and six editable demos. It intentionally omits DOM/JavaScript interop, files, network, and async/timers. To integrate with browser APIs, compile your own module using the guide below.</p></div>
 <h2 id="export-functions">Export BoxLang functions</h2>
 <p>Create <code>greetings.bxs</code>:</p>
 <pre><code>function greet(name) {

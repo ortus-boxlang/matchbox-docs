@@ -1,0 +1,24 @@
+[package]
+name = "matchbox-playground"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+matchbox_compiler = { path = "../../matchbox/crates/matchbox-compiler", default-features = false }
+matchbox_vm = { path = "../../matchbox/crates/matchbox-vm", default-features = false }
+wasm-bindgen = "=0.2.114"
+serde_json = "1.0"
+# Enable WASM entropy without enabling MatchBox's JavaScript host bridge.
+getrandom = { version = "0.4", features = ["wasm_js"] }
+uuid = { version = "1", features = ["js"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

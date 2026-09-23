@@ -50,16 +50,23 @@ def build():
         old.unlink()
 
     def render(path, title, description, content, is_doc=False):
+        is_playground = path == OUTPUT / "playground.html"
         path.write_text(layout.substitute(
             title=escape(title), description=escape(description, quote=True),
             root="../" if is_doc else "./", content=content,
-            page_class="docs-page" if is_doc else "home-page",
+            page_class="docs-page" if is_doc else "playground-page" if is_playground else "home-page",
             docs_current='aria-current="true"' if is_doc else "", year=date.today().year,
+            playground_current='aria-current="page"' if is_playground else "",
+            extra_head='<link rel="stylesheet" href="./assets/playground.css">\n  <script src="./assets/playground.js" type="module"></script>' if is_playground else "",
         ), encoding="utf-8")
 
     render(OUTPUT / "index.html", "MatchBox — BoxLang power. Native freedom.",
            "The native Rust-powered BoxLang runtime. Build standalone applications, browser WebAssembly, web services, and ESP32 projects without a JVM.",
            (SOURCE / "index.html").read_text(encoding="utf-8"))
+
+    render(OUTPUT / "playground.html", "Playground · MatchBox",
+           "Run real BoxLang in your browser with the MatchBox WebAssembly playground. A stateful REPL, editable scripts, and six hands-on demos. No installation required.",
+           (SOURCE / "playground.html").read_text(encoding="utf-8"))
 
     groups = list(dict.fromkeys(page["group"] for page in pages))
     search_index = []
@@ -107,7 +114,7 @@ def build():
         })
     (OUTPUT / "search-index.json").write_text(json.dumps(search_index, ensure_ascii=False), encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
-    print(f"Built homepage + {len(pages)} documentation pages → {OUTPUT}")
+    print(f"Built homepage + playground + {len(pages)} documentation pages → {OUTPUT}")
 
 
 if __name__ == "__main__":

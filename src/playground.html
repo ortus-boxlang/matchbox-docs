@@ -1,0 +1,45 @@
+<main id="main" class="playground wrap">
+  <header class="playground-intro">
+    <div><p class="eyebrow"><span class="status-dot"></span> BOXLANG × WEBASSEMBLY</p><h1>A little code.<br><span class="gradient-text">A live runtime.</span></h1><p>No install. No JVM. Just MatchBox, running in your browser.<br>Pick a demo, change something, and see what happens.</p></div>
+    <div class="playground-runtime"><span class="runtime-badge" id="runtime-status" data-state="loading" role="status">Loading WebAssembly…</span><span>Real compiler. Real VM. Entirely local.</span><a class="text-link" href="docs/webassembly.html">How browser builds work <span>↗</span></a></div>
+  </header>
+
+  <noscript><div class="callout"><strong>This playground needs JavaScript and WebAssembly.</strong><p>You can still <a href="docs/quick-start.html">run these ideas with the MatchBox CLI</a>. The rest of the documentation works without JavaScript.</p></div></noscript>
+  <section aria-labelledby="demos-title" class="playground-demos">
+    <div class="demo-heading"><h2 id="demos-title">Start with a spark.</h2><span>Six small experiments. Make them your own.</span></div>
+    <div id="demo-list" class="demo-list"></div>
+    <p id="demo-description">Functions, interpolation, and a little introduction. Change the name and make it yours.</p>
+  </section>
+
+  <div class="workbench">
+    <div class="workbench-toolbar"><span class="workbench-label"><svg class="icon"><use href="assets/icons.svg#terminal"/></svg> MATCHBOX PLAYGROUND <span class="browser-label">/ BROWSER SESSION</span></span><div class="workbench-controls"><button type="button" id="stop-code" class="button button-secondary" disabled>Stop</button><button type="button" id="run-code" class="button button-primary" disabled><span aria-hidden="true">▶</span> Run script <kbd id="run-shortcut">Ctrl ↵</kbd></button></div></div>
+    <div class="playground-panels">
+      <section class="editor-pane" aria-labelledby="source-title">
+        <div class="pane-heading"><h2 id="source-title"><label for="source-code">Source</label></h2><span id="source-filename">hello.bxs</span></div>
+        <div class="editor-body"><div id="line-numbers" aria-hidden="true"></div><textarea id="source-code" aria-describedby="editor-help" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" maxlength="65536">// BoxLang. In your browser. No JVM required.
+function greet(name) {
+    return "Hello, #name#!";
+}
+
+println(greet("browser"));
+6 * 7;</textarea></div>
+        <div class="pane-footer" id="editor-help"><span>BoxLang · UTF-8</span><span>Ctrl / ⌘ + Enter to run</span></div>
+      </section>
+      <section class="console-pane" aria-labelledby="console-title">
+        <div class="pane-heading"><h2 id="console-title">Session console</h2><div><button type="button" class="console-action" id="clear-console">Clear</button><button type="button" class="console-action" id="reset-session" disabled>Reset session</button></div></div>
+        <div id="console-output" class="console-output" role="log" aria-label="MatchBox output" aria-live="polite" aria-relevant="additions" tabindex="0"><p class="console-welcome">Your next idea starts here.<br><span>Run a script, or enter an expression below.</span></p></div>
+        <form id="repl-form" class="repl-form"><label for="repl-input"><span aria-hidden="true">bx&gt;</span><span class="sr-only">BoxLang expression</span></label><input id="repl-input" type="text" placeholder="Try 1 + 2" autocomplete="off" spellcheck="false" autocapitalize="off" maxlength="65536" aria-describedby="repl-help" readonly><button type="submit" id="repl-submit" aria-label="Evaluate expression" disabled>↵</button></form>
+        <div class="pane-footer" id="repl-help"><span>Enter to evaluate · ↑ ↓ history</span><span>Stateful REPL</span></div>
+      </section>
+    </div>
+    <div class="workbench-footer"><p id="execution-status" role="status">Getting the runtime ready…</p><span>POWERED BY RUST + WASM</span></div>
+  </div>
+  <p class="playground-hint">Keep exploring: after running this demo, try <code id="demo-hint">greet("your name")</code> in the console.</p>
+
+  <div class="playground-notes">
+    <section><span class="card-number">01 / A REAL SESSION</span><h2>Write. Run. Repeat.</h2><p>The editor and REPL share variables, functions, and objects. Clear only removes output; Reset session creates a fresh VM. Choosing another demo also resets the session.</p></section>
+    <section><span class="card-number">02 / YOUR BROWSER, YOUR CODE</span><h2>Local by design.</h2><p>Code is compiled and executed on your device, not sent to a server. Output appears when a run finishes. Copy work you want to keep: edits and sessions aren’t saved on reload.</p></section>
+    <section><span class="card-number">03 / ROOM TO EXPERIMENT</span><h2>Small, on purpose.</h2><p>Runs stop after 5 seconds, with 128 MiB of WASM memory and 64 KiB source/output limits. Stop or a runtime trap resets the VM. Files, network, DOM, JVM APIs, native clocks, and async/timers aren’t supported here. <a href="docs/compatibility.html">See target differences →</a></p></section>
+  </div>
+  <div class="playground-next"><p>Like what you can do in a tab? <strong>Take it to your terminal.</strong></p><a class="button button-secondary" href="docs/quick-start.html">Build with MatchBox <svg class="icon"><use href="assets/icons.svg#arrow"/></svg></a></div>
+</main>
