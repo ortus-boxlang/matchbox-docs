@@ -103,7 +103,7 @@
 				<div class="mbx-hero__copy">
 					<p class="mbx-eyebrow"><img src="/assets/boxlang.svg" alt="" width="24" height="24"> BOXLANG SOFTWARE PRODUCTIVITY PLATFORM</p>
 					<h1>Build with BoxLang.<br><span>Choose your runtime.</span></h1>
-					<p class="mbx-lede">Bring language, developer tooling, AI, and testing together. Use the official JVM runtime for broad Java ecosystem access, or MatchBox's independent Rust VM for native, WebAssembly, WASI, and embedded targets.</p>
+					<p class="mbx-lede">BoxLang is the software productivity platform for building, modernizing, and running applications, with developers and AI agents working together. Use the official JVM runtime for its broad ecosystem, or MatchBox's independent Rust runtime to reach other targets.</p>
 					<div class="mbx-hero__actions">
 						<a class="mbx-button" href="/getting-started/quick-start/">Build your first app <span aria-hidden="true">&rarr;</span></a>
 						<a class="mbx-text-link" href="/getting-started/">Explore the documentation <span aria-hidden="true">&rarr;</span></a>
@@ -144,9 +144,9 @@
 
 		<section class="mbx-home-content">
 			<article class="page-content"><section class="mbx-content-section mbx-productivity" id="productivity">
-	<p class="mbx-section-kicker">A SOFTWARE PRODUCTIVITY PLATFORM</p>
-	<h2>More than a runtime: a connected way to build</h2>
-	<p class="mbx-section-lede">BoxLang brings a modern language together with developer tooling, AI, browser testing, and documentation. MatchBox extends that platform with a Rust runtime for workloads where a JVM is not the right fit.</p>
+	<p class="mbx-section-kicker">BUILT FOR DEVELOPERS. BUILT FOR AI. BUILT TO SHIP.</p>
+	<h2>One productivity platform, from first prompt to production</h2>
+	<p class="mbx-section-lede">A modern, expressive language and batteries-included JVM runtime, paired with predictable conventions, developer tools, an AI framework, and a growing choice of runtimes. Developers and AI agents work in the same feedback loop.</p>
 	<div class="mbx-capability-grid">
 		<a class="mbx-capability" href="/getting-started/quick-start/">
 			<span class="mbx-capability__number">01 / BUILD</span>
@@ -172,6 +172,34 @@
 			<p>Explore bxPlaywright for browser automation, web-first assertions, visual checks, and browser artifacts in BoxLang projects.</p>
 			<span class="mbx-capability__link">Explore bxPlaywright <span aria-hidden="true">&nearr;</span></span>
 		</a>
+	</div>
+</section>
+<section class="mbx-platform-map" aria-labelledby="mbx-platform-map-title">
+	<div class="mbx-content-section">
+		<p class="mbx-section-kicker">THE PLATFORM AT A GLANCE</p>
+		<h2 id="mbx-platform-map-title">A shared platform. Runtime choices for the work.</h2>
+		<p class="mbx-section-lede">Developers and AI agents use BoxLang's language, conventions, and tools, then target the runtime that best fits the application.</p>
+		<div class="mbx-platform-diagram" role="group" aria-label="Developers and AI agents use the BoxLang platform to build for JVM or MatchBox Rust runtimes">
+			<div class="mbx-diagram-people">
+				<div class="mbx-diagram-node mbx-diagram-node--person"><span class="mbx-diagram-index">01</span><strong>Developers</strong><small>Design, build, decide</small></div>
+				<div class="mbx-diagram-node mbx-diagram-node--agent"><span class="mbx-diagram-index">02</span><strong>AI agents</strong><small>Plan, implement, verify</small></div>
+			</div>
+			<div class="mbx-diagram-connector" aria-hidden="true"><span>&rarr;</span></div>
+			<div class="mbx-diagram-platform">
+				<div class="mbx-diagram-platform__head"><img src="/assets/boxlang.svg" alt="" width="28" height="28"><span><small>SOFTWARE PRODUCTIVITY PLATFORM</small><strong>BoxLang</strong></span></div>
+				<div class="mbx-diagram-services">
+					<div><strong>Language + conventions</strong><span>Expressive code, predictable structure</span></div>
+					<div><strong>AI + agent tooling</strong><span>BoxLang AI, skills, MCP</span></div>
+					<div><strong>Build + verify</strong><span>Developer tools, bxPlaywright, bxSites</span></div>
+				</div>
+			</div>
+			<div class="mbx-diagram-connector" aria-hidden="true"><span>&rarr;</span></div>
+			<div class="mbx-diagram-runtimes">
+				<div class="mbx-diagram-node mbx-diagram-node--jvm"><span class="mbx-diagram-index">RUNTIME A</span><strong>BoxLang on the JVM</strong><small>CLI · web · containers · serverless · desktop</small></div>
+				<div class="mbx-diagram-node mbx-diagram-node--matchbox"><span class="mbx-diagram-index">RUNTIME B</span><strong>MatchBox on Rust</strong><small>Native · browser/WASM · WASI · ESP32</small></div>
+			</div>
+		</div>
+		<p class="mbx-diagram-note">Runtime APIs and module support differ. MatchBox is an independent implementation of an evolving BoxLang subset; check compatibility for your target.</p>
 	</div>
 </section>
 <section class="mbx-runtime-section" id="runtime-choice">
@@ -233,13 +261,20 @@
 	</div>
 </section>
 <section class="mbx-content-section mbx-workflow" id="workflow">
-	<p class="mbx-section-kicker">A PRACTICAL DEVELOPMENT LOOP</p>
-	<h2>From first script to a tested target</h2>
-	<div class="mbx-workflow-grid">
-		<article><span>01</span><h3>Start with BoxLang</h3><p>Write a `.bxs` script and run it with MatchBox. Keep the first iteration focused on portable language features.</p><a href="/getting-started/quick-start/">Run your first application <span aria-hidden="true">&rarr;</span></a></article>
-		<article><span>02</span><h3>Choose a deployment profile</h3><p>Build native, browser/WASM, WASI, or ESP32 artifacts deliberately. Each profile has its own APIs, dependencies, and host requirements.</p><a href="#targets">Compare target guides <span aria-hidden="true">&uarr;</span></a></article>
-		<article><span>03</span><h3>Validate where it runs</h3><p>Run the artifact on its real destination and test the APIs it uses. A successful local run does not establish support on every target.</p><a href="/getting-started/agentic-development/">Set up an agent feedback loop <span aria-hidden="true">&rarr;</span></a></article>
+	<p class="mbx-section-kicker">AI-FIRST DEVELOPMENT</p>
+	<h2>A useful agent loop ends with evidence</h2>
+	<p class="mbx-section-lede">Give agents the same project context, runtime tools, and test feedback as the developer. Let evidence from each run shape the next change.</p>
+	<div class="mbx-loop-diagram" role="group" aria-label="AI-assisted BoxLang development loop from project context through coding, runtime inspection, browser tests, and feedback">
+		<ol class="mbx-loop-track">
+			<li><span>01</span><strong>Context</strong><small>Conventions + agent skills</small></li>
+			<li><span>02</span><strong>Build</strong><small>Developer + AI agent</small></li>
+			<li><span>03</span><strong>Run + inspect</strong><small>Runtime tools + MCP</small></li>
+			<li><span>04</span><strong>Test</strong><small>Browser flows + assertions</small></li>
+			<li><span>05</span><strong>Ship</strong><small>Choose a supported target</small></li>
+		</ol>
+		<div class="mbx-loop-feedback"><span aria-hidden="true">&larr;</span><p><strong>Feed the result back.</strong> Test reports, runtime observations, screenshots, and traces help developers and agents make the next change with evidence.</p></div>
 	</div>
+	<p class="mbx-loop-note">Runtime introspection over MCP and browser tooling depend on the selected runtime and integration. See <a href="/getting-started/agentic-development/">Agentic Development</a> and <a href="https://bxplaywright.boxlang.io/ai/" target="_blank" rel="noopener noreferrer">bxPlaywright for AI agents</a>.</p>
 </section>
 <section class="mbx-ecosystem-section" id="ecosystem">
 	<div class="mbx-content-section">
