@@ -17,7 +17,7 @@ theme:
     navCollapsible: true
     navExpandAll: false
     tocPosition: sticky
-    accentColor: '#00FF75'
+    accentColor: '#00FF78'
     accentColorDark: '#00DBFF'
 markdown:
   enableFootnotes: true

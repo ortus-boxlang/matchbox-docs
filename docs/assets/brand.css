@@ -6,9 +6,9 @@
 }
 
 :root {
-  --bxsites-gradient-start: #00ff75;
+  --bxsites-gradient-start: #00ff78;
   --bxsites-gradient-end: #00dbff;
-  --bxsites-accent: #fff500;
+  --bxsites-accent: #00ff78;
   --bxsites-link: #087b63;
   --bxsites-link-hover: #075b4d;
   --bxsites-step-marker-bg: #00b977;
@@ -22,9 +22,9 @@
 }
 
 [data-theme="dark"] {
-  --bxsites-gradient-start: #00ff75;
+  --bxsites-gradient-start: #00ff78;
   --bxsites-gradient-end: #00dbff;
-  --bxsites-accent: #fff500;
+  --bxsites-accent: #00ff78;
   --bxsites-link: #52d6b2;
   --bxsites-link-hover: #98f0d7;
   --bxsites-table-header-bg: #17342e;
