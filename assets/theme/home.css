@@ -10,6 +10,7 @@
   --mbx-home-green: #00ff75;
   --mbx-home-cyan: #00dbff;
   --mbx-home-yellow: #fff500;
+  --mbx-home-display: "Sora", ui-sans-serif, system-ui, sans-serif;
 }
 
 html[data-theme="dark"] {
@@ -27,8 +28,10 @@ body.bxsites-home {
   margin: 0;
   background: var(--mbx-home-bg);
   color: var(--mbx-home-ink);
-  font-family: "Manrope", sans-serif;
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
+
+body.bxsites-home :is(h1, h2, h3, h4, h5, h6) { font-family: var(--mbx-home-display); }
 
 .mbx-skip {
   position: fixed;
