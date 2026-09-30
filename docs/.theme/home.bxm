@@ -98,7 +98,7 @@
 				<div class="mbx-hero__copy">
 					<p class="mbx-eyebrow"><img src="#variables.basePath#assets/boxlang.svg" alt="" width="24" height="24"> BOXLANG SOFTWARE PRODUCTIVITY PLATFORM</p>
 					<h1>Build with BoxLang.<br><span>Choose your runtime.</span></h1>
-					<p class="mbx-lede">Bring language, developer tooling, AI, and testing together. Use the official JVM runtime for broad Java ecosystem access, or MatchBox's independent Rust VM for native, WebAssembly, WASI, and embedded targets.</p>
+					<p class="mbx-lede">BoxLang is the software productivity platform for building, modernizing, and running applications, with developers and AI agents working together. Use the official JVM runtime for its broad ecosystem, or MatchBox's independent Rust runtime to reach other targets.</p>
 					<div class="mbx-hero__actions">
 						<a class="mbx-button" href="#variables.basePath#getting-started/quick-start/">Build your first app <span aria-hidden="true">&rarr;</span></a>
 						<a class="mbx-text-link" href="#variables.basePath#getting-started/">Explore the documentation <span aria-hidden="true">&rarr;</span></a>
