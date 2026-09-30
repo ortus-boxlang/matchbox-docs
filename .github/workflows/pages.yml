@@ -1,0 +1,61 @@
+name: Build and Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up BoxLang and bxSites dependencies
+        uses: ortus-boxlang/setup-boxlang@1.4.0
+        with:
+          with-commandbox: true
+          modules: bx-esapi bx-yaml bx-toml bx-markdown bx-image
+
+      - name: Register this module
+        run: |
+          mkdir -p "${BOXLANG_HOME}/modules"
+          ln -s "$(pwd)" "${BOXLANG_HOME}/modules/$(basename "$(pwd)")"
+
+      - name: Build site
+        run: boxlang bxSites build
+
+      - name: Audit site
+        run: boxlang bxSites audit
+
+      - name: Verify generated site and OG images
+        run: |
+          if [[ ! -d site ]] || [[ -z "$(ls -A site 2>/dev/null)" ]]; then
+            echo "::error::bxSites build produced no site output"
+            exit 1
+          fi
+          page_count="$(find docs -type f -name '*.md' | wc -l | tr -d '[:space:]')"
+          og_count="$(find site/assets/og -type f -name '*.png' | wc -l | tr -d '[:space:]')"
+          if [[ "${page_count}" -ne "${og_count}" ]]; then
+            echo "::error::Expected ${page_count} OG images for Markdown pages; found ${og_count}"
+            exit 1
+          fi
+          touch site/.nojekyll
+
+      - name: Publish to GitHub Pages
+        if: github.ref_name == 'main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          cname: matchbox.boxlang.io
+          commit_message: Publish MatchBox documentation

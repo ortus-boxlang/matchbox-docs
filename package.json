@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "python3 tools/build.py",
-    "test": "python3 tools/check.py && node tools/check-search.js && node tools/check-playground.js",
-    "serve": "python3 -m http.server 8080 --directory site"
+    "build": "boxlang bxSites build",
+    "test": "boxlang bxSites build && boxlang bxSites audit",
+    "serve": "boxlang bxSites serve --port=8081",
+    "test:playground": "node tools/check-playground.js"
   }
 }

@@ -1,6 +1,11 @@
+# Build and cache directories
 site/
 __pycache__/
 *.pyc
 node_modules/
 playground-runtime/target/
 .DS_Store
+
+# AI
+.pi/**
+.opencode/**

@@ -1,0 +1,65 @@
+[
+  "index.md",
+  {
+    "title": "Getting Started",
+    "icon": "phosphor-duotone:rocket-launch",
+    "children": [
+      "getting-started/index.md",
+      "getting-started/what-is-matchbox.md",
+      "getting-started/installation.md",
+      "getting-started/quick-start.md",
+      "getting-started/features-overview.md",
+      "getting-started/building.md",
+      "getting-started/agentic-development.md",
+      "getting-started/boxlang-ai.md"
+    ]
+  },
+  {
+    "title": "Build & Deploy",
+    "icon": "phosphor-duotone:rocket",
+    "children": [
+      "building-and-deploying/native-builds.md",
+      "building-and-deploying/javascript-and-wasm.md",
+      "building-and-deploying/wasm-container.md",
+      "building-and-deploying/docker-image.md",
+      "building-and-deploying/esp32.md",
+      "building-and-deploying/aws-lambda-aws-cli-setup.md",
+      {
+        "title": "Examples",
+        "path": "examples/index.md",
+        "children": [
+          "examples/basic_project/README.md",
+          "examples/boxlang_alpine_js/README.md",
+          "examples/esp32/README.md",
+          "examples/esp32_camera/README.md",
+          "examples/java_interop/README.md",
+          "examples/native_fusion/README.md",
+          "examples/wasm_browser/README.md",
+          "examples/wasm_container/README.md"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Web Development",
+    "icon": "phosphor-duotone:globe-hemisphere-west",
+    "children": [
+      "examples/web_server/README.md",
+      "examples/app_server/README.md",
+      "http.md",
+      "examples/websocket_counter/README.md"
+    ]
+  },
+  {
+    "title": "Reference",
+    "icon": "phosphor-duotone:book-open-text",
+    "children": [
+      "reference/cli.md",
+      "differences-from-boxlang.md",
+      "building-and-deploying/native-fusion.md",
+      "building-and-deploying/jit.md",
+      "getting-started/building-matchbox.md",
+      "reference/examples.md"
+    ]
+  }
+]

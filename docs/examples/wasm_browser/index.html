@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BoxLang Zero-Boilerplate Todo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <!-- Import the compiled JS bundle -->
+  <script type="module" src="./todo.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    document.addEventListener("alpine:init", async () => {
+      await window.MatchBox.ready("todo");
+      const app = window.MatchBox.State("todo", {
+        mount: "getSnapshot",
+        initialState: {
+          todos: [],
+          total: 0,
+          completed: 0,
+          remaining: 0,
+          newTodo: "",
+          filter: "all"
+        }
+      });
+      Alpine.store("todoApp", app);
+      await app.init();
+    });
+  </script>
+  <style>
+    main { padding-top: 3rem; padding-bottom: 3rem; }
+    .todo-row { display: grid; grid-template-columns: auto 1fr auto; gap: 0.75rem; align-items: center; }
+    .todo-text.done { text-decoration: line-through; opacity: 0.65; }
+    .toolbar { display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; }
+    .empty { opacity: 0.7; text-align: center; padding: 1rem 0; }
+  </style>
+</head>
+<body x-data>
+  <main class="container" x-data="$store.todoApp">
+    <header>
+      <h1>BoxLang <span>Todo</span></h1>
+      <p>Pico CSS + Alpine.js + BoxLang State-Driven Logic</p>
+    </header>
+
+    <article>
+      <form @submit.prevent="await call('submitTodo', newTodo); newTodo = '';">
+        <label for="todo-input">New todo</label>
+        <input type="text" x-model="newTodo" placeholder="What needs to be done?" autocomplete="off" />
+        <button type="submit">Add Todo</button>
+      </form>
+    </article>
+
+    <article x-show="ready">
+      <div class="toolbar">
+        <div role="group">
+          <button type="button" :class="filter === 'all' ? '' : 'outline'" @click="filter = 'all'">All</button>
+          <button type="button" :class="filter === 'open' ? '' : 'outline'" @click="filter = 'open'">Open</button>
+          <button type="button" :class="filter === 'done' ? '' : 'outline'" @click="filter = 'done'">Done</button>
+        </div>
+        <button class="secondary" @click="await call('clearCompletedAction')" x-show="completed > 0">
+          Clear Completed
+        </button>
+      </div>
+
+      <p><small x-text="`${remaining} remaining, ${completed} completed, ${total} total`"></small></p>
+
+      <template x-if="total === 0">
+        <p class="empty">No tasks yet — add one above!</p>
+      </template>
+
+      <template x-for="todo in (filter === 'open' ? todos.filter(t => !t.done) : filter === 'done' ? todos.filter(t => t.done) : todos)" :key="todo.id">
+        <article class="todo-row">
+          <input type="checkbox" :checked="todo.done" @change="await call('toggleTodoAction', todo.id)" />
+          <span class="todo-text" :class="{ done: todo.done }" x-text="todo.text"></span>
+          <button type="button" class="outline" @click="await call('removeTodoAction', todo.id)">Delete</button>
+        </article>
+      </template>
+    </article>
+
+    <footer x-show="error">
+      <mark x-text="error"></mark>
+    </footer>
+  </main>
+</body>
+</html>

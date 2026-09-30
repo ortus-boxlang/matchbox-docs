@@ -1,0 +1,74 @@
+// todo.bxs — BoxLang Todo App logic (State-driven)
+//
+// This version returns state snapshots and automatically registers itself
+// with Alpine.js if present, enabling zero-boilerplate HTML.
+
+// --------------------------------------------------------------------------
+// State
+// --------------------------------------------------------------------------
+todos    = []
+nextId   = 1
+
+// --------------------------------------------------------------------------
+// Actions — return a state snapshot for the UI to apply
+// --------------------------------------------------------------------------
+
+function submitTodo(text) {
+    if (text == "" || text == null) {
+        return getSnapshot()
+    }
+    todo        = { id: nextId, text: text, done: false }
+    todos[nextId] = todo      // store by id so removal is easy
+    nextId      = nextId + 1
+    return getSnapshot()
+}
+
+function toggleTodoAction(id) {
+    if (todos[id] != null) {
+        todos[id].done = !todos[id].done
+    }
+    return getSnapshot()
+}
+
+function removeTodoAction(id) {
+    todos[id] = null          // mark slot as empty
+    return getSnapshot()
+}
+
+function clearCompletedAction() {
+    for (id = 1; id < nextId; id++) {
+        if (todos[id] != null && todos[id].done) {
+            todos[id] = null
+        }
+    }
+    return getSnapshot()
+}
+
+// --------------------------------------------------------------------------
+// State Snapshot Helper
+// --------------------------------------------------------------------------
+
+function getSnapshot() {
+    visible = []
+    completed = 0
+    // Collect non-null todos into a dense array for JS rendering
+    for (id = 1; id < nextId; id++) {
+        if (todos[id] != null) {
+            visible.append(todos[id])
+            if (todos[id].done) completed++
+        }
+    }
+    
+    total = visible.len()
+    
+    return { 
+        todos: visible,
+        total: total,
+        completed: completed,
+        remaining: total - completed
+    }
+}
+
+// The browser page owns framework wiring.
+// Import `todo.js`, wait for `window.MatchBox.ready("todo")`, then create a
+// state helper with `window.MatchBox.State("todo", ...)`.

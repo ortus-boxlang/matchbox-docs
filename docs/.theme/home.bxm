@@ -1,0 +1,154 @@
+<bx:include template="#variables.moduleAssetsDir#/icons.bxm">
+<bx:include template="#variables.moduleAssetsDir#/locale-flags.bxm">
+<bx:include template="includes/site-helpers.bxm">
+<bx:script>
+	variables.searchEnabled = ( variables.siteConfig.search ?: false ) ? true : false
+	variables.searchProviderName = lCase( trim( variables.siteConfig.searchProvider.provider ?: "local" ) )
+	variables.searchAlgolia = variables.siteConfig.searchProvider.algolia ?: {}
+	variables.repoUrl = trim( variables.siteConfig.repo.url ?: "" )
+	variables.ogImageUrl = len( trim( variables.page.ogImage ?: "" ) ) ? trim( variables.page.ogImage ) : trim( variables.siteConfig.ogImage ?: "" )
+	variables.ogDescription = len( variables.page.description ?: "" ) ? variables.page.description : ( variables.siteConfig.description ?: "" )
+	variables.faviconUrl = trim( variables.siteConfig.theme.favicon ?: "" )
+</bx:script>
+<bx:output>
+<!doctype html>
+<html lang="#encodeForHTML( variables.currentLocale.len() ? variables.currentLocale : 'en' )#" dir="#encodeForHTML( variables.currentLocaleDir )#">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>#encodeForHTML( variables.page.title )# - #encodeForHTML( variables.siteConfig.name )#</title>
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="#encodeForHTML( variables.siteConfig.name )#">
+	<meta property="og:title" content="#encodeForHTML( variables.page.title )#">
+	#renderArticleMeta()#
+	<bx:if len( variables.page.canonicalUrl )>
+		<link rel="canonical" href="#encodeForHTML( variables.page.canonicalUrl )#">
+	</bx:if>
+	<bx:if len( variables.ogDescription )>
+		<meta name="description" content="#encodeForHTML( variables.ogDescription )#">
+		<meta property="og:description" content="#encodeForHTML( variables.ogDescription )#">
+	</bx:if>
+	<bx:if len( variables.ogImageUrl )>
+		<meta property="og:image" content="#resolveAssetUrl( variables.ogImageUrl )#">
+		<meta name="twitter:card" content="summary_large_image">
+	</bx:if>
+	<bx:if len( variables.faviconUrl )>
+		<link rel="icon" href="#resolveAssetUrl( variables.faviconUrl )#">
+	</bx:if>
+	<script>
+		( function () {
+			var configuredMode = "#variables.siteConfig.theme.options.colorMode ?: 'auto'#";
+			var stored = localStorage.getItem( "bxsites-theme" );
+			var prefersDark = window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+			var wantsDark = stored ? stored === "dark" : ( configuredMode === "dark" || ( configuredMode === "auto" && prefersDark ) );
+			if ( wantsDark ) document.documentElement.setAttribute( "data-theme", "dark" );
+		} )();
+	</script>
+	<link rel="stylesheet" href="#variables.basePath#assets/vendor/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="#variables.basePath#assets/vendor/highlight/github.min.css">
+	<link rel="stylesheet" href="#variables.basePath##variables.siteConfig.theme.styleUrl ?: 'assets/theme/style.css'#">
+	<link rel="stylesheet" href="#variables.basePath#assets/theme/home.css">
+	#renderExtraCss( variables.siteConfig.extraCss ?: [] )#
+	<bx:if variables.searchEnabled and variables.searchProviderName eq 'algolia'>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+	</bx:if>
+	<bx:if variables.searchEnabled and variables.searchProviderName eq 'pagefind'>
+		<link rel="stylesheet" href="#variables.basePath#pagefind/pagefind-ui.css">
+	</bx:if>
+	<bx:if variables.searchEnabled and variables.searchProviderName eq 'local'>
+		<script>window.__BXSITES_BASE_PATH__ = "#variables.basePath#";</script>
+		<script>window.__BXSITES_SEARCH_NO_RESULTS__ = "#encodeForJavaScript( variables.strings.searchNoResults )#";</script>
+		<script src="#variables.basePath#assets/vendor/minisearch/minisearch.js"></script>
+		<script src="#variables.basePath#assets/search.js" defer></script>
+	</bx:if>
+	<script src="#variables.basePath#assets/vendor/alpine/cdn.min.js" defer></script>
+</head>
+<body class="bxsites-home matchbox-home" x-data="{ dark: document.documentElement.getAttribute( 'data-theme' ) === 'dark' }" x-init="$watch( 'dark', v => { document.documentElement.setAttribute( 'data-theme', v ? 'dark' : 'light' ); localStorage.setItem( 'bxsites-theme', v ? 'dark' : 'light' ) } )">
+	<a class="mbx-skip" href="##main">Skip to content</a>
+	<header class="mbx-header">
+		<div class="mbx-header__inner">
+			<a class="mbx-brand" href="#variables.basePath#" aria-label="MatchBox home">
+				<img src="#variables.basePath#assets/matchbox.svg" alt="" width="42" height="42">
+				<span><strong>MatchBox</strong><small>A BOXLANG RUNTIME</small></span>
+			</a>
+			<nav class="mbx-nav" aria-label="Primary navigation">
+				<a href="#variables.basePath#getting-started/">Documentation</a>
+				<a href="#variables.basePath#getting-started/agentic-development/">Agentic Development</a>
+				<a href="#variables.basePath#getting-started/boxlang-ai/">BoxLang AI</a>
+			</nav>
+			<div class="mbx-header__actions">
+				<bx:if variables.searchEnabled>
+					<div class="mbx-search"><bx:include template="#variables.themeDir#/search.bxm"></div>
+				</bx:if>
+				<bx:if len( variables.repoUrl )>
+					<a class="mbx-icon-button" href="#bxsitesUrlAttr( variables.repoUrl )#" aria-label="MatchBox on GitHub" title="MatchBox on GitHub" target="_blank" rel="noopener noreferrer">#bxsitesIcon( "github" )#</a>
+				</bx:if>
+				<button class="mbx-icon-button" type="button" @click="dark = !dark" aria-label="#encodeForHTML( variables.strings.toggleDarkMode )#" title="#encodeForHTML( variables.strings.toggleDarkMode )#">
+					<span x-show="!dark">#bxsitesIcon( "moon" )#</span>
+					<span x-show="dark" x-cloak>#bxsitesIcon( "sun" )#</span>
+				</button>
+				<a class="mbx-button mbx-button--small" href="#variables.basePath#getting-started/quick-start/">Get started <span aria-hidden="true">&rarr;</span></a>
+			</div>
+		</div>
+	</header>
+
+	<main id="main">
+		<section class="mbx-hero">
+			<div class="mbx-hero__inner">
+				<div class="mbx-hero__copy">
+					<p class="mbx-eyebrow"><img src="#variables.basePath#assets/boxlang.svg" alt="" width="24" height="24"> A PILLAR OF THE BOXLANG PLATFORM</p>
+					<h1>BoxLang,<br><span>beyond the JVM.</span></h1>
+					<p class="mbx-lede">MatchBox is an independent Rust implementation of the BoxLang language and runtime, bringing BoxLang to native, WebAssembly, serverless, and embedded targets.</p>
+					<div class="mbx-hero__actions">
+						<a class="mbx-button" href="#variables.basePath#getting-started/quick-start/">Build your first app <span aria-hidden="true">&rarr;</span></a>
+						<a class="mbx-text-link" href="#variables.basePath#getting-started/">Explore the documentation <span aria-hidden="true">&rarr;</span></a>
+					</div>
+					<div class="mbx-proof" aria-label="Runtime characteristics">
+						<span><i></i> Rust powered</span>
+						<span>No JVM required for the core runtime</span>
+					</div>
+				</div>
+				<div class="mbx-product" aria-label="A BoxLang program running in MatchBox">
+					<div class="mbx-product__top"><span class="mbx-product__dots" aria-hidden="true"><i></i><i></i><i></i></span><span>hello.bxs</span><span class="mbx-product__mode">MATCHBOX / NATIVE</span></div>
+					<div class="mbx-editor">
+						<pre><code><span class="mbx-line"><span class="mbx-line__number">01</span><span class="mbx-keyword">function</span> greet(name) {</span><span class="mbx-line"><span class="mbx-line__number">02</span>  <span class="mbx-keyword">return</span> <span class="mbx-string">"Hello, "</span> &amp; name;</span><span class="mbx-line"><span class="mbx-line__number">03</span>}</span><span class="mbx-line"><span class="mbx-line__number">04</span></span><span class="mbx-line"><span class="mbx-line__number">05</span>println(greet(<span class="mbx-string">"BoxLang"</span>));</span></code></pre>
+					</div>
+					<div class="mbx-terminal">
+						<div><span>TERMINAL</span><span>BUILD &amp; RUN</span></div>
+					<p><b>$</b> matchbox hello.bxs</p>
+					<p class="mbx-terminal__result">Hello, BoxLang!</p>
+					</div>
+					<div class="mbx-product__foot"><span><i></i> One language, more places to build</span><span>OPEN SOURCE</span></div>
+				</div>
+			</div>
+			<div class="mbx-targets" aria-label="MatchBox targets">
+				<div><span>01</span> Native</div><div><span>02</span> WebAssembly</div><div><span>03</span> Serverless</div><div><span>04</span> Embedded</div>
+			</div>
+		</section>
+
+		<section class="mbx-ecosystem" aria-label="BoxLang platform">
+			<div class="mbx-ecosystem__inner">
+				<a class="mbx-ecosystem__boxlang" href="https://boxlang.io" target="_blank" rel="noopener noreferrer">
+					<img src="#variables.basePath#assets/boxlang.svg" alt="" width="38" height="38">
+					<span><strong>BoxLang</strong><small>SOFTWARE PRODUCTIVITY PLATFORM</small></span>
+				</a>
+				<p>Build, modernize, and run applications with developers and AI agents.</p>
+				<a class="mbx-ecosystem__link" href="https://boxlang.io" target="_blank" rel="noopener noreferrer">Explore BoxLang <span aria-hidden="true">&nearr;</span></a>
+			</div>
+		</section>
+
+		<section class="mbx-home-content">
+			<article class="page-content">#variables.page.contentHtml#</article>
+		</section>
+	</main>
+
+	<footer class="mbx-footer">
+		<div class="mbx-footer__inner">
+			<a href="https://www.ortussolutions.com" aria-label="Ortus Solutions" target="_blank" rel="noopener noreferrer"><img src="#variables.basePath#assets/ortus.svg" alt="Ortus Solutions" width="150" height="23"></a>
+			<p>MatchBox is part of the BoxLang ecosystem.</p>
+			<div><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">BoxLang</a><a href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+		</div>
+	</footer>
+</body>
+</html>
+</bx:output>
