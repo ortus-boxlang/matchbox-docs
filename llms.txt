@@ -6,6 +6,7 @@
 
 - [Getting Started](https://matchbox.boxlang.io/getting-started/index.md) ([HTML](https://matchbox.boxlang.io/getting-started/index.html))
 - [MatchBox](https://matchbox.boxlang.io/index.md) ([HTML](https://matchbox.boxlang.io/index.html))
+- [Releases and Downloads](https://matchbox.boxlang.io/reference/releases.md) ([HTML](https://matchbox.boxlang.io/reference/releases/index.html))
 - [What is MatchBox?](https://matchbox.boxlang.io/getting-started/what-is-matchbox.md) ([HTML](https://matchbox.boxlang.io/getting-started/what-is-matchbox/index.html))
 - [Installation](https://matchbox.boxlang.io/getting-started/installation.md) ([HTML](https://matchbox.boxlang.io/getting-started/installation/index.html))
 - [Your First Application](https://matchbox.boxlang.io/getting-started/quick-start.md) ([HTML](https://matchbox.boxlang.io/getting-started/quick-start/index.html))
