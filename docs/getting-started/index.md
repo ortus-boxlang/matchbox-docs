@@ -11,7 +11,7 @@ MatchBox brings BoxLang to environments where a JVM runtime is not the right fit
 
 ::: stepper
 ::: step "Install MatchBox"
-Use the official macOS/Linux or Windows installer, or choose a release archive or container.
+Use MVM or the direct macOS/Linux or Windows installer, or download a full CLI executable or Docker image. See [installation](installation.md) and [releases and downloads](../reference/releases.md).
 :::
 ::: step "Run BoxLang"
 Start with a script or the interactive REPL. The CLI and standalone programs do not require Java.

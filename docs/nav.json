@@ -55,6 +55,7 @@
     "icon": "phosphor-duotone:book-open-text",
     "children": [
       "reference/cli.md",
+      "reference/releases.md",
       "differences-from-boxlang.md",
       "building-and-deploying/native-fusion.md",
       "building-and-deploying/jit.md",

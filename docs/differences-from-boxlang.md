@@ -41,4 +41,4 @@ Host APIs also differ. MatchBox's native [`http()`](http.md) request struct and 
 4. Test the compiled artifact on the actual destination.
 5. Report minimal compatibility differences in [MatchBox GitHub Issues](https://github.com/ortus-boxlang/matchbox/issues).
 
-Review the MatchBox [changelog](https://github.com/ortus-boxlang/matchbox/blob/development/CHANGELOG.md) and compatibility tests when evaluating a release.
+Review the MatchBox [changelog](https://github.com/ortus-boxlang/matchbox/blob/develop/CHANGELOG.md) and compatibility tests when evaluating a release.
