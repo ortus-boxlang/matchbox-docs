@@ -6,6 +6,8 @@ MatchBox publishes a general-purpose Docker image to GitHub Container Registry:
 ghcr.io/ortus-boxlang/matchbox
 ```
 
+The image supports Linux `amd64` and `arm64`. CI packages the same full CLI binaries published in GitHub releases using `Dockerfile.release`; the original `Dockerfile` remains available for local source builds.
+
 The image runs the main `matchbox` CLI as its entrypoint. That makes it useful for CI builds, direct script execution, bytecode compilation, WASM/native artifact generation, and webroot serving without installing MatchBox on the host.
 
 ---
@@ -23,6 +25,7 @@ Develop snapshots publish:
 
 | Tag | Description |
 | :--- | :--- |
+| `vX.Y.Z-snapshot` | Refreshed snapshot image for the next base version |
 | `develop` | Latest build from the `develop` branch |
 | `snapshot` | Rolling snapshot alias |
 | `be` | Rolling BE/development image alias |
@@ -51,7 +54,9 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --version
 docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest my_script.bxs
 ```
 
-Because `matchbox` is the entrypoint, arguments after the image name are passed directly to MatchBox.
+Because `matchbox` is the entrypoint, arguments after the image name are passed directly to MatchBox. Docker selects the matching image architecture automatically; use `--platform linux/amd64` or `--platform linux/arm64` when selecting it explicitly.
+
+The CLI's `--version` output and the image's `org.opencontainers.image.version` label include the build number, for example `0.12.0-snapshot+133`. Tags omit the `+133` suffix. After a stable release succeeds, CI advances `develop` to the next minor version and builds its snapshot. See [releases and downloads](../reference/releases.md).
 
 ---
 
@@ -104,4 +109,4 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --build src
 docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target wasm src/main.bxs
 ```
 
-For release automation, pin a version tag such as `v0.6.4` instead of `latest`.
+For production and repeatable CI, pin a stable version tag such as `v0.11.0` or an image digest instead of `latest`. Snapshot tags, including `vX.Y.Z-snapshot`, are mutable and are not immutable build pins.

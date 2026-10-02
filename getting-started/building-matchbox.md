@@ -59,7 +59,7 @@ You can customize your build using Cargo feature flags.
 ### Core Features
 - `jit`: Enables the Cranelift-based Just-In-Time compiler (Desktop only).
 - `server`: Includes the built-in web server and BXM transpiler.
-- `cross-compile`: Instructs `build.rs` to attempt building runner stubs for all supported platforms (creates a "Fat CLI").
+- `cross-compile`: Instructs `build.rs` to attempt building cross-platform runner stubs and embed them in the full CLI.
 
 ### Built-in Function (BIF) Features
 MatchBox allows you to toggle specific BIF libraries to reduce binary size:
@@ -76,21 +76,21 @@ MatchBox allows you to toggle specific BIF libraries to reduce binary size:
 
 ## Build Examples
 
-### 1. Slim CLI (Default)
-Builds the VM, Compiler, and REPL with default BIFs for your current architecture.
+### 1. Local CLI (Default)
+Builds the VM, compiler, REPL, and default features for your current architecture. This is a source-build configuration, not a separate published "slim" distribution.
 ```bash
 cargo build --release
 ```
 
-### 2. Fat CLI (All targets)
-Builds the full developer tool, including runner stubs for Native, WASM, and ESP32.
-> **Note**: Requires all cross-compilation toolchains to be installed. ESP32-S3 may still fall back to a local runner build if no healthy pre-built stub is available.
+### 2. CLI with cross-platform runners
+Builds the full developer tool with available cross-platform runner stubs.
+> **Note**: Requires the relevant cross-compilation toolchains. ESP32 stub publication is currently disabled; ESP32 deployments may require a local runner build and an activated ESP-IDF environment.
 ```bash
 cargo build --release --features cross-compile
 ```
 
-### 3. Lightweight Server
-Builds a specialized server binary with minimal BIFs for containerized environments.
+### 3. Custom CLI feature set
+Builds a CLI with webroot serving and a reduced feature set. The separate `matchbox_server` crate remains available for source-built app servers, but standalone server executables are no longer release downloads.
 ```bash
 # Disable default features (JIT, JNI, etc.) and only enable what you need
 cargo build --release --no-default-features --features server,bif-io,bif-http
@@ -117,15 +117,21 @@ toolchain over the managed per-project tool installation flow. Run MatchBox from
 
 ---
 
+## Release builds
+
+CI publishes one full CLI per supported OS/architecture using `--features cross-compile`, plus Linux `amd64`/`arm64` Docker images built from those same binaries. Custom source builds do not create additional published distribution variants.
+
+Pushes to `master` publish the base version in `Cargo.toml`. After publication succeeds, CI advances `develop` to the next minor version and starts its snapshots. See [releases and downloads](../reference/releases.md) for tags, channels, metadata, and checksum verification.
+
 ## Understanding `build.rs`
 
 MatchBox uses a sophisticated `build.rs` script in the root directory. When you run `cargo build`, it:
-1. Detects your git commit and build date for `--version` output.
+1. Detects your Git commit and build date for `--version` output. CI supplies `MATCHBOX_BUILD_VERSION` to include the snapshot suffix and/or build number.
 2. Navigates into `crates/matchbox-runner`.
 3. Compiles the runner for target architectures.
 4. Embeds these runner binaries directly into the `matchbox` CLI as bytes.
 
-This is why `matchbox` can produce a standalone binary for WASM or ESP32 without needing to download external assets at runtime—everything is baked into the main executable.
+Embedded runner stubs let `matchbox` package supported standalone targets without downloading a separate runtime. Do not assume every target has a prebuilt stub: browser packaging and ESP32 deployments can still require their documented local toolchains.
 
 ## Optimization Profiles
 

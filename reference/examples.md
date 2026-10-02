@@ -23,4 +23,4 @@ Connect BoxLang applications to Rust functions.
 :::
 :::
 
-Browse the [full examples directory](https://github.com/ortus-boxlang/matchbox/tree/development/docs/examples) for current source and project layouts. The repository's [changelog](https://github.com/ortus-boxlang/matchbox/blob/development/CHANGELOG.md) and [compatibility notes](../differences-from-boxlang.md) are useful when evaluating a release.
+Browse the [full examples directory](https://github.com/ortus-boxlang/matchbox/tree/develop/docs/examples) for current source and project layouts. The repository's [changelog](https://github.com/ortus-boxlang/matchbox/blob/develop/CHANGELOG.md) and [compatibility notes](../differences-from-boxlang.md) are useful when evaluating a release.
