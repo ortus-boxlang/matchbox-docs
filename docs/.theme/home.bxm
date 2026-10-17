@@ -1,154 +1,338 @@
+<!---
+	The MatchBox landing page. Selected by docs/index.md's `layout: home`. Head, search-free shell and footer are hand written here;
+	the look is matchbox-home.css and the motion is matchbox-home.js. The whole page is hardcoded: index.md's Markdown body is unused.
+	Literal `#` is written `##` because this file is interpolated.
+--->
 <bx:include template="#variables.moduleAssetsDir#/icons.bxm">
 <bx:include template="#variables.moduleAssetsDir#/locale-flags.bxm">
 <bx:include template="includes/site-helpers.bxm">
 <bx:script>
-	variables.searchEnabled = ( variables.siteConfig.search ?: false ) ? true : false
-	variables.searchProviderName = lCase( trim( variables.siteConfig.searchProvider.provider ?: "local" ) )
-	variables.searchAlgolia = variables.siteConfig.searchProvider.algolia ?: {}
-	variables.repoUrl = trim( variables.siteConfig.repo.url ?: "" )
-	variables.ogImageUrl = len( trim( variables.page.ogImage ?: "" ) ) ? trim( variables.page.ogImage ) : trim( variables.siteConfig.ogImage ?: "" )
-	variables.ogDescription = len( variables.page.description ?: "" ) ? variables.page.description : ( variables.siteConfig.description ?: "" )
+	variables.siteUrl = reReplace( variables.siteConfig.baseURL ?: "https://matchbox.boxlang.io/", "/*$", "/" )
+	variables.pageTitle = "MatchBox: BoxLang compiled to Rust. Native, WASM, Lambda and ESP32"
+	variables.pageDesc = "MatchBox is the Rust runtime for BoxLang. A bytecode VM with a tiered Cranelift JIT that ships to native binaries, the browser, WASI containers, AWS Lambda and ESP32."
 	variables.faviconUrl = trim( variables.siteConfig.theme.favicon ?: "" )
 </bx:script>
 <bx:output>
 <!doctype html>
-<html lang="#encodeForHTML( variables.currentLocale.len() ? variables.currentLocale : 'en' )#" dir="#encodeForHTML( variables.currentLocaleDir )#">
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>#encodeForHTML( variables.page.title )# - #encodeForHTML( variables.siteConfig.name )#</title>
+	<title>#encodeForHTML( variables.pageTitle )#</title>
+	<meta name="description" content="#encodeForHTML( variables.pageDesc )#">
+	<meta name="theme-color" content="##06141a">
+	<meta name="robots" content="index, follow, max-image-preview:large">
+	<link rel="canonical" href="#variables.siteUrl#">
 	<meta property="og:type" content="website">
-	<meta property="og:site_name" content="#encodeForHTML( variables.siteConfig.name )#">
-	<meta property="og:title" content="#encodeForHTML( variables.page.title )#">
-	#renderArticleMeta()#
-	<bx:if len( variables.page.canonicalUrl )>
-		<link rel="canonical" href="#encodeForHTML( variables.page.canonicalUrl )#">
-	</bx:if>
-	<bx:if len( variables.ogDescription )>
-		<meta name="description" content="#encodeForHTML( variables.ogDescription )#">
-		<meta property="og:description" content="#encodeForHTML( variables.ogDescription )#">
-	</bx:if>
-	<bx:if len( variables.ogImageUrl )>
-		<meta property="og:image" content="#resolveAssetUrl( variables.ogImageUrl )#">
-		<meta name="twitter:card" content="summary_large_image">
-	</bx:if>
+	<meta property="og:site_name" content="MatchBox">
+	<meta property="og:title" content="#encodeForHTML( variables.pageTitle )#">
+	<meta property="og:description" content="#encodeForHTML( variables.pageDesc )#">
+	<meta property="og:url" content="#variables.siteUrl#">
+	<meta property="og:image" content="#variables.siteUrl#assets/og/home.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@TryBoxLang">
+	<meta name="twitter:title" content="#encodeForHTML( variables.pageTitle )#">
+	<meta name="twitter:description" content="#encodeForHTML( variables.pageDesc )#">
+	<meta name="twitter:image" content="#variables.siteUrl#assets/og/home.png">
 	<bx:if len( variables.faviconUrl )>
 		<link rel="icon" href="#resolveAssetUrl( variables.faviconUrl )#">
 	</bx:if>
 	<script>
 		( function () {
-			var configuredMode = "#variables.siteConfig.theme.options.colorMode ?: 'auto'#";
-			var stored = localStorage.getItem( "bxsites-theme" );
-			var prefersDark = window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
-			var wantsDark = stored ? stored === "dark" : ( configuredMode === "dark" || ( configuredMode === "auto" && prefersDark ) );
-			if ( wantsDark ) document.documentElement.setAttribute( "data-theme", "dark" );
+			var stored = null;
+			try { stored = localStorage.getItem( "bxsites-theme" ); } catch ( e ) {}
+			var dark = stored ? stored === "dark" : window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+			document.documentElement.setAttribute( "data-theme", dark ? "dark" : "light" );
 		} )();
 	</script>
-	<link rel="stylesheet" href="#variables.basePath#assets/vendor/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" href="#variables.basePath#assets/vendor/highlight/github.min.css">
-	<link rel="stylesheet" href="#variables.basePath##variables.siteConfig.theme.styleUrl ?: 'assets/theme/style.css'#">
-	<link rel="stylesheet" href="#variables.basePath#assets/theme/home.css">
+	<link rel="stylesheet" href="#themeAssetUrl( 'matchbox-home.css' )#">
 	#renderExtraCss( variables.siteConfig.extraCss ?: [] )#
-	<bx:if variables.searchEnabled and variables.searchProviderName eq 'algolia'>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-	</bx:if>
-	<bx:if variables.searchEnabled and variables.searchProviderName eq 'pagefind'>
-		<link rel="stylesheet" href="#variables.basePath#pagefind/pagefind-ui.css">
-	</bx:if>
-	<bx:if variables.searchEnabled and variables.searchProviderName eq 'local'>
-		<script>window.__BXSITES_BASE_PATH__ = "#variables.basePath#";</script>
-		<script>window.__BXSITES_SEARCH_NO_RESULTS__ = "#encodeForJavaScript( variables.strings.searchNoResults )#";</script>
-		<script src="#variables.basePath#assets/vendor/minisearch/minisearch.js"></script>
-		<script src="#variables.basePath#assets/search.js" defer></script>
-	</bx:if>
-	<script src="#variables.basePath#assets/vendor/alpine/cdn.min.js" defer></script>
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "SoftwareApplication",
+				"name": "MatchBox",
+				"applicationCategory": "DeveloperApplication",
+				"operatingSystem": "Linux, macOS, Windows",
+				"description": "#encodeForJavaScript( variables.pageDesc )#",
+				"url": "#variables.siteUrl#",
+				"license": "https://www.apache.org/licenses/LICENSE-2.0",
+				"codeRepository": "https://github.com/ortus-boxlang/matchbox",
+				"programmingLanguage": "BoxLang",
+				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+				"author": { "@type": "Organization", "name": "Ortus Solutions, Corp", "url": "https://www.ortussolutions.com" }
+			},
+			{
+				"@type": "WebSite",
+				"name": "MatchBox",
+				"url": "#variables.siteUrl#",
+				"publisher": { "@type": "Organization", "name": "Ortus Solutions, Corp", "url": "https://www.ortussolutions.com" }
+			},
+			{
+				"@type": "FAQPage",
+				"mainEntity": [
+					{ "@type": "Question", "name": "What is MatchBox?", "acceptedAnswer": { "@type": "Answer", "text": "MatchBox is a Rust implementation of the BoxLang runtime. BoxLang is the platform, with a JVM runtime and a Rust runtime. MatchBox compiles BoxLang to bytecode and runs it on a Rust VM with a tiered JIT in the native CLI." } },
+					{ "@type": "Question", "name": "Is MatchBox a replacement for BoxLang on the JVM?", "acceptedAnswer": { "@type": "Answer", "text": "No. It complements it. Use the JVM runtime for the full Java ecosystem and broad module coverage, and MatchBox to run BoxLang where a JVM does not fit, such as single binaries, the browser, WASI containers, serverless and microcontrollers." } },
+					{ "@type": "Question", "name": "Does MatchBox need a JVM?", "acceptedAnswer": { "@type": "Answer", "text": "No, not for the core runtime or native builds. Experimental Java interop exists in native builds and needs a JDK." } },
+					{ "@type": "Question", "name": "Where can MatchBox run?", "acceptedAnswer": { "@type": "Answer", "text": "Native executables, the browser and JavaScript including Cloudflare Workers, WASI containers, AWS Lambda (preview) and ESP32 devices." } },
+					{ "@type": "Question", "name": "How do I install MatchBox?", "acceptedAnswer": { "@type": "Answer", "text": "Install MVM, the MatchBox Version Manager, then run mvm install latest and mvm use latest." } },
+					{ "@type": "Question", "name": "Can AI agents write MatchBox code?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Install the BoxLang skills with npx skills add ortus-boxlang/skills so your agent learns the targets, commands and limits." } }
+				]
+			}
+		]
+	}
+	</script>
 </head>
-<body class="bxsites-home matchbox-home" x-data="{ dark: document.documentElement.getAttribute( 'data-theme' ) === 'dark' }" x-init="$watch( 'dark', v => { document.documentElement.setAttribute( 'data-theme', v ? 'dark' : 'light' ); localStorage.setItem( 'bxsites-theme', v ? 'dark' : 'light' ) } )">
-	<a class="mbx-skip" href="##main">Skip to content</a>
-	<header class="mbx-header">
-		<div class="mbx-header__inner">
-			<a class="mbx-brand" href="#variables.basePath#" aria-label="MatchBox home">
-				<img src="#variables.basePath#assets/matchbox.svg" alt="" width="42" height="42">
-				<span><strong>MatchBox</strong><small>A BOXLANG RUNTIME</small></span>
-			</a>
-			<nav class="mbx-nav" aria-label="Primary navigation">
-				<a href="#variables.basePath#getting-started/">Documentation</a>
-				<a href="#variables.basePath#getting-started/agentic-development/">Agentic Development</a>
-				<a href="#variables.basePath#getting-started/boxlang-ai/">BoxLang AI</a>
-			</nav>
-			<div class="mbx-header__actions">
-				<bx:if variables.searchEnabled>
-					<div class="mbx-search"><bx:include template="#variables.themeDir#/search.bxm"></div>
-				</bx:if>
-				<bx:if len( variables.repoUrl )>
-					<a class="mbx-icon-button" href="#bxsitesUrlAttr( variables.repoUrl )#" aria-label="MatchBox on GitHub" title="MatchBox on GitHub" target="_blank" rel="noopener noreferrer">#bxsitesIcon( "github" )#</a>
-				</bx:if>
-				<button class="mbx-icon-button" type="button" @click="dark = !dark" aria-label="#encodeForHTML( variables.strings.toggleDarkMode )#" title="#encodeForHTML( variables.strings.toggleDarkMode )#">
-					<span x-show="!dark">#bxsitesIcon( "moon" )#</span>
-					<span x-show="dark" x-cloak>#bxsitesIcon( "sun" )#</span>
-				</button>
-				<a class="mbx-button mbx-button--small" href="#variables.basePath#getting-started/quick-start/">Get started <span aria-hidden="true">&rarr;</span></a>
-			</div>
-		</div>
-	</header>
+<body class="mxh" data-base="#variables.basePath#">
+<a class="skip" href="##main">Skip to content</a>
 
-	<main id="main">
-		<section class="mbx-hero">
-			<div class="mbx-hero__inner">
-				<div class="mbx-hero__copy">
-					<p class="mbx-eyebrow"><img src="#variables.basePath#assets/boxlang.svg" alt="" width="24" height="24"> BOXLANG SOFTWARE PRODUCTIVITY PLATFORM</p>
-					<h1>Build with BoxLang.<br><span>Choose your runtime.</span></h1>
-					<p class="mbx-lede">BoxLang is the software productivity platform for building, modernizing, and running applications, with developers and AI agents working together. Use the official JVM runtime for its broad ecosystem, or MatchBox's independent Rust runtime to reach other targets.</p>
-					<div class="mbx-hero__actions">
-						<a class="mbx-button" href="#variables.basePath#getting-started/quick-start/">Build your first app <span aria-hidden="true">&rarr;</span></a>
-						<a class="mbx-text-link" href="#variables.basePath#getting-started/">Explore the documentation <span aria-hidden="true">&rarr;</span></a>
-					</div>
-					<div class="mbx-proof" aria-label="Runtime characteristics">
-						<span><i></i> Rust powered</span>
-						<span>JVM or Rust, selected for the workload</span>
-					</div>
-				</div>
-				<div class="mbx-product" aria-label="A BoxLang program running in MatchBox">
-					<div class="mbx-product__top"><span class="mbx-product__dots" aria-hidden="true"><i></i><i></i><i></i></span><span>hello.bxs</span><span class="mbx-product__mode">MATCHBOX / NATIVE</span></div>
-					<div class="mbx-editor">
-						<pre><code><span class="mbx-line"><span class="mbx-line__number">01</span><span class="mbx-keyword">function</span> greet(name) {</span><span class="mbx-line"><span class="mbx-line__number">02</span>  <span class="mbx-keyword">return</span> <span class="mbx-string">"Hello, "</span> &amp; name;</span><span class="mbx-line"><span class="mbx-line__number">03</span>}</span><span class="mbx-line"><span class="mbx-line__number">04</span></span><span class="mbx-line"><span class="mbx-line__number">05</span>println(greet(<span class="mbx-string">"BoxLang"</span>));</span></code></pre>
-					</div>
-					<div class="mbx-terminal">
-						<div><span>TERMINAL</span><span>BUILD &amp; RUN</span></div>
-					<p><b>$</b> matchbox hello.bxs</p>
-					<p class="mbx-terminal__result">Hello, BoxLang!</p>
-					</div>
-					<div class="mbx-product__foot"><span><i></i> One language, more places to build</span><span>OPEN SOURCE</span></div>
-				</div>
-			</div>
-			<div class="mbx-targets" aria-label="MatchBox targets">
-				<div><span>01</span> Native</div><div><span>02</span> WebAssembly</div><div><span>03</span> Serverless</div><div><span>04</span> Embedded</div>
-			</div>
-		</section>
+<div class="prog" id="prog"></div>
+<nav><div class="wrap">
+  <a class="logo" href="##top" aria-label="MatchBox home"><img src="#variables.basePath#assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a>
+  <div class="links"><a href="#variables.basePath#getting-started/">Docs</a><a href="##targets">Targets</a><a href="##fusion">Native Fusion</a><a href="##ai">AI native</a><a href="##mvm">Install</a></div>
+  <div class="sp"></div>
+  <a class="ibtn" href="https://boxlang.io" target="_blank" rel="noopener noreferrer" aria-label="BoxLang, boxlang.io" title="boxlang.io"><img src="#variables.basePath#assets/ecosystem/boxlang-icon-full.svg" alt=""><span>BoxLang</span><i aria-hidden="true">&##8599;</i></a>
+  <a class="ibtn sq" href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer" aria-label="MatchBox on GitHub" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+  <button type="button" class="themebtn" id="themebtn" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  <a class="btn p sm" href="#variables.basePath#getting-started/quick-start/">Get started</a>
+</div></nav>
 
-		<section class="mbx-ecosystem" aria-label="BoxLang platform">
-			<div class="mbx-ecosystem__inner">
-				<a class="mbx-ecosystem__boxlang" href="https://boxlang.io" target="_blank" rel="noopener noreferrer">
-					<img src="#variables.basePath#assets/boxlang.svg" alt="" width="38" height="38">
-					<span><strong>BoxLang</strong><small>SOFTWARE PRODUCTIVITY PLATFORM</small></span>
-				</a>
-				<p>Build, modernize, and run applications with developers and AI agents.</p>
-				<a class="mbx-ecosystem__link" href="https://boxlang.io" target="_blank" rel="noopener noreferrer">Explore BoxLang <span aria-hidden="true">&nearr;</span></a>
-			</div>
-		</section>
+<main id="main">
+<header class="hero" id="top"><div class="spot" id="spot"></div>
+  <div class="glyphs" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow">The Rust runtime for BoxLang</span>
+      <h1>BoxLang, <span class="grad">compiled to Rust.</span><br>Ships to <span class="grad swap" id="swap">a native binary</span>.</h1>
+      <p class="lede">BoxLang is the platform, and MatchBox is its <b>Rust runtime</b>, alongside the JVM one. Same language, with a bytecode VM and a <b>tiered Cranelift JIT</b>, for <b>native, browser, WASI, AWS Lambda and ESP32</b>.</p>
+      <div class="cta"><a class="btn p" href="##install">Install MatchBox &rarr;</a><a class="btn" href="##targets">See where it runs</a></div>
+      <div class="install"><code><span class="pr">$</span> curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash</code><button type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash">Copy</button></div>
+      <div class="chips"><span class="chip"><b>5</b> deployment targets</span><span class="chip"><b>4</b> JIT tiers</span><span class="chip"><b>500+</b> transferred compat tests</span><span class="chip"><b>~500 KB</b> runner stub</span></div>
+    </div>
+    <div class="term rv" aria-label="MatchBox command line demo">
+      <div class="bar"><i class="dot" style="background:##ff5f56"></i><i class="dot" style="background:##ffbd2e"></i><i class="dot" style="background:##27c93f"></i><span style="margin-left:8px">hello.bxs</span></div>
+      <div class="tabs" role="tablist" id="ttabs"></div>
+      <pre id="tout" aria-live="polite"></pre>
+      <div class="sizebar"><span id="sizelbl">runner stub + your bytecode</span><div class="track"><div class="fill" id="sizefill"></div></div></div>
+    </div>
+  </div>
+</header>
 
-		<section class="mbx-home-content">
-			<article class="page-content">#variables.page.contentHtml#</article>
-		</section>
-	</main>
+<div class="marq" aria-hidden="true"><div class="row" id="marq"></div></div>
 
-	<footer class="mbx-footer">
-		<div class="mbx-footer__inner">
-			<a href="https://www.ortussolutions.com" aria-label="Ortus Solutions" target="_blank" rel="noopener noreferrer"><img src="#variables.basePath#assets/ortus.svg" alt="Ortus Solutions" width="150" height="23"></a>
-			<p>MatchBox is part of the BoxLang ecosystem.</p>
-			<div><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">BoxLang</a><a href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer">GitHub</a></div>
-		</div>
-	</footer>
+<section id="why"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">One platform, two runtimes</span><h2>BoxLang on the JVM. <span class="grad">BoxLang on Rust.</span></h2><p>MatchBox does not replace the JVM runtime. It complements it. Write BoxLang once, then choose the runtime that fits where the code has to run.</p></div>
+  <div class="plat rv" id="plat">
+    <div class="pbar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg><b>BoxLang</b><span>the language, conventions and tools</span></div>
+    <div class="beams" aria-hidden="true"><i></i><i></i></div>
+    <div class="rts">
+      <div class="rt jvm"><small>RUNTIME A</small><h3>BoxLang on the JVM</h3><p>The full Java ecosystem, broad module coverage, and the infrastructure your JVM apps already use.</p><span class="pick">Choose it for Java interop and the full library surface</span></div>
+      <div class="rt rs"><small>RUNTIME B</small><h3>MatchBox, on Rust</h3><p>Single binaries, browser and edge, containers, serverless and microcontrollers, with no JVM at runtime.</p><span class="pick">Choose it to run BoxLang where a JVM does not fit</span></div>
+    </div>
+  </div>
+  <div class="stats" style="margin-top:28px">
+    <div class="stat rv"><b class="grad" data-count="5">0</b><span>deployment targets</span><small>native · browser · WASI · Lambda · ESP32</small></div>
+    <div class="stat rv" style="--d:.08s"><b class="grad" data-count="4">0</b><span>JIT tiers</span><small>loops, arrays, hot functions</small></div>
+    <div class="stat rv" style="--d:.16s"><b class="grad" data-count="500" data-plus="1">0</b><span>transferred compat tests</span><small>black-box, from the BoxLang JVM suite</small></div>
+    <div class="stat rv" style="--d:.24s"><b class="grad">0 JVMs</b><span>needed at runtime</span><small>core runtime, native builds</small></div>
+  </div>
+  <p class="fn">MatchBox is an independent, evolving implementation. Runtime APIs and module support differ between the two, so check compatibility for your target.</p>
+</div></section>
+
+<section id="ai"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">AI native</span><h2>Agents already <span class="grad">speak MatchBox</span>.</h2><p>MatchBox is part of the BoxLang productivity platform, where developers and AI agents work in the same loop. Install the skills once and your agent knows the targets, the commands and the limits.</p></div>
+  <div class="aig rv">
+    <div class="chat" aria-label="An AI agent using MatchBox skills">
+      <div class="cbar"><i class="dot" style="background:##ff5f56"></i><i class="dot" style="background:##ffbd2e"></i><i class="dot" style="background:##27c93f"></i><span>your coding agent</span></div>
+      <div class="cbody" id="cbody"></div>
+    </div>
+    <div class="skl">
+      <div class="skcmd"><span class="pr">$</span> npx skills add ortus-boxlang/skills</div>
+      <div class="sks" id="sks"></div>
+      <div class="skm">
+        <div><b data-count="105">0</b><span>BoxLang skills in the registry</span></div>
+        <div><b>llms.txt</b><span>and an MCP index on this site</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="vm" style="background:var(--bg2)"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Inside MatchBox</span><h2>From source to <span class="grad">machine code</span>.</h2><p>Your BoxLang compiles to bytecode. A Rust VM runs it, schedules fibers, and the native CLI compiles hot code with Cranelift.</p></div>
+  <div class="vmp rv" id="vmpipe">
+    <div class="rail"><i id="vmdot"></i></div>
+    <ol id="vmstages"></ol>
+    <div class="vmcap"><span class="lbl" id="vmlbl"></span><pre id="vmcode"></pre></div>
+  </div>
+</div></section>
+
+<section id="jit"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Speed</span><h2>It watches your code, then <span class="grad">compiles what is hot</span>.</h2><p>Four tiers of JIT, built on Cranelift. Cheap profiling first, native machine code only once a loop or function has earned it.</p></div>
+  <div class="jit">
+    <div class="tiers rv" id="tiers" role="tablist"></div>
+    <div class="jv rv">
+      <div class="lbl">Tier in action <span class="ill">ILLUSTRATIVE</span></div>
+      <pre id="jcode"></pre>
+      <div class="lane">
+        <div class="rowb"><em>interpreter</em><div class="pipe"><i id="pi"></i></div><span id="pit">0 ms</span></div>
+        <div class="rowb"><em>JIT</em><div class="pipe"><i class="fast" id="pj"></i></div><span id="pjt">0 ms</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="fibers"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Concurrency</span><h2>Fibers share one thread, <span class="grad">politely</span>.</h2><p>runAsync, sleep and HTTP yield to a cooperative scheduler, so other fibers keep running while one waits.</p></div>
+  <div class="fib rv" id="fib">
+    <div class="fl"><em>main</em><div class="ft" data-f="m"></div></div>
+    <div class="fl"><em>runAsync A</em><div class="ft" data-f="a"></div></div>
+    <div class="fl"><em>runAsync B</em><div class="ft" data-f="b"></div></div>
+    <div class="fl one"><em>one thread</em><div class="ft" data-f="t"></div></div>
+    <div class="play" id="fplay"></div>
+  </div>
+</div></section>
+
+<section style="background:var(--bg2)" id="how"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">How it ships</span><h2>A tiny runtime, <span class="grad">plus your code</span>. One file.</h2><p>MatchBox compiles your BoxLang to bytecode and appends it to a stripped runner stub. Nothing else to install on the destination.</p></div>
+  <div class="pack rv" id="pack" aria-label="Runner stub plus bytecode makes one executable">
+    <div class="blk stub"><b>Runner stub</b><span>VM core, ~500 KB</span></div>
+    <div class="plus" aria-hidden="true">+</div>
+    <div class="blk code"><b>Your bytecode</b><span>from app.bxs</span></div>
+    <div class="plus" aria-hidden="true">=</div>
+    <div class="blk exe"><b>./app</b><span>one self-contained file</span></div>
+  </div>
+  <div class="why3">
+    <div class="rv"><b>Nothing to install</b><span>The destination needs no JVM and no separate MatchBox install for a native build.</span></div>
+    <div class="rv" style="--d:.08s"><b>Compile once</b><span>Ship a <code>.bxb</code> bytecode file to any compatible runner, or strip the source text with <code>--strip-source</code>.</span></div>
+    <div class="rv" style="--d:.16s"><b>Fibers built in</b><span>A cooperative scheduler runs <code>runAsync</code> and non-blocking <code>sleep</code> and HTTP without OS thread overhead.</span></div>
+    <div class="rv" style="--d:.24s"><b>Written in Rust</b><span>A memory safe implementation, with a tiered JIT where the target allows it.</span></div>
+  </div>
+</div></section>
+
+<section id="targets"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Targets</span><h2>Run it <span class="grad">close to the workload</span>.</h2><p>One codebase. Pick the destination at build time.</p></div>
+  <div class="cards" id="cards"></div>
+</div></section>
+
+<section id="matrix"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Know before you go</span><h2>What each target <span class="grad">brings with it</span>.</h2><p>Targets share the language, not every capability. Here is the honest picture, straight from the compatibility guide.</p></div>
+  <div class="mx rv" id="mx">
+    <div class="mh"></div><div class="mh">Native</div><div class="mh">Browser / WASM</div><div class="mh">ESP32</div>
+  </div>
+  <p class="fn">A high level orientation, not a guarantee for every release or build. Test the artifact on the destination.</p>
+</div></section>
+
+<section id="fusion" style="background:var(--bg2)"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Native Fusion</span><h2>BoxLang, Rust and Java, <span class="grad">in one loop</span>.</h2><p>Call Rust from BoxLang. Let Rust call back into BoxLang. Reach Java classes from a native build. Tap an arrow to see it.</p></div>
+  <div class="loop rv">
+    <div class="lv">
+      <svg viewBox="0 0 640 424" id="lsvg" role="img" aria-label="BoxLang calls Rust, Rust calls back into BoxLang, and BoxLang reaches Java">
+        <defs><linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="##00ff78"/><stop offset="1" stop-color="##00dbff"/></linearGradient>
+        <filter id="gw"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <path id="pA" class="lp on" d="M150 292 C196 236 246 168 296 122" />
+        <path id="pB" class="lp" d="M268 112 C196 140 118 206 100 270" />
+        <path id="pC" class="lp dash" d="M170 336 C270 392 370 392 470 336" />
+        <circle class="pk a" r="6"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="##pA"/></animateMotion></circle>
+        <circle class="pk b" r="6"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite"><mpath href="##pB"/></animateMotion></circle>
+        <circle class="pk c" r="6"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="##pC"/></animateMotion></circle>
+        <g class="nd" transform="translate(320 78)"><circle r="52"/><text y="-2">Rust</text><text y="18" class="sm">native/*.rs</text></g>
+        <g class="nd" transform="translate(110 318)"><circle r="52"/><text y="-2">BoxLang</text><text y="18" class="sm">app.bxs</text></g>
+        <g class="nd jv" transform="translate(530 318)"><circle r="52"/><text y="-2">Java</text><text y="18" class="sm">via JNI</text></g>
+        <text class="ar" x="232" y="226" id="tA">add(10, 20)</text>
+        <text class="ar" x="62" y="176" id="tB">callback(n)</text>
+        <text class="ar" x="320" y="412" id="tC" text-anchor="middle">java.new(...)</text>
+      </svg>
+    </div>
+    <div class="lc">
+      <div class="ltabs" role="tablist" id="ltabs"></div>
+      <div class="lcode"><div class="lbar" id="lbar"></div><pre id="lpre"></pre><div class="lnote" id="lnote"></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="mvm" style="background:var(--bg2)"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">MVM, the MatchBox Version Manager</span><h2>Any version, <span class="grad">one command</span>.</h2><p>Install stable releases side by side, pin one per project, and follow the rolling snapshot. Every download is checked against its SHA-256 before it replaces anything.</p></div>
+  <div class="mvm rv">
+    <div class="term"><div class="bar"><i class="dot" style="background:##ff5f56"></i><i class="dot" style="background:##ffbd2e"></i><i class="dot" style="background:##27c93f"></i><span style="margin-left:8px">terminal</span></div><pre id="mvmout" aria-live="polite"></pre></div>
+    <div class="mvmf">
+      <div><b>Side by side</b><span>Keep several MatchBox versions installed and switch with <code>mvm use</code>.</span></div>
+      <div><b>Per project</b><span>Pin a version in <code>.mvmrc</code> and activate it with <code>mvm use</code>.</span></div>
+      <div><b>Verified</b><span>SHA-256 checked before install. A failed check leaves your current version intact.</span></div>
+      <div><b>Snapshots</b><span><code>mvm install snapshot</code> tracks the rolling build and refreshes only when it changes.</span></div>
+      <div class="dog"><b>Built with MatchBox</b><span>MVM is a BoxLang program compiled to a native executable by MatchBox itself.</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="eco"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Part of the BoxLang ecosystem</span><h2>Built for <span class="grad">BoxLang</span>, with <span class="grad">BoxLang</span>.</h2><p>MatchBox is one runtime in a wider platform. These projects work alongside it.</p></div>
+  <div class="eco9">
+    <a class="rv" style="--d:0.00s" href="https://boxlang.io" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/boxlang-icon-full.svg" alt="BoxLang"></div><b>BoxLang <i class="up" aria-hidden="true">&##8599;</i></b><span>The language and the JVM runtime. MatchBox is its Rust sibling.</span></a>
+    <a class="rv" style="--d:0.05s" href="https://ai.boxlang.io" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/icon-module-bx-ai.svg" alt="BoxLang AI"></div><b>BoxLang AI <i class="up" aria-hidden="true">&##8599;</i></b><span>Models, tools and agents for your apps. Check module support for the runtime you ship.</span></a>
+    <a class="rv" style="--d:0.10s" href="https://boxlang.io/plans" target="_blank" rel="noopener noreferrer"><div class="ic ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 2.2 3.2-.4.9 3.1 2.8 1.7-1.2 3 1.2 3-2.8 1.7-.9 3.1-3.2-.4L12 21l-2.4-2.2-3.2.4-.9-3.1L2.7 14.4l1.2-3-1.2-3 2.8-1.7.9-3.1 3.2.4z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg></div><b>BoxLang+ <i class="up" aria-hidden="true">&##8599;</i></b><span>Support, modules and the features that run a fleet.</span></a>
+    <a class="rv" style="--d:0.15s" href="https://www.coldbox.org" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/coldbox-icon-full.svg" alt="ColdBox"></div><b>ColdBox <i class="up" aria-hidden="true">&##8599;</i></b><span>Conventions based MVC. MatchBox's app server uses ColdBox style handlers.</span></a>
+    <a class="rv" style="--d:0.20s" href="https://commandbox.ortusbooks.com" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/commandbox-icon-full.svg" alt="CommandBox"></div><b>CommandBox <i class="up" aria-hidden="true">&##8599;</i></b><span>The CLI, package manager and server for the JVM runtime.</span></a>
+    <a class="rv" style="--d:0.25s" href="https://bxsites.io" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/bxsites-icon-full.svg" alt="bxSites"></div><b>bxSites <i class="up" aria-hidden="true">&##8599;</i></b><span>The static site generator that builds this documentation.</span></a>
+    <a class="rv" style="--d:0.30s" href="https://bxplaywright.boxlang.io" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/bxplaywright-icon-full.svg" alt="BxPlaywright"></div><b>BxPlaywright <i class="up" aria-hidden="true">&##8599;</i></b><span>Browser automation and testing for BoxLang.</span></a>
+    <a class="rv" style="--d:0.35s" href="https://bxlens.boxlang.io" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/bxlens-icon-full.svg" alt="BxLens"></div><b>BxLens <i class="up" aria-hidden="true">&##8599;</i></b><span>The debug bar and ops console for BoxLang apps.</span></a>
+    <a class="rv" style="--d:0.40s" href="https://bxagents.ai" target="_blank" rel="noopener noreferrer"><div class="ic"><img src="#variables.basePath#assets/ecosystem/bxagents-icon-full.svg" alt="BxAgents"></div><b>BxAgents <i class="up" aria-hidden="true">&##8599;</i></b><span>Build AI agents by convention, powered by BoxLang AI.</span></a>
+  </div>
+  <div class="learn rv"><span>Learn and build</span><a href="#variables.basePath#examples/">Examples</a><a href="#variables.basePath#getting-started/agentic-development/">Agent skills</a><a href="https://marketplace.visualstudio.com/items?itemName=ortus-solutions.vscode-boxlang" target="_blank" rel="noopener noreferrer">VS Code extension</a><a href="https://boxlang.ortusbooks.com" target="_blank" rel="noopener noreferrer">BoxLang docs</a></div>
+</div></section>
+
+<section class="tight" id="consult"><div class="wrap">
+  <div class="support rv">
+    <div class="sl">
+      <span class="eyebrow">Consulting and support</span>
+      <h2>Need MatchBox in production? <span class="grad">Talk to the people who build BoxLang.</span></h2>
+      <p><a href="https://www.ortussolutions.com" target="_blank" rel="noopener noreferrer">Ortus Solutions</a> offers professional support, architecture reviews and custom development for BoxLang, including native tools, edge and WASM workloads, and embedded devices.</p>
+      <div class="cta"><a class="btn p" href="https://www.ortussolutions.com/services" target="_blank" rel="noopener noreferrer">Talk to Ortus &rarr;</a><a class="btn" href="https://boxlang.io/plans" target="_blank" rel="noopener noreferrer">See BoxLang+ plans</a><a class="btn" href="mailto:consulting@ortussolutions.com">consulting@ortussolutions.com</a></div>
+    </div>
+    <div class="sr">
+      <div class="perk"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/></svg></span><div><b>Priority support</b><span>Answers from the team that wrote the runtime.</span></div></div>
+      <div class="perk"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><div><b>Custom development</b><span>Native Fusion modules, edge workloads and device firmware built to your brief.</span></div></div>
+      <div class="perk"><span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><div><b>Training and review</b><span>Get your team productive and your design checked.</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Questions</span><h2>Straight <span class="grad">answers</span>.</h2></div>
+  <div class="faq rv">
+    <details open><summary>What is MatchBox?</summary><p>MatchBox is a Rust implementation of the BoxLang runtime. BoxLang is the platform, and it now has two runtimes: the JVM runtime and MatchBox on Rust. MatchBox compiles BoxLang to bytecode and runs it on a Rust VM with a tiered JIT in the native CLI.</p></details>
+    <details><summary>Is MatchBox a replacement for BoxLang on the JVM?</summary><p>No. It complements it. Use the JVM runtime for the full Java ecosystem and broad module coverage. Use MatchBox to run BoxLang where a JVM does not fit, such as single binaries, the browser, WASI containers, serverless and microcontrollers. Runtime APIs and module support differ, so check compatibility for your target.</p></details>
+    <details><summary>Does MatchBox need a JVM?</summary><p>No, not for the core runtime or for native builds. Experimental Java interop exists in native builds and needs a JDK on the machine.</p></details>
+    <details><summary>Where can MatchBox run?</summary><p>Native executables, the browser and JavaScript (including Cloudflare Workers), WASI containers, AWS Lambda (preview) and ESP32 devices.</p></details>
+    <details><summary>How do I install it?</summary><p>Install MVM, the MatchBox Version Manager, then run <code>mvm install latest &amp;&amp; mvm use latest</code>. See the <a href="#variables.basePath#getting-started/installation/">installation guide</a>.</p></details>
+    <details><summary>Can AI agents write MatchBox code?</summary><p>Yes. Install the BoxLang skills with <code>npx skills add ortus-boxlang/skills</code> and your agent learns the targets, commands and limits. This site also publishes an llms.txt index and an MCP endpoint.</p></details>
+  </div>
+</div></section>
+
+<section class="final" id="install"><div class="wrap">
+  <span class="eyebrow">Start in a minute</span>
+  <h2 class="rv">Start with a script. <span class="grad">Ship a binary.</span></h2>
+  <p class="rv">Install MVM, pick a MatchBox version, run a file, then build it for the target you need.</p>
+  <div class="cta rv"><a class="btn p" href="#variables.basePath#getting-started/quick-start/">Quick start &rarr;</a><a class="btn" href="#variables.basePath#getting-started/">Read the docs</a></div>
+  <div class="install rv"><code><span class="pr">$</span> mvm install latest &amp;&amp; mvm use latest</code><button type="button" data-copy="mvm install latest && mvm use latest">Copy</button></div>
+</div></section>
+
+
+</main>
+<footer class="foot"><div class="wrap">
+  <div class="fgrid">
+    <div><a class="logo" href="#variables.basePath#"><img src="#variables.basePath#assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a><p>The Rust runtime for BoxLang. Part of the BoxLang productivity platform.</p></div>
+    <div><h4>Learn</h4><a href="#variables.basePath#getting-started/quick-start/">Quick start</a><a href="#variables.basePath#getting-started/installation/">Install with MVM</a><a href="#variables.basePath#examples/">Examples</a><a href="#variables.basePath#reference/cli/">CLI reference</a></div>
+    <div><h4>Targets</h4><a href="#variables.basePath#building-and-deploying/native-builds/">Native</a><a href="#variables.basePath#building-and-deploying/javascript-and-wasm/">Browser and JS</a><a href="#variables.basePath#building-and-deploying/wasm-container/">WASI</a><a href="#variables.basePath#building-and-deploying/esp32/">ESP32</a><a href="#variables.basePath#building-and-deploying/native-fusion/">Native Fusion</a></div>
+    <div><h4>Community</h4><a href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">boxlang.io</a><a href="https://www.ortussolutions.com/community/slack" target="_blank" rel="noopener noreferrer">Slack</a><a href="https://www.ortussolutions.com/services" target="_blank" rel="noopener noreferrer">Consulting</a></div>
+  </div>
+  <div class="fbot"><span>&copy; #year( now() )# Ortus Solutions, Corp. MatchBox is an independent Rust implementation of BoxLang.</span><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">Part of the BoxLang ecosystem</a></div>
+</div></footer>
+
+<script src="#themeAssetUrl( 'matchbox-home.js' )#" defer></script>
 </body>
 </html>
 </bx:output>
