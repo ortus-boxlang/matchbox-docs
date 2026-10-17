@@ -1,3 +1,8 @@
+---
+title: ESP32 example
+description: Compile and flash a simple BoxLang script to an ESP32 microcontroller.
+---
+
 # ESP32 BoxLang Example
 
 This example demonstrates how to compile and flash a simple BoxLang script to an ESP32 microcontroller.

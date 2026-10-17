@@ -1,6 +1,6 @@
 ---
 title: ESP32 Camera Streamer
- description: An ESP32 example showing BoxLang-to-native BIF registration and serial output.
+description: An ESP32 example showing BoxLang-to-native BIF registration and serial output.
 ---
 
 # ESP32 camera streamer

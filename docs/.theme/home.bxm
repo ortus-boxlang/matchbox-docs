@@ -8,6 +8,7 @@
 <bx:include template="includes/site-helpers.bxm">
 <bx:script>
 	variables.siteUrl = reReplace( variables.siteConfig.baseURL ?: "https://matchbox.boxlang.io/", "/*$", "/" )
+	// The home card is hand designed (tools/og/home.html, rendered to docs/assets/og-home.png). The generated assets/og/home.png still exists for index.md.
 	variables.pageTitle = "MatchBox: BoxLang compiled to Rust. Native, WASM, Lambda and ESP32"
 	variables.pageDesc = "MatchBox is the Rust runtime for BoxLang. A bytecode VM with a tiered Cranelift JIT that ships to native binaries, the browser, WASI containers, AWS Lambda and ESP32."
 	variables.faviconUrl = trim( variables.siteConfig.theme.favicon ?: "" )
@@ -28,14 +29,15 @@
 	<meta property="og:title" content="#encodeForHTML( variables.pageTitle )#">
 	<meta property="og:description" content="#encodeForHTML( variables.pageDesc )#">
 	<meta property="og:url" content="#variables.siteUrl#">
-	<meta property="og:image" content="#variables.siteUrl#assets/og/home.png">
+	<meta property="og:image" content="#variables.siteUrl#assets/og-home.png">
+	<meta property="og:image:alt" content="MatchBox: BoxLang, compiled to Rust. Ships to a native binary, the browser, WASI, AWS Lambda and ESP32.">
 	<meta property="og:image:width" content="1200">
 	<meta property="og:image:height" content="630">
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@TryBoxLang">
 	<meta name="twitter:title" content="#encodeForHTML( variables.pageTitle )#">
 	<meta name="twitter:description" content="#encodeForHTML( variables.pageDesc )#">
-	<meta name="twitter:image" content="#variables.siteUrl#assets/og/home.png">
+	<meta name="twitter:image" content="#variables.siteUrl#assets/og-home.png">
 	<bx:if len( variables.faviconUrl )>
 		<link rel="icon" href="#resolveAssetUrl( variables.faviconUrl )#">
 	</bx:if>

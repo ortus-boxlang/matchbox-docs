@@ -1,3 +1,8 @@
+---
+title: Building MatchBox from source
+description: Clone, configure and build MatchBox from source, including or excluding features per target.
+---
+
 # Building MatchBox from Source
 
 This guide covers how to clone, configure, and build custom versions of MatchBox. MatchBox is designed to be highly modular, allowing you to include or exclude features based on your deployment needs.

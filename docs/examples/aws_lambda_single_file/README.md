@@ -1,3 +1,8 @@
+---
+title: Single-file AWS Lambda
+description: The smallest MatchBox Lambda: one Lambda.bx class, a local invoke and a deploy command.
+---
+
 # Single-File AWS Lambda
 
 This example is the smallest MatchBox Lambda shape:

@@ -9,3 +9,4 @@ playground-runtime/target/
 # AI
 .pi/**
 .opencode/**
+.cache/

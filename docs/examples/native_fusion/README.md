@@ -1,3 +1,8 @@
+---
+title: Native Fusion example
+description: Rust functions and a stateful native object used from BoxLang in a single native binary.
+---
+
 # Native Fusion Example
 
 **Native Fusion** lets you write performance-critical functions and stateful

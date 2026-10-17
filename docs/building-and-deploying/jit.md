@@ -1,3 +1,8 @@
+---
+title: JIT compilation
+description: How the four-tier Cranelift JIT in the native CLI compiles hot loops and functions, and where it is off.
+---
+
 # JIT Compilation
 
 MatchBox includes a multi-tier JIT compiler built on [Cranelift](https://cranelift.dev/). It profiles hot code at runtime and compiles it to native machine code, eliminating interpreter dispatch overhead for the loops and functions that matter most.

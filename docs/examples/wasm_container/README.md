@@ -1,3 +1,8 @@
+---
+title: WASM container example
+description: Compile a BoxLang script to a raw WASM binary and run it in a minimal OCI container.
+---
+
 # WASM Container Example
 
 This example shows how to compile a BoxLang script to a raw WebAssembly binary

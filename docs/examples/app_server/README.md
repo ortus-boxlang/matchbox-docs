@@ -1,3 +1,8 @@
+---
+title: App server example
+description: A routed MatchBox app server built with web.server() and ColdBox-style handlers.
+---
+
 # MatchBox App Server Example
 
 This example demonstrates the routed MatchBox app server API built around `web.server()` and ColdBox-style handlers:
