@@ -58,6 +58,10 @@ export function initialize() {
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,
+        __wbg___wbindgen_is_undefined_52709e72fb9f179c: function(arg0) {
+            const ret = getObject(arg0) === undefined;
+            return ret;
+        },
         __wbg___wbindgen_throw_6ddd609b62940d55: function(arg0, arg1) {
             throw new Error(getStringFromWasm0(arg0, arg1));
         },
@@ -83,6 +87,34 @@ function __wbg_get_imports() {
             const ret = new Date(getObject(arg0));
             return addHeapObject(ret);
         },
+        __wbg_now_16f0c993d5dd6c27: function() {
+            const ret = Date.now();
+            return ret;
+        },
+        __wbg_now_e7c6795a7f81e10f: function(arg0) {
+            const ret = getObject(arg0).now();
+            return ret;
+        },
+        __wbg_performance_3fcf6e32a7e1ed0a: function(arg0) {
+            const ret = getObject(arg0).performance;
+            return addHeapObject(ret);
+        },
+        __wbg_static_accessor_GLOBAL_8adb955bd33fac2f: function() {
+            const ret = typeof global === 'undefined' ? null : global;
+            return isLikeNone(ret) ? 0 : addHeapObject(ret);
+        },
+        __wbg_static_accessor_GLOBAL_THIS_ad356e0db91c7913: function() {
+            const ret = typeof globalThis === 'undefined' ? null : globalThis;
+            return isLikeNone(ret) ? 0 : addHeapObject(ret);
+        },
+        __wbg_static_accessor_SELF_f207c857566db248: function() {
+            const ret = typeof self === 'undefined' ? null : self;
+            return isLikeNone(ret) ? 0 : addHeapObject(ret);
+        },
+        __wbg_static_accessor_WINDOW_bb9f1ba69d61b386: function() {
+            const ret = typeof window === 'undefined' ? null : window;
+            return isLikeNone(ret) ? 0 : addHeapObject(ret);
+        },
         __wbindgen_cast_0000000000000001: function(arg0) {
             // Cast intrinsic for `F64 -> Externref`.
             const ret = arg0;
@@ -91,6 +123,10 @@ function __wbg_get_imports() {
         __wbindgen_cast_0000000000000002: function(arg0, arg1) {
             // Cast intrinsic for `Ref(String) -> Externref`.
             const ret = getStringFromWasm0(arg0, arg1);
+            return addHeapObject(ret);
+        },
+        __wbindgen_object_clone_ref: function(arg0) {
+            const ret = getObject(arg0);
             return addHeapObject(ret);
         },
         __wbindgen_object_drop_ref: function(arg0) {
@@ -162,6 +198,10 @@ let heap = new Array(1024).fill(undefined);
 heap.push(undefined, null, true, false);
 
 let heap_next = heap.length;
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
 
 function passStringToWasm0(arg, malloc, realloc) {
     if (realloc === undefined) {

@@ -1,0 +1,11 @@
+<bx:output>
+<footer class="foot"><div class="wrap">
+  <div class="fgrid">
+    <div><a class="logo" href="#variables.basePath#"><img src="#variables.basePath#assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a><p>The Rust runtime for BoxLang. Part of the BoxLang productivity platform.</p></div>
+    <div><h4>Learn</h4><a href="#variables.basePath#getting-started/quick-start/">Quick start</a><a href="#variables.basePath#getting-started/installation/">Install with MVM</a><a href="#variables.basePath#examples/">Examples</a><a href="#variables.basePath#reference/cli/">CLI reference</a></div>
+    <div><h4>Targets</h4><a href="#variables.basePath#building-and-deploying/native-builds/">Native</a><a href="#variables.basePath#building-and-deploying/javascript-and-wasm/">Browser and JS</a><a href="#variables.basePath#building-and-deploying/wasm-container/">WASI</a><a href="#variables.basePath#building-and-deploying/esp32/">ESP32</a><a href="#variables.basePath#building-and-deploying/native-fusion/">Native Fusion</a></div>
+    <div><h4>Community</h4><a href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">boxlang.io</a><a href="https://www.ortussolutions.com/community/slack" target="_blank" rel="noopener noreferrer">Slack</a><a href="https://www.ortussolutions.com/services" target="_blank" rel="noopener noreferrer">Consulting</a></div>
+  </div>
+  <div class="fbot"><span>&copy; #year( now() )# Ortus Solutions, Corp. MatchBox is an independent Rust implementation of BoxLang.</span><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">Part of the BoxLang ecosystem</a></div>
+</div></footer>
+</bx:output>

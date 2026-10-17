@@ -10,7 +10,7 @@ fi
 
 export RUSTFLAGS='--cfg getrandom_backend="wasm_js" -C link-arg=--max-memory=134217728'
 cargo build --locked --manifest-path playground-runtime/Cargo.toml --target wasm32-unknown-unknown --release
-wasm-bindgen --target web --no-typescript --out-name matchbox --out-dir assets/runtime \
+wasm-bindgen --target web --no-typescript --out-name matchbox --out-dir docs/assets/playground/runtime \
   playground-runtime/target/wasm32-unknown-unknown/release/matchbox_playground.wasm
 node tools/check-playground.js
 
@@ -42,7 +42,7 @@ for package in metadata['packages']:
 notices = ['Cargo dependency notices (including build-time dependencies).\nIdentical texts are grouped below.']
 for text, packages in licenses.items():
     notices.append('\n'.join(packages) + '\n\n' + text)
-Path('assets/runtime/THIRD-PARTY-NOTICES.txt').write_text('\n\n' + ('\n\n' + '=' * 72 + '\n\n').join(notices) + '\n', encoding='utf-8')
+Path('docs/assets/playground/runtime/THIRD-PARTY-NOTICES.txt').write_text('\n\n' + ('\n\n' + '=' * 72 + '\n\n').join(notices) + '\n', encoding='utf-8')
 
 class Text(HTMLParser):
     def __init__(self):
@@ -57,8 +57,8 @@ if not copyright.exists():
     raise RuntimeError('Install standard-library notices: rustup component add rust-docs')
 text = Text()
 text.feed(copyright.read_text(encoding='utf-8'))
-Path('assets/runtime/RUST-NOTICES.txt').write_text(''.join(text.parts), encoding='utf-8')
+Path('docs/assets/playground/runtime/RUST-NOTICES.txt').write_text(''.join(text.parts), encoding='utf-8')
 revision = subprocess.check_output(['git', '-C', '../matchbox', 'describe', '--always', '--dirty'], text=True)
 version = subprocess.check_output(['rustc', '--version'], text=True)
-Path('assets/runtime/BUILD.txt').write_text(f'MatchBox source: {revision}{version}wasm-bindgen 0.2.114\nRebuild: bash tools/build-runtime.sh\n', encoding='utf-8')
+Path('docs/assets/playground/runtime/BUILD.txt').write_text(f'MatchBox source: {revision}{version}wasm-bindgen 0.2.114\nRebuild: bash tools/build-runtime.sh\n', encoding='utf-8')
 PY

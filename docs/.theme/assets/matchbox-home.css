@@ -406,3 +406,22 @@ nav .links{gap:20px}
 .faq code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;background:var(--bg2);border-radius:5px;padding:1px 6px}
 .faq a{color:var(--accent)}
 .btn.sm{white-space:nowrap}@media(max-width:480px){.btn.sm{padding:9px 11px;font-size:.82rem}.logo{font-size:1rem}nav .wrap{gap:6px}}
+
+/* live mini REPL */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#live{padding-block:56px}
+.mini{background:var(--code);border:1px solid var(--line);border-radius:18px;padding:16px;color:#cfeee3;max-width:860px;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.mini-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.mini-chip{border:1px solid #2c5560;background:transparent;color:#cfeee3;border-radius:999px;padding:6px 14px;font:600 .8rem Manrope,system-ui,sans-serif;cursor:pointer;transition:border-color .2s,color .2s}
+.mini-chip:hover:not([disabled]){border-color:var(--g1);color:#fff}
+.mini-chip[disabled]{opacity:.45;cursor:not-allowed}
+.mini-term{background:#071a22;border:1px solid #12303a;border-radius:12px;overflow:hidden}
+.mini-out{min-height:150px;max-height:260px;overflow:auto;padding:12px 14px;font:400 .84rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+.mini-out>div{white-space:pre-wrap;overflow-wrap:anywhere}
+.mini-cmd{color:#7ee8ff}.mini-so{color:#cfeee3}.mini-val{color:var(--g1)}.mini-err{color:#ff8a80}.mini-info{color:#5f8581}
+.mini-form{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid #12303a}
+.mini-form label{color:var(--g1);font:700 .84rem ui-monospace,monospace}
+.mini-form input{flex:1;min-width:0;background:#0b222b;border:1px solid #17353f;border-radius:8px;color:#e8f4f2;padding:9px 12px;font:400 .84rem ui-monospace,SFMono-Regular,Menlo,monospace}
+.mini-form input:focus-visible{outline:2px solid var(--g2);outline-offset:1px}
+.mini-foot{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;margin-top:12px;font-size:.82rem;color:#8fb2ae}
+.mini-foot a{color:var(--g1);text-decoration:none;font-weight:700}
