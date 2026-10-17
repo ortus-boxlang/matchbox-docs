@@ -25,11 +25,6 @@ jobs:
         with:
           modules: bx-cli bx-sites bx-markdown bx-esapi bx-yaml bx-image
 
-      - name: Register this module
-        run: |
-          mkdir -p "${BOXLANG_HOME}/modules"
-          ln -s "$(pwd)" "${BOXLANG_HOME}/modules/$(basename "$(pwd)")"
-
       - name: Build site
         run: boxlang bxSites build
 
