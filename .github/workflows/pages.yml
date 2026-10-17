@@ -23,7 +23,7 @@ jobs:
       - name: Set up BoxLang and bxSites dependencies
         uses: ortus-boxlang/setup-boxlang@1.4.0
         with:
-          modules: bx-cli bx-sites
+          modules: bx-cli bx-sites bx-markdown bx-esapi bx-yaml bx-image
 
       - name: Register this module
         run: |
