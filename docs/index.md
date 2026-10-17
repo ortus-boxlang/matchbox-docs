@@ -1,6 +1,6 @@
 ---
 title: MatchBox
-description: BoxLang software productivity across JVM and Rust runtimes, from developer tooling to native and embedded targets.
+description: MatchBox is the Rust runtime for BoxLang. A bytecode VM with a tiered Cranelift JIT that ships to native binaries, the browser, WASI containers, AWS Lambda and ESP32.
 order: 1
 layout: home
 ---
