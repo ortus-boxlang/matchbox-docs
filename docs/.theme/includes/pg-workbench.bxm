@@ -1,0 +1,43 @@
+<!---
+	The workbench shared by the playground page and the embed. Literal `#` is written `##` because this file is interpolated.
+--->
+<bx:output>
+	<div class="workbench">
+		<div class="wb-toolbar"><div class="wb-left"><span class="wb-label">MATCHBOX PLAYGROUND</span><span class="wb-version" id="runtime-version" title="The MatchBox version compiled into this runtime">MatchBox</span></div><div class="wb-controls">
+			<button type="button" id="clear-console" class="btn sm" title="Clear the editor and the console output">Clear</button>
+			<button type="button" id="stop-code" class="btn sm" disabled>Stop</button>
+			<button type="button" id="run-code" class="btn p sm" disabled>Run script <kbd id="run-shortcut">Ctrl &##8629;</kbd></button>
+			<span class="wb-sep" aria-hidden="true"></span>
+			<button type="button" id="copy-link" class="btn sm icon" title="Copy a link to this code" aria-label="Copy link to this code"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="sr-only">Copy link</span></button>
+			<button type="button" id="share-open" class="btn sm icon" title="Share or embed this code" aria-label="Share or embed this code" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="sr-only">Share</span></button>
+			<button type="button" id="fullscreen" class="btn sm icon" title="Full screen" aria-label="Full screen" aria-pressed="false"><svg class="fs-in" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg><svg class="fs-out" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg><span class="sr-only">Full screen</span></button>
+		</div></div>
+		<div class="wb-panels">
+			<section class="editor-pane" aria-labelledby="source-title">
+				<div class="pane-head"><h2 id="source-title"><label for="source-code">Source</label></h2><span id="source-filename">hello.bxs</span></div>
+				<div class="editor-body"><div id="line-numbers" aria-hidden="true"></div><div class="code-wrap"><div id="cur-line" aria-hidden="true"></div><pre id="code-hl" aria-hidden="true"><code></code></pre><textarea id="source-code" aria-describedby="editor-help" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" maxlength="65536"></textarea></div></div>
+				<div class="pane-foot" id="editor-help"><span>BoxLang &middot; UTF-8</span><span>Ctrl / &##8984; + Enter to run</span></div>
+			</section>
+			<section class="console-pane" aria-labelledby="console-title">
+				<div class="pane-head"><h2 id="console-title">Session console</h2><div><button type="button" class="console-action" id="reset-session" disabled>Reset session</button></div></div>
+				<div id="console-output" class="console-output" role="log" aria-label="MatchBox output" aria-live="polite" aria-relevant="additions" tabindex="0"><p class="console-welcome">Your next idea starts here.<br><span>Run a script, or enter an expression below.</span></p></div>
+				<form id="repl-form" class="repl-form"><label for="repl-input"><span aria-hidden="true">bx&gt;</span><span class="sr-only">BoxLang expression</span></label><input id="repl-input" type="text" placeholder="Try 1 + 2" autocomplete="off" spellcheck="false" autocapitalize="off" maxlength="65536" aria-describedby="repl-help" readonly><button type="submit" id="repl-submit" aria-label="Evaluate expression" disabled>&##8629;</button></form>
+				<div class="pane-foot" id="repl-help"><span>Enter to evaluate &middot; &##8593; &##8595; history</span><span>Stateful REPL</span></div>
+			</section>
+		</div>
+		<div class="wb-foot"><p id="execution-status" role="status">Getting the runtime ready...</p><span>POWERED BY RUST + WASM</span></div>
+	</div>
+<dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title">
+	<form method="dialog" class="share-card">
+		<div class="share-head"><h2 id="share-title">Share or embed</h2><button type="submit" class="share-x" aria-label="Close">&##215;</button></div>
+		<label class="share-label" for="share-link">Link</label>
+		<div class="share-row"><input id="share-link" type="text" readonly spellcheck="false"><button type="button" class="btn sm" id="share-copy-link">Copy link</button></div>
+		<label class="share-label" for="share-snippet">Embed</label>
+		<div class="share-row"><textarea id="share-snippet" rows="3" readonly spellcheck="false"></textarea><button type="button" class="btn sm" id="share-copy-snippet">Copy embed</button></div>
+		<label class="share-check"><input type="checkbox" id="share-ro"> Read only (viewers can run the code but not edit it)</label>
+		<p class="share-note" id="share-note" role="status"></p>
+		<div class="share-label">Preview</div>
+		<iframe id="share-preview" title="Embed preview" allow="fullscreen" loading="lazy"></iframe>
+	</form>
+</dialog>
+</bx:output>

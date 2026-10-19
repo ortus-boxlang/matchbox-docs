@@ -70,6 +70,7 @@ if (root) {
     worker.postMessage({ type: 'evaluate', source });
   };
   chips.forEach(chip => chip.addEventListener('click', () => { input.value = chip.dataset.code; run(chip.dataset.code); input.value = ''; }));
+  document.getElementById('mini-clear')?.addEventListener('click', () => { out.replaceChildren(); input.value = ''; });
   form.addEventListener('submit', event => { event.preventDefault(); run(input.value); input.value = ''; });
   setReady(false);
   const begin = () => { if (!worker) start(); };

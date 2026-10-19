@@ -1,0 +1,46 @@
+<!---
+	The embeddable playground. Selected by docs/playground/embed.md's `layout: embed`; the share dialog on the playground page makes iframes
+	of it. The runtime, worker and editor logic live in docs/assets/playground/. Literal `#` is written `##` because this file is interpolated.
+--->
+<bx:include template="#variables.moduleAssetsDir#/icons.bxm">
+<bx:include template="#variables.moduleAssetsDir#/locale-flags.bxm">
+<bx:include template="includes/site-helpers.bxm">
+<bx:script>
+	variables.siteUrl = reReplace( variables.siteConfig.baseURL ?: "https://matchbox.boxlang.io/", "/*$", "/" )
+	variables.pageUrl = variables.siteUrl & "playground/embed/"
+	variables.pageTitle = "MatchBox Playground Embed"
+	variables.pageDesc = "Write and run BoxLang in your browser with MatchBox compiled to WebAssembly. Real compiler, real VM, nothing installed, nothing sent to a server."
+	variables.faviconUrl = trim( variables.siteConfig.theme.favicon ?: "" )
+</bx:script>
+<bx:output>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>#encodeForHTML( variables.pageTitle )#</title>
+	<meta name="description" content="#encodeForHTML( variables.pageDesc )#">
+	<meta name="theme-color" content="##06141a">
+	<meta name="robots" content="noindex, follow">
+	<link rel="canonical" href="#variables.siteUrl#playground/">
+	<bx:if len( variables.faviconUrl )>
+		<link rel="icon" href="#resolveAssetUrl( variables.faviconUrl )#">
+	</bx:if>
+	<script>
+		( function () {
+			var stored = null;
+			try { stored = localStorage.getItem( "bxsites-theme" ); } catch ( e ) {}
+			var dark = stored ? stored === "dark" : window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+			document.documentElement.setAttribute( "data-theme", dark ? "dark" : "light" );
+		} )();
+	</script>
+	<link rel="stylesheet" href="#themeAssetUrl( 'matchbox-home.css' )#">
+	<link rel="stylesheet" href="#themeAssetUrl( 'matchbox-playground.css' )#">
+	#renderExtraCss( variables.siteConfig.extraCss ?: [] )#
+</head>
+<body class="mxh pgpage embed" data-embed="true" data-base="#variables.basePath#" data-playground-path="playground/" data-embed-path="playground/embed/">
+<bx:include template="includes/pg-workbench.bxm">
+<script type="module" src="#variables.basePath#assets/playground/playground.js"></script>
+</body>
+</html>
+</bx:output>

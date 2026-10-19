@@ -1,5 +1,6 @@
 import { demos } from './playground-demos.js';
 import { highlight } from './highlight.js';
+import { buildShareUrl, iframeSnippet, parseShareHash, MAX_ENCODED_LENGTH } from './share.js';
 
 const editor = document.getElementById('source-code');
 const lineNumbers = document.getElementById('line-numbers');
@@ -15,6 +16,11 @@ const submit = document.getElementById('repl-submit');
 const reset = document.getElementById('reset-session');
 const badge = document.getElementById('runtime-status');
 const status = document.getElementById('execution-status');
+const bench = document.querySelector('.workbench');
+const embedded = document.body.dataset.embed === 'true';
+const demoList = document.getElementById('demo-list');
+let readOnly = false;
+let notice = '';
 let worker;
 let timer;
 let state = 'loading';
@@ -25,8 +31,8 @@ let draft = '';
 
 function setState(next) {
   state = next;
-  badge.dataset.state = next;
-  badge.textContent = { loading: 'Loading WebAssembly…', ready: 'MatchBox is ready', running: 'Running locally…', error: 'Runtime unavailable' }[next];
+  if (badge) badge.dataset.state = next;
+  if (badge) badge.textContent = { loading: 'Loading WebAssembly…', ready: 'MatchBox is ready', running: 'Running locally…', error: 'Runtime unavailable' }[next];
   run.disabled = submit.disabled = next !== 'ready';
   stop.disabled = next !== 'running';
   input.readOnly = next !== 'ready';
@@ -83,7 +89,8 @@ function startSession(clear = true) {
       if (data.type === 'ready') {
         if (data.version) versionLabel.textContent = `MatchBox ${data.version}`;
         setState('ready');
-        status.textContent = 'Ready when you are. Everything runs on your device.';
+        status.textContent = notice || 'Ready when you are. Everything runs on your device.';
+        notice = '';
       } else if (data.type === 'result') {
         if (data.output) append('stdout', data.output.replace(/\n$/, ''));
         if (data.value != null) append('value', `=> ${data.value}`);
@@ -162,14 +169,16 @@ function selectDemo(index, initial = false) {
   editor.value = demo.code;
   editor.scrollTop = editor.scrollLeft = 0;
   document.getElementById('source-filename').textContent = demo.file;
-  document.getElementById('demo-description').textContent = demo.description;
-  document.getElementById('demo-hint').textContent = demo.hint;
+  if (demoList) {
+    document.getElementById('demo-description').textContent = demo.description;
+    document.getElementById('demo-hint').textContent = demo.hint;
+  }
   document.querySelectorAll('.demo-card').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
   updateEditor();
   startSession();
 }
 
-for (const [index, demo] of demos.entries()) {
+for (const [index, demo] of demoList ? demos.entries() : []) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'demo-card';
@@ -180,14 +189,23 @@ for (const [index, demo] of demos.entries()) {
   title.textContent = demo.title;
   button.append(tag, title);
   button.addEventListener('click', () => selectDemo(index));
-  document.getElementById('demo-list').append(button);
+  demoList.append(button);
 }
 
 run.addEventListener('click', () => evaluate(editor.value, `▶ ${demos[selected].file}`));
 stop.addEventListener('click', () => failed('Stopped by you. Session reset; your script is unchanged.'));
 reset.disabled = false;
 reset.addEventListener('click', () => startSession());
-document.getElementById('clear-console').addEventListener('click', () => clearOutput());
+document.getElementById('clear-console').addEventListener('click', () => {
+  if (editor.value && !window.confirm('Clear the editor and the console output? Session variables are kept.')) return;
+  editor.value = '';
+  editor.scrollTop = editor.scrollLeft = 0;
+  updateEditor();
+  output.replaceChildren();
+  input.value = '';
+  status.textContent = 'Cleared the editor and the console. Session variables are kept; use Reset session for a fresh VM.';
+  if (!readOnly) editor.focus();
+});
 editor.addEventListener('input', updateEditor);
 editor.addEventListener('scroll', syncScroll);
 for (const event of ['keyup', 'click', 'select', 'focus', 'blur']) editor.addEventListener(event, () => updateCaretLine());
@@ -220,4 +238,116 @@ input.addEventListener('keydown', event => {
 input.addEventListener('input', () => { historyIndex = history.length; });
 window.addEventListener('pagehide', () => { clearTimeout(timer); worker?.terminate(); });
 window.addEventListener('pageshow', event => { if (event.persisted) startSession(); });
-selectDemo(0, true);
+
+// Full screen: the browser API when it exists, a fixed-position fallback (iOS Safari) when it does not.
+const fullscreen = document.getElementById('fullscreen');
+function fullscreenActive() { return document.fullscreenElement === bench || bench.classList.contains('is-fullscreen'); }
+function syncFullscreen() {
+  const on = fullscreenActive();
+  fullscreen.setAttribute('aria-pressed', String(on));
+  fullscreen.title = on ? 'Exit full screen' : 'Full screen';
+  fullscreen.setAttribute('aria-label', fullscreen.title);
+  bench.classList.toggle('is-fullscreen', on);
+}
+fullscreen.addEventListener('click', async () => {
+  if (fullscreenActive()) {
+    if (document.fullscreenElement) await document.exitFullscreen().catch(() => {});
+    bench.classList.remove('is-fullscreen');
+  } else if (bench.requestFullscreen) {
+    await bench.requestFullscreen().catch(() => bench.classList.add('is-fullscreen'));
+  } else bench.classList.add('is-fullscreen');
+  syncFullscreen();
+});
+document.addEventListener('fullscreenchange', syncFullscreen);
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && bench.classList.contains('is-fullscreen') && !document.fullscreenElement) { bench.classList.remove('is-fullscreen'); syncFullscreen(); }
+});
+
+// Sharing. The page and embed URLs are resolved from the document so they are right on any host.
+const pageUrl = new URL(`${document.body.dataset.base || ''}${document.body.dataset.playgroundPath || 'playground/'}`, location.href).href;
+const embedUrl = new URL(`${document.body.dataset.base || ''}${document.body.dataset.embedPath || 'playground/embed/'}`, location.href).href;
+const copyLink = document.getElementById('copy-link');
+const shareOpen = document.getElementById('share-open');
+const shareDialog = document.getElementById('share-dialog');
+const shareLink = document.getElementById('share-link');
+const shareSnippet = document.getElementById('share-snippet');
+const shareRo = document.getElementById('share-ro');
+const shareNote = document.getElementById('share-note');
+const sharePreview = document.getElementById('share-preview');
+const TOO_LARGE = `This script is too large to share by link (about ${Math.round(MAX_ENCODED_LENGTH / 1000)} KB compressed). Download or copy it instead.`;
+
+async function copyText(text, fallbackField) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    if (fallbackField) { fallbackField.focus(); fallbackField.select(); }
+    return false;
+  }
+}
+
+function flash(button, text) {
+  const label = button.querySelector('.sr-only') || button;
+  const original = button.dataset.label ??= label.textContent;
+  label.textContent = text;
+  button.classList.add('flashed');
+  clearTimeout(button.flashTimer);
+  button.flashTimer = setTimeout(() => { label.textContent = original; button.classList.remove('flashed'); }, 1800);
+}
+
+copyLink.addEventListener('click', async () => {
+  const url = await buildShareUrl(pageUrl, editor.value);
+  if (!url) { status.textContent = TOO_LARGE; flash(copyLink, 'Too large'); return; }
+  if (await copyText(url)) { status.textContent = 'Link copied. Anyone with it gets this code in their own browser.'; flash(copyLink, 'Copied!'); }
+  else { status.textContent = 'Could not reach the clipboard. Use Share and copy the link from there.'; flash(copyLink, 'Copy failed'); }
+});
+
+let shareRun = 0;
+async function refreshShare() {
+  const run = ++shareRun;
+  const link = await buildShareUrl(pageUrl, editor.value);
+  const embed = await buildShareUrl(embedUrl, editor.value, { readOnly: shareRo.checked });
+  if (run !== shareRun) return; // a newer toggle owns the dialog
+  shareLink.value = link ?? '';
+  shareSnippet.value = embed ? iframeSnippet(embed) : '';
+  shareNote.textContent = embed ? '' : TOO_LARGE;
+  document.getElementById('share-copy-link').disabled = !link;
+  document.getElementById('share-copy-snippet').disabled = !embed;
+  if (embed) sharePreview.src = embed;
+  else sharePreview.removeAttribute('src');
+}
+
+shareOpen.addEventListener('click', async () => {
+  shareRo.checked = readOnly;
+  shareDialog.showModal();
+  await refreshShare();
+});
+shareRo.addEventListener('change', refreshShare);
+shareDialog.addEventListener('close', () => sharePreview.removeAttribute('src'));
+shareDialog.addEventListener('click', event => { if (event.target === shareDialog) shareDialog.close(); });
+for (const [id, field] of [['share-copy-link', shareLink], ['share-copy-snippet', shareSnippet]]) {
+  const button = document.getElementById(id);
+  button.addEventListener('click', async () => flash(button, (await copyText(field.value, field)) ? 'Copied!' : 'Press Ctrl+C'));
+}
+
+// Boot: shared code from the URL hash wins over the first demo.
+async function boot() {
+  const shared = await parseShareHash(location.hash);
+  readOnly = shared.readOnly && embedded;
+  if (shared.present && shared.code != null) {
+    editor.value = shared.code;
+    document.getElementById('source-filename').textContent = 'shared.bxs';
+    updateEditor();
+    notice = 'Loaded shared code. Read it first, then run it. Nothing runs until you press Run.';
+    startSession();
+  } else {
+    if (shared.present) notice = 'That share link is damaged, so the first demo is loaded instead.';
+    selectDemo(0, true);
+  }
+  editor.readOnly = readOnly;
+  document.body.classList.toggle('is-readonly', readOnly);
+  if (readOnly) for (const id of ['clear-console', 'share-open']) document.getElementById(id).hidden = true;
+}
+await boot();
+// Pasting a share link that differs only by hash does not reload the page, so do it here.
+window.addEventListener('hashchange', () => { if (/^#code=/.test(location.hash)) location.reload(); });

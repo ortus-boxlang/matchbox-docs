@@ -125,6 +125,7 @@
 			<button type="button" class="mini-chip" data-code="arrayReduce( [1, 2, 3, 4], ( sum, n ) =&gt; sum + n, 0 )" disabled>reduce</button>
 			<button type="button" class="mini-chip" data-code="&quot;matchbox&quot;.ucase()" disabled>string</button>
 			<button type="button" class="mini-chip" data-code="runAsync( () =&gt; 21 * 2 ).get()" disabled>fibers</button>
+			<button type="button" class="mini-chip mini-clear" id="mini-clear" title="Clear the output. Session variables are kept.">Clear</button>
 		</div>
 		<div class="mini-term">
 			<div id="mini-out" class="mini-out" role="log" aria-label="MatchBox output" aria-live="polite" tabindex="0"><div class="mini-info">Pick an example, or type an expression below.</div></div>
