@@ -1,3 +1,8 @@
+---
+title: Building for ESP32
+description: Cross-compile the MatchBox runner for ESP32 chips, flash BoxLang bytecode, and use the lean web.server().
+---
+
 # Building for ESP32
 
 MatchBox supports building and flashing BoxLang scripts directly to ESP32 microcontrollers. This is achieved by cross-compiling a specialized MatchBox runner for the Xtensa or RISC-V architectures and deploying your compiled bytecode to a dedicated flash partition.

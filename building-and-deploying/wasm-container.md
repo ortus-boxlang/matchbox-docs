@@ -1,3 +1,8 @@
+---
+title: WASM container deployment
+description: Run MatchBox WASM binaries as server-side workloads in Wasmtime, WasmEdge or minimal OCI containers.
+---
+
 # WASM Container Deployment
 
 MatchBox WASM binaries can be run as standalone server-side workloads using WASM-native runtimes like [Wasmtime](https://wasmtime.dev/), [WasmEdge](https://wasmedge.org/), or inside minimal OCI containers using the WASM OCI image spec.

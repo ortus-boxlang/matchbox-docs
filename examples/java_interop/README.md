@@ -1,3 +1,8 @@
+---
+title: Java interop example
+description: Call Java classes from BoxLang in a native build through the experimental JNI bridge.
+---
+
 # Java Interop Example
 
 This example demonstrates calling Java classes and methods from BoxLang using

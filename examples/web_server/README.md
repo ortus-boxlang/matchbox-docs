@@ -1,3 +1,8 @@
+---
+title: Web server example
+description: The built-in MatchBox web runtime serving .bxm pages and static assets with session and form scopes.
+---
+
 # MatchBox Web Server Example
 
 This example demonstrates the built-in MatchBox high-performance web runtime. It includes support for BoxLang Markup (`.bxm`), static asset serving, and automatic scope injection (URL, Form, Cookie, Session).
