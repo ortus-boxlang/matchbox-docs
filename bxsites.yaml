@@ -30,6 +30,8 @@ math: true
 openapi: true
 imageGallery: true
 generateOgImages: true
+ogCard:
+  logo: assets/matchbox-og-logo.png
 social:
   - url: https://github.com/ortus-boxlang/matchbox
     icon: github

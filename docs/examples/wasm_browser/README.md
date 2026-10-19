@@ -1,3 +1,8 @@
+---
+title: WASM browser Todo app
+description: A browser Todo app written in BoxLang, compiled to WebAssembly and wired to Alpine.
+---
+
 # WASM Browser — Todo App
 
 A minimal browser Todo application written in BoxLang and compiled to WebAssembly.

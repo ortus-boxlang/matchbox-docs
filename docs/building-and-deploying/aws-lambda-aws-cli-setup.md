@@ -1,3 +1,8 @@
+---
+title: AWS CLI setup for Lambda deploys
+description: Prepare your machine and AWS account for MatchBox Lambda deploys: AWS CLI, profile, region and role.
+---
+
 # AWS CLI Setup For MatchBox Lambda Deploys
 
 This guide prepares your machine and AWS account for future `matchbox lambda ...` commands, especially creating or updating a single-file Lambda and printing its Function URL.

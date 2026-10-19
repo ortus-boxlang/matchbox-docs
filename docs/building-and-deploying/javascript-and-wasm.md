@@ -1,3 +1,8 @@
+---
+title: JavaScript and WebAssembly
+description: Compile BoxLang to an ES module or a raw WASM binary, or run source strings in the browser.
+---
+
 # JavaScript + WebAssembly
 
 MatchBox can compile BoxLang for browser-oriented WebAssembly workflows. There are three distinct modes, chosen to match different use-cases.

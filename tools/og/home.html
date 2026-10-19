@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>MatchBox social card</title>
+<style>
+@font-face{font-family:Manrope;src:url("../../docs/assets/manrope.woff2") format("woff2");font-weight:200 800}
+*{box-sizing:border-box;margin:0}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{font-family:Manrope,system-ui,sans-serif;color:#e8f4f2;background:#06141a;position:relative}
+.bg{position:absolute;inset:0;background:
+ radial-gradient(520px 380px at 12% 8%,rgba(0,255,120,.30),transparent 70%),
+ radial-gradient(560px 420px at 92% 94%,rgba(0,219,255,.22),transparent 70%),
+ linear-gradient(135deg,#06141a,#0a2229)}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(0,219,255,.16) 1.5px,transparent 1.6px);background-size:40px 40px;background-position:80px 40px}
+.bar{position:absolute;left:0;right:0;bottom:0;height:14px;background:linear-gradient(90deg,#00ff78,#00dbff)}
+.top{position:absolute;left:80px;right:80px;top:56px;display:flex;align-items:center;gap:16px}
+.top img{width:56px;height:56px}
+.top b{font-size:30px;font-weight:800;color:#a8c5c1;letter-spacing:-.01em}
+.top .pill{margin-left:auto;font:700 18px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#00ff78;border:2px solid rgba(0,255,120,.55);background:rgba(0,255,120,.10);border-radius:999px;padding:8px 20px}
+h1{position:absolute;left:80px;top:172px;width:600px;font-size:68px;line-height:1.04;font-weight:800;letter-spacing:-.03em}
+h1 span{background:linear-gradient(90deg,#00ff78,#00dbff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{position:absolute;left:80px;top:392px;width:560px;font-size:29px;line-height:1.35;color:#9db9b5;font-weight:500}
+.targets{position:absolute;left:80px;bottom:62px;display:flex;gap:10px}
+.targets i{font-style:normal;font:700 19px Manrope,sans-serif;color:#cfeee3;border:2px solid #1f4650;background:rgba(10,34,41,.7);border-radius:12px;padding:8px 16px}
+.term{position:absolute;right:56px;top:150px;width:456px;background:#04101a;border:2px solid #17353f;border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.45);overflow:hidden}
+.term .tb{display:flex;gap:8px;padding:14px 18px;border-bottom:2px solid #12303a}
+.term .tb em{width:12px;height:12px;border-radius:50%;display:block}
+.term pre{font:500 18px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:18px 22px;color:#cfeee3;white-space:pre}
+.term .p{color:#00ff78}.term .c{color:#5f8581}.term .k{color:#7ee8ff}.term .s{color:#ffd47a}
+.size{padding:0 22px 22px;font:600 15px ui-monospace,monospace;color:#8fb2ae}
+.size .t{height:12px;border-radius:99px;background:#0e2831;margin-top:10px;overflow:hidden}
+.size .t i{display:block;height:100%;width:9%;border-radius:99px;background:linear-gradient(90deg,#00ff78,#00dbff)}
+.url{position:absolute;right:80px;bottom:56px;font:600 22px ui-monospace,SFMono-Regular,Menlo,monospace;color:#7fa09c}
+</style>
+<div class="bg"></div><div class="dots"></div>
+<div class="top"><img src="../../docs/assets/matchbox-og-logo.png" alt=""><b>MatchBox</b><span class="pill">THE RUST RUNTIME FOR BOXLANG</span></div>
+<h1>BoxLang, <span>compiled to Rust.</span></h1>
+<p class="sub">Ships to a native binary, the browser, WASI, AWS Lambda and ESP32.</p>
+<div class="targets"><i>Native</i><i>Browser</i><i>WASI</i><i>Lambda</i><i>ESP32</i></div>
+<div class="term">
+  <div class="tb"><em style="background:#ff5f56"></em><em style="background:#ffbd2e"></em><em style="background:#27c93f"></em></div>
+<pre><span class="c"># hello.bxs</span>
+<span class="k">println</span>(<span class="s">"Hello, world!"</span>);
+
+<span class="p">$</span> matchbox --target native hello.bxs
+<span class="p">✓</span> wrote ./hello  <span class="c">(no JVM)</span></pre>
+  <div class="size">runner stub + your bytecode<div class="t"><i></i></div></div>
+</div>
+<div class="url">matchbox.boxlang.io</div>
+<div class="bar"></div>

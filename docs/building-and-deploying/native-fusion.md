@@ -1,3 +1,8 @@
+---
+title: Native Fusion reference
+description: Expose Rust functions and classes to BoxLang as BIFs and native objects in a native build.
+---
+
 # Native Fusion — Rust Interop Reference
 
 **Native Fusion** is the mechanism that lets you write Rust functions and classes
