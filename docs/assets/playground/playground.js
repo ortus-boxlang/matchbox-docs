@@ -1,7 +1,12 @@
 import { demos } from './playground-demos.js';
+import { highlight } from './highlight.js';
 
 const editor = document.getElementById('source-code');
 const lineNumbers = document.getElementById('line-numbers');
+const codeLayer = document.getElementById('code-hl');
+const codeMarkup = codeLayer.firstElementChild;
+const currentLine = document.getElementById('cur-line');
+const versionLabel = document.getElementById('runtime-version');
 const output = document.getElementById('console-output');
 const input = document.getElementById('repl-input');
 const run = document.getElementById('run-code');
@@ -76,6 +81,7 @@ function startSession(clear = true) {
       if (worker !== active) return;
       clearTimeout(timer);
       if (data.type === 'ready') {
+        if (data.version) versionLabel.textContent = `MatchBox ${data.version}`;
         setState('ready');
         status.textContent = 'Ready when you are. Everything runs on your device.';
       } else if (data.type === 'result') {
@@ -110,9 +116,43 @@ function evaluate(source, label) {
   return true;
 }
 
-function updateLines() {
-  lineNumbers.textContent = Array.from({ length: editor.value.split('\n').length }, (_, i) => i + 1).join('\n');
+const LINE_HEIGHT = 22;
+const EDITOR_PADDING = 14;
+
+// Repaint the highlighted layer and the line numbers from the textarea, then place the caret line.
+function updateEditor() {
+  const text = editor.value;
+  // A trailing newline needs a visible character, or the layer ends one line short of the textarea.
+  codeMarkup.innerHTML = highlight(text) + (text.endsWith('\n') ? ' ' : '');
+  const count = text.split('\n').length;
+  lineNumbers.dataset.count = count;
+  updateCaretLine(true);
+  syncScroll();
+}
+
+let caretLine = 0;
+function updateCaretLine(force = false) {
+  const line = editor.value.slice(0, editor.selectionStart).split('\n').length;
+  if (force || line !== caretLine || !lineNumbers.firstChild) {
+    caretLine = line;
+    const count = Number(lineNumbers.dataset.count) || 1;
+    let html = '';
+    for (let n = 1; n <= count; n++) html += (n === line ? `<b>${n}</b>` : n) + (n < count ? '\n' : '');
+    lineNumbers.innerHTML = html;
+  }
+  placeCaretLine();
+}
+
+function placeCaretLine() {
+  currentLine.style.transform = `translateY(${(caretLine - 1) * LINE_HEIGHT - editor.scrollTop}px)`;
+  currentLine.style.display = document.activeElement === editor ? '' : 'none';
+}
+
+function syncScroll() {
+  codeLayer.scrollTop = editor.scrollTop;
+  codeLayer.scrollLeft = editor.scrollLeft;
   lineNumbers.scrollTop = editor.scrollTop;
+  placeCaretLine();
 }
 
 function selectDemo(index, initial = false) {
@@ -125,7 +165,7 @@ function selectDemo(index, initial = false) {
   document.getElementById('demo-description').textContent = demo.description;
   document.getElementById('demo-hint').textContent = demo.hint;
   document.querySelectorAll('.demo-card').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-  updateLines();
+  updateEditor();
   startSession();
 }
 
@@ -148,8 +188,10 @@ stop.addEventListener('click', () => failed('Stopped by you. Session reset; your
 reset.disabled = false;
 reset.addEventListener('click', () => startSession());
 document.getElementById('clear-console').addEventListener('click', () => clearOutput());
-editor.addEventListener('input', updateLines);
-editor.addEventListener('scroll', () => { lineNumbers.scrollTop = editor.scrollTop; });
+editor.addEventListener('input', updateEditor);
+editor.addEventListener('scroll', syncScroll);
+for (const event of ['keyup', 'click', 'select', 'focus', 'blur']) editor.addEventListener(event, () => updateCaretLine());
+document.addEventListener('selectionchange', () => { if (document.activeElement === editor) updateCaretLine(); });
 editor.addEventListener('keydown', event => {
   if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
     event.preventDefault();

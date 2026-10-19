@@ -1,10 +1,10 @@
 // Exercise the shipped WASM, not a mock or the native CLI. No packages required.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { initSync, Repl } from '../assets/runtime/matchbox.js';
-import { demos } from '../assets/playground-demos.js';
+import { initSync, Repl } from '../docs/assets/playground/runtime/matchbox.js';
+import { demos } from '../docs/assets/playground/playground-demos.js';
 
-const wasm = initSync({ module: readFileSync(new URL('../assets/runtime/matchbox_bg.wasm', import.meta.url)) });
+const wasm = initSync({ module: readFileSync(new URL('../docs/assets/playground/runtime/matchbox_bg.wasm', import.meta.url)) });
 assert.throws(() => wasm.memory.grow(2048), RangeError, '128 MiB memory ceiling must be enforced');
 const repl = new Repl();
 const evaluate = source => JSON.parse(repl.evaluate(source));
@@ -14,6 +14,11 @@ assert.equal(evaluate('answer += 2; answer').value, '42');
 assert.equal(evaluate('function twice(n) { return n * 2; }').error, undefined);
 assert.equal(evaluate('twice(answer)').value, '84');
 assert.equal(evaluate('println("🦀 Hello!"); print("still here");').output, '🦀 Hello!\nstill here');
+// These trapped ("time not implemented on this platform") before the VM used web_time clocks.
+assert.equal(evaluate('[1,2,3].map( n => n * 2 )').value, '[2,4,6]', 'Member calls must not trap');
+assert.equal(evaluate('getTickCount() > 0').value, 'true', 'getTickCount must not trap');
+assert.equal(evaluate('sleep( 5 ); "awake"').value, 'awake', 'sleep must not trap');
+assert.equal(evaluate('runAsync( () => 21 * 2 ).get()').value, '42', 'Cooperative futures must work');
 assert.match(evaluate('function broken(').error, /error:/i);
 const failure = evaluate('println("before error"); throw "deliberate error";');
 assert.match(failure.error, /deliberate error/);
@@ -64,4 +69,22 @@ for (const demo of demos) {
     }
   } finally { session.free(); }
 }
+// Editor highlighter: markup is escaped, classes are right, and the text always round-trips.
+const { highlight } = await import('../docs/assets/playground/highlight.js');
+const plainText = html => html.replace(/<span class="tk-[a-z]">/g, '').replaceAll('</span>', '').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
+const samples = [
+  ...demos.map(demo => demo.code),
+  '// c\nx = "a ""quoted"" #name# ##literal## string"; /* block\nspans */ y = 0x1F + 3.14e2 - .5;',
+  'if ( a < b && c >= d ) { return true; } else { throw "x" }',
+  'unterminated = "open string with #interp',
+  '/* unterminated block',
+  '<script>alert("&")</script>',
+  '',
+];
+for (const sample of samples) assert.equal(plainText(highlight(sample)), sample, 'highlighter must not change the text');
+const tokens = highlight('function add( a, b ) { return a + b; } // sum\nx = "hi #n#"; y = 42; z = true; this.f( 1 )');
+for (const cls of ['tk-k', 'tk-f', 'tk-c', 'tk-s', 'tk-i', 'tk-n', 'tk-l', 'tk-v', 'tk-o']) assert.ok(tokens.includes(`class="${cls}"`), `expected a ${cls} token`);
+const escaped = highlight('<b>x</b>');
+assert.ok(escaped.includes('&lt;') && !escaped.includes('<b>') && !escaped.includes('</b>'), 'HTML must be escaped');
+assert.ok(!highlight('a.return').includes('tk-k'), 'a keyword after a dot is a member name');
 console.log('PASS: shipped WASM, persistent REPL, output/errors, UTF-8 limits, memory ceiling, and all six demos + follow-up expressions.');

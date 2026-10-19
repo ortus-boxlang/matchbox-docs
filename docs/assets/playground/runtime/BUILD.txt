@@ -1,0 +1,4 @@
+MatchBox source: 5ed5f72
+rustc 1.97.0 (2d8144b78 2026-07-07)
+wasm-bindgen 0.2.114
+Rebuild: bash tools/build-runtime.sh

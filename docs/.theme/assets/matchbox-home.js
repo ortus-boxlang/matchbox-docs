@@ -229,11 +229,4 @@
     a.addEventListener('mousemove',function(e){var r=a.getBoundingClientRect();a.style.setProperty('--mx',(e.clientX-r.left)+'px');a.style.setProperty('--my',(e.clientY-r.top)+'px')});
     ch.appendChild(a);io.observe(a)});
 
-  // theme toggle
-  var tb=$('#themebtn');
-  if(tb)tb.addEventListener('click',function(){
-    var r=document.documentElement,dark=r.getAttribute('data-theme')==='dark';
-    r.setAttribute('data-theme',dark?'light':'dark');
-    try{localStorage.setItem('bxsites-theme',dark?'light':'dark')}catch(e){}
-  });
 })();
