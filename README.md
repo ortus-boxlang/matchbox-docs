@@ -27,4 +27,4 @@ Edit Markdown in `docs/`; site configuration is in `bxsites.yaml`, and the navig
 
 ## Playground
 
-The browser playground is published at `/playground/`, and the home page has a small live REPL. The theme layout is `docs/.theme/playground.bxm`; the WebAssembly runtime, worker and editor scripts are in `docs/assets/playground/`. The Rust crate that builds the runtime is `playground-runtime/` (it needs the sibling `../matchbox` checkout, the `wasm32-unknown-unknown` target and `wasm-bindgen-cli` 0.2.114). Rebuild with `bash tools/build-runtime.sh` and check the shipped WASM with `npm run test:playground`.
+The browser playground is published at `/playground/`, and the home page has a small live REPL. The layout is `docs/.overrides/bootstrap/playground.bxm`; the WebAssembly runtime, worker and editor scripts are in `docs/assets/playground/`. The Rust crate that builds the runtime is `playground-runtime/` (it needs the sibling `../matchbox` checkout, the `wasm32-unknown-unknown` target and `wasm-bindgen-cli` 0.2.114). Rebuild with `bash tools/build-runtime.sh` and check the shipped WASM with `npm run test:playground`.
