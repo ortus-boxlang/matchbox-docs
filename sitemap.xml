@@ -28,6 +28,7 @@
 	<url><loc>https://matchbox.boxlang.io/examples/java_interop/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/javascript-and-wasm/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/jit/index.html</loc></url>
+	<url><loc>https://matchbox.boxlang.io/playground/embed/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/native-builds/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/examples/native_fusion/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/native-fusion/index.html</loc></url>

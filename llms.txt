@@ -32,6 +32,7 @@
 - [Java interop example](https://matchbox.boxlang.io/examples/java_interop/README.md) ([HTML](https://matchbox.boxlang.io/examples/java_interop/README/index.html))
 - [JavaScript and WebAssembly](https://matchbox.boxlang.io/building-and-deploying/javascript-and-wasm.md) ([HTML](https://matchbox.boxlang.io/building-and-deploying/javascript-and-wasm/index.html))
 - [JIT compilation](https://matchbox.boxlang.io/building-and-deploying/jit.md) ([HTML](https://matchbox.boxlang.io/building-and-deploying/jit/index.html))
+- [MatchBox Playground Embed](https://matchbox.boxlang.io/playground/embed.md) ([HTML](https://matchbox.boxlang.io/playground/embed/index.html))
 - [Native Builds](https://matchbox.boxlang.io/building-and-deploying/native-builds.md) ([HTML](https://matchbox.boxlang.io/building-and-deploying/native-builds/index.html))
 - [Native Fusion example](https://matchbox.boxlang.io/examples/native_fusion/README.md) ([HTML](https://matchbox.boxlang.io/examples/native_fusion/README/index.html))
 - [Native Fusion reference](https://matchbox.boxlang.io/building-and-deploying/native-fusion.md) ([HTML](https://matchbox.boxlang.io/building-and-deploying/native-fusion/index.html))

@@ -92,3 +92,52 @@
 #source-code:focus-visible{box-shadow:inset 0 0 0 2px var(--g2)}
 .tk-c{color:#5f8581;font-style:italic}.tk-s{color:#ffd47a}.tk-i{color:#ffb07a}.tk-n{color:#ff9db8}.tk-k{color:#7ee8ff}
 .tk-l{color:#c9a6ff}.tk-v{color:#8fd0ff}.tk-f{color:#7dffb2}.tk-o{color:#9fb8b4}
+
+/* Share, copy link, full screen. Icon buttons sit after a divider in the toolbar. */
+.wb-controls{flex-wrap:wrap;align-items:center}
+.wb-controls .btn[hidden]{display:none!important}
+.wb-sep{width:1px;align-self:stretch;margin:4px 2px;background:#12303a}
+.wb-controls .btn.icon{padding:8px 10px;display:inline-flex;align-items:center;gap:6px}
+.wb-controls .btn.flashed{border-color:var(--g2);color:var(--g2)}
+.wb-controls .btn.flashed .sr-only{position:static;width:auto;height:auto;clip:auto;font-size:.8rem}
+#fullscreen .fs-out,#fullscreen[aria-pressed="true"] .fs-in{display:none}
+#fullscreen[aria-pressed="true"] .fs-out{display:inline}
+.workbench.is-fullscreen,.workbench:fullscreen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;border-radius:0;border:0;max-width:none;width:auto;height:auto}
+.workbench.is-fullscreen .wb-panels,.workbench:fullscreen .wb-panels{flex:1;min-height:0}
+.workbench.is-fullscreen .editor-pane,.workbench:fullscreen .editor-pane,.workbench.is-fullscreen .console-pane,.workbench:fullscreen .console-pane{min-height:0}
+.workbench.is-fullscreen .editor-body,.workbench:fullscreen .editor-body{max-height:none;min-height:0;flex:1}
+.workbench.is-fullscreen .console-output,.workbench:fullscreen .console-output{max-height:none;min-height:0}
+@media(max-width:900px){.workbench.is-fullscreen .wb-panels,.workbench:fullscreen .wb-panels{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}}
+
+/* Share dialog */
+.share-dialog{border:1px solid #2c5560;border-radius:16px;background:#071d24;color:#cfeee3;padding:0;width:min(640px,calc(100vw - 32px));box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.share-dialog::backdrop{background:rgba(2,10,14,.7)}
+.share-card{display:flex;flex-direction:column;gap:10px;padding:20px 22px 22px;margin:0}
+.share-head{display:flex;justify-content:space-between;align-items:center}
+.share-head h2{margin:0;font-size:1.1rem}
+.share-x{background:none;border:0;color:#8fb2ae;font-size:1.6rem;line-height:1;cursor:pointer;padding:0 4px}
+.share-x:hover{color:#fff}
+.share-label{font:600 .72rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8fb2ae;margin-top:6px}
+.share-row{display:flex;gap:8px;align-items:stretch}
+.share-row input,.share-row textarea{flex:1;min-width:0;background:#04141a;color:#cfeee3;border:1px solid #1c4450;border-radius:10px;padding:9px 11px;font:400 .78rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;resize:none}
+.share-row .btn{align-self:flex-start;white-space:nowrap;color:#e8f4f2;border-color:#2c5560;background:transparent}
+.share-row .btn[disabled]{opacity:.45;cursor:not-allowed}
+.share-check{display:flex;gap:8px;align-items:center;font-size:.88rem;color:#cfeee3}
+.share-note{margin:0;min-height:1.2em;color:#ffd47a;font-size:.82rem}
+#share-preview{width:100%;height:240px;border:1px solid #1c4450;border-radius:10px;background:#04141a}
+
+/* Embed layout: the workbench fills the frame. */
+body.embed{margin:0;background:#06141a;min-height:100vh;display:flex}
+body.embed .workbench{flex:1;display:flex;flex-direction:column;border-radius:0;border:0;box-shadow:none;min-width:0}
+body.embed .wb-panels{flex:1;min-height:0}
+body.embed .editor-pane,body.embed .console-pane{min-height:0}
+body.embed .editor-body{max-height:none;min-height:0;flex:1}
+body.embed .console-output{max-height:none;min-height:0}
+body.embed .wb-foot{display:none}
+body.embed .wb-toolbar{padding:8px 12px}
+body.embed .wb-label{display:none}
+body.is-readonly .pane-foot span:first-child::after{content:" · read only"}
+@media(max-width:900px){body.embed .wb-panels{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}}
+/* Embeds are usually wide and short: keep the panes side by side until the frame is genuinely narrow. */
+@media(max-width:900px) and (min-width:521px){body.embed .wb-panels{grid-template-columns:1.1fr 1fr;grid-template-rows:none}body.embed .editor-pane{border-right:1px solid #12303a;border-bottom:0}}
+@media(max-width:560px){.wb-sep{display:none}}
