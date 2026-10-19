@@ -7,6 +7,7 @@
     "test": "boxlang bxSites build && boxlang bxSites audit",
     "serve": "boxlang bxSites serve --port=8081",
     "test:playground": "node tools/check-playground.js",
-    "test:playground:ui": "node tools/check-playground-ui.cjs"
+    "test:playground:ui": "node tools/check-playground-ui.cjs",
+    "test:course": "node tools/check-course.js"
   }
 }
