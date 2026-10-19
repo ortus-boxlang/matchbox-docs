@@ -18,7 +18,7 @@ export class Repl {
         let deferred2_1;
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(source, wasm.__wbindgen_export2, wasm.__wbindgen_export3);
+            const ptr0 = passStringToWasm0(source, wasm.__wbindgen_export3, wasm.__wbindgen_export4);
             const len0 = WASM_VECTOR_LEN;
             wasm.repl_evaluate(retptr, this.__wbg_ptr, ptr0, len0);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
@@ -28,7 +28,7 @@ export class Repl {
             return getStringFromWasm0(r0, r1);
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_export4(deferred2_0, deferred2_1, 1);
+            wasm.__wbindgen_export2(deferred2_0, deferred2_1, 1);
         }
     }
     constructor() {
@@ -53,6 +53,27 @@ if (Symbol.dispose) Repl.prototype[Symbol.dispose] = Repl.prototype.free;
 
 export function initialize() {
     wasm.initialize();
+}
+
+/**
+ * The MatchBox version this runtime was built from (from the sibling checkout's Cargo.toml).
+ * @returns {string}
+ */
+export function matchbox_version() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.matchbox_version(retptr);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        deferred1_0 = r0;
+        deferred1_1 = r1;
+        return getStringFromWasm0(r0, r1);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_export2(deferred1_0, deferred1_1, 1);
+    }
 }
 
 function __wbg_get_imports() {

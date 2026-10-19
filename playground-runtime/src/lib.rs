@@ -16,6 +16,12 @@ pub fn initialize() {
     std::panic::set_hook(Box::new(|info| error(&format!("MatchBox: {info}"))));
 }
 
+/// The MatchBox version this runtime was built from (from the sibling checkout's Cargo.toml).
+#[wasm_bindgen]
+pub fn matchbox_version() -> String {
+    env!("MATCHBOX_VERSION").to_string()
+}
+
 fn bounded(mut text: String) -> String {
     if text.len() > 65_536 {
         let mut end = 65_536;

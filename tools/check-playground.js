@@ -69,4 +69,22 @@ for (const demo of demos) {
     }
   } finally { session.free(); }
 }
+// Editor highlighter: markup is escaped, classes are right, and the text always round-trips.
+const { highlight } = await import('../docs/assets/playground/highlight.js');
+const plainText = html => html.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+const samples = [
+  ...demos.map(demo => demo.code),
+  '// c\nx = "a ""quoted"" #name# ##literal## string"; /* block\nspans */ y = 0x1F + 3.14e2 - .5;',
+  'if ( a < b && c >= d ) { return true; } else { throw "x" }',
+  'unterminated = "open string with #interp',
+  '/* unterminated block',
+  '<script>alert("&")</script>',
+  '',
+];
+for (const sample of samples) assert.equal(plainText(highlight(sample)), sample, 'highlighter must not change the text');
+const tokens = highlight('function add( a, b ) { return a + b; } // sum\nx = "hi #n#"; y = 42; z = true; this.f( 1 )');
+for (const cls of ['tk-k', 'tk-f', 'tk-c', 'tk-s', 'tk-i', 'tk-n', 'tk-l', 'tk-v', 'tk-o']) assert.ok(tokens.includes(`class="${cls}"`), `expected a ${cls} token`);
+const escaped = highlight('<b>x</b>');
+assert.ok(escaped.includes('&lt;') && !escaped.includes('<b>') && !escaped.includes('</b>'), 'HTML must be escaped');
+assert.ok(!highlight('a.return').includes('tk-k'), 'a keyword after a dot is a member name');
 console.log('PASS: shipped WASM, persistent REPL, output/errors, UTF-8 limits, memory ceiling, and all six demos + follow-up expressions.');
