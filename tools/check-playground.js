@@ -87,4 +87,31 @@ for (const cls of ['tk-k', 'tk-f', 'tk-c', 'tk-s', 'tk-i', 'tk-n', 'tk-l', 'tk-v
 const escaped = highlight('<b>x</b>');
 assert.ok(escaped.includes('&lt;') && !escaped.includes('<b>') && !escaped.includes('</b>'), 'HTML must be escaped');
 assert.ok(!highlight('a.return').includes('tk-k'), 'a keyword after a dot is a member name');
+// Share links: lossless round trip, a stable hash format, safe failure on junk, and a size ceiling.
+const share = await import('../docs/assets/playground/share.js');
+for (const sample of ['', 'x = 1;', 'println( "héllo wörld 🚀 日本語" );\n', ...demos.map(demo => demo.code), '\u0000\ud83d\ude80 tabs\t\r\n']) {
+  assert.equal(await share.decodeCode(await share.encodeCode(sample)), sample, 'share encoding must round-trip');
+}
+const encoded = await share.encodeCode('println( "hi" );');
+assert.match(encoded, /^[A-Za-z0-9_-]+$/, 'encoded code must be URL safe (no +, / or =)');
+assert.equal(await share.decodeCode(encoded + '!'), null, 'junk is rejected');
+assert.equal(await share.decodeCode('not base64 at all'), null);
+assert.equal(await share.decodeCode('AAAA'), null, 'valid base64 that is not deflate is rejected');
+assert.equal(await share.decodeCode(''), null);
+const hashed = await share.buildShareUrl('https://matchbox.test/playground/', 'a = 1;', { readOnly: true });
+assert.ok(hashed.startsWith('https://matchbox.test/playground/#code='), 'code travels in the hash, never the query');
+assert.ok(!hashed.includes('?'), 'no query string');
+assert.ok(hashed.endsWith('&ro=true'));
+assert.deepEqual(await share.parseShareHash(new URL(hashed).hash), { code: 'a = 1;', readOnly: true, present: true });
+assert.deepEqual(await share.parseShareHash(''), { code: null, readOnly: false, present: false });
+assert.deepEqual(await share.parseShareHash('#main'), { code: null, readOnly: false, present: false });
+assert.deepEqual(await share.parseShareHash('#code=%%%'), { code: null, readOnly: false, present: true }, 'damaged links are reported, not thrown');
+let seed = 12345;
+const noise = Array.from({ length: 20000 }, () => String.fromCharCode(33 + (((seed = (seed * 1103515245 + 12345) >>> 0) >>> 16) % 90))).join('');
+assert.equal(await share.buildShareUrl('https://matchbox.test/playground/', noise), null, 'incompressible code over the ceiling is refused');
+assert.notEqual(await share.buildShareUrl('https://matchbox.test/playground/', 'println( 1 );\n'.repeat(3000)), null, 'repetitive code compresses under the ceiling');
+const snippet = share.iframeSnippet('https://matchbox.test/playground/embed/#code=abc&ro=true');
+assert.equal(snippet, '<iframe src="https://matchbox.test/playground/embed/#code=abc&amp;ro=true" width="600" height="400" allow="fullscreen" loading="lazy"></iframe>');
+assert.ok(!share.iframeSnippet('https://x.test/#"onload="alert(1)').includes('"onload'), 'quotes are escaped in the snippet');
+
 console.log('PASS: shipped WASM, persistent REPL, output/errors, UTF-8 limits, memory ceiling, and all six demos + follow-up expressions.');
