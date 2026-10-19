@@ -86,15 +86,15 @@
 
 <section class="pg-bench"><div class="wrap">
 	<div class="workbench">
-		<div class="wb-toolbar"><span class="wb-label">MATCHBOX PLAYGROUND <i>/ BROWSER SESSION</i></span><div class="wb-controls"><button type="button" id="stop-code" class="btn sm" disabled>Stop</button><button type="button" id="run-code" class="btn p sm" disabled>Run script <kbd id="run-shortcut">Ctrl &##8629;</kbd></button></div></div>
+		<div class="wb-toolbar"><div class="wb-left"><span class="wb-label">MATCHBOX PLAYGROUND</span><span class="wb-version" id="runtime-version" title="The MatchBox version compiled into this runtime">MatchBox</span></div><div class="wb-controls"><button type="button" id="clear-console" class="btn sm" title="Clear the console output">Clear</button><button type="button" id="stop-code" class="btn sm" disabled>Stop</button><button type="button" id="run-code" class="btn p sm" disabled>Run script <kbd id="run-shortcut">Ctrl &##8629;</kbd></button></div></div>
 		<div class="wb-panels">
 			<section class="editor-pane" aria-labelledby="source-title">
 				<div class="pane-head"><h2 id="source-title"><label for="source-code">Source</label></h2><span id="source-filename">hello.bxs</span></div>
-				<div class="editor-body"><div id="line-numbers" aria-hidden="true"></div><textarea id="source-code" aria-describedby="editor-help" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" maxlength="65536"></textarea></div>
+				<div class="editor-body"><div id="line-numbers" aria-hidden="true"></div><div class="code-wrap"><div id="cur-line" aria-hidden="true"></div><pre id="code-hl" aria-hidden="true"><code></code></pre><textarea id="source-code" aria-describedby="editor-help" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" maxlength="65536"></textarea></div></div>
 				<div class="pane-foot" id="editor-help"><span>BoxLang &middot; UTF-8</span><span>Ctrl / &##8984; + Enter to run</span></div>
 			</section>
 			<section class="console-pane" aria-labelledby="console-title">
-				<div class="pane-head"><h2 id="console-title">Session console</h2><div><button type="button" class="console-action" id="clear-console">Clear</button><button type="button" class="console-action" id="reset-session" disabled>Reset session</button></div></div>
+				<div class="pane-head"><h2 id="console-title">Session console</h2><div><button type="button" class="console-action" id="reset-session" disabled>Reset session</button></div></div>
 				<div id="console-output" class="console-output" role="log" aria-label="MatchBox output" aria-live="polite" aria-relevant="additions" tabindex="0"><p class="console-welcome">Your next idea starts here.<br><span>Run a script, or enter an expression below.</span></p></div>
 				<form id="repl-form" class="repl-form"><label for="repl-input"><span aria-hidden="true">bx&gt;</span><span class="sr-only">BoxLang expression</span></label><input id="repl-input" type="text" placeholder="Try 1 + 2" autocomplete="off" spellcheck="false" autocapitalize="off" maxlength="65536" aria-describedby="repl-help" readonly><button type="submit" id="repl-submit" aria-label="Evaluate expression" disabled>&##8629;</button></form>
 				<div class="pane-foot" id="repl-help"><span>Enter to evaluate &middot; &##8593; &##8595; history</span><span>Stateful REPL</span></div>

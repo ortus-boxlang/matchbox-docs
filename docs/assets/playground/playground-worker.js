@@ -1,10 +1,10 @@
-import init, { Repl } from './runtime/matchbox.js';
+import init, { Repl, matchbox_version } from './runtime/matchbox.js';
 
 let repl;
 try {
   await init();
   repl = new Repl();
-  postMessage({ type: 'ready' });
+  postMessage({ type: 'ready', version: matchbox_version() });
 } catch (error) {
   postMessage({ type: 'fatal', message: `Could not initialize MatchBox: ${error}` });
 }
