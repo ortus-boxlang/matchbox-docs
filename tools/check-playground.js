@@ -71,7 +71,7 @@ for (const demo of demos) {
 }
 // Editor highlighter: markup is escaped, classes are right, and the text always round-trips.
 const { highlight } = await import('../docs/assets/playground/highlight.js');
-const plainText = html => html.replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+const plainText = html => html.replace(/<span class="tk-[a-z]">/g, '').replaceAll('</span>', '').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
 const samples = [
   ...demos.map(demo => demo.code),
   '// c\nx = "a ""quoted"" #name# ##literal## string"; /* block\nspans */ y = 0x1F + 3.14e2 - .5;',
