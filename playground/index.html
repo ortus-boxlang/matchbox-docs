@@ -1,0 +1,147 @@
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>MatchBox Playground&#x3a; run BoxLang in your browser</title>
+	<meta name="description" content="Write and run BoxLang in your browser with MatchBox compiled to WebAssembly. Real compiler, real VM, nothing installed, nothing sent to a server.">
+	<meta name="theme-color" content="#06141a">
+	<meta name="robots" content="index, follow, max-image-preview:large">
+	<link rel="canonical" href="https://matchbox.boxlang.io/playground/">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="MatchBox">
+	<meta property="og:title" content="MatchBox Playground&#x3a; run BoxLang in your browser">
+	<meta property="og:description" content="Write and run BoxLang in your browser with MatchBox compiled to WebAssembly. Real compiler, real VM, nothing installed, nothing sent to a server.">
+	<meta property="og:url" content="https://matchbox.boxlang.io/playground/">
+	<meta property="og:image" content="https://matchbox.boxlang.io/assets/og/home.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@TryBoxLang">
+	<meta name="twitter:title" content="MatchBox Playground&#x3a; run BoxLang in your browser">
+	<meta name="twitter:description" content="Write and run BoxLang in your browser with MatchBox compiled to WebAssembly. Real compiler, real VM, nothing installed, nothing sent to a server.">
+	<meta name="twitter:image" content="https://matchbox.boxlang.io/assets/og/home.png">
+	
+		<link rel="icon" href="/assets/matchbox.svg">
+	
+	<script>
+		( function () {
+			var stored = null;
+			try { stored = localStorage.getItem( "bxsites-theme" ); } catch ( e ) {}
+			var dark = stored ? stored === "dark" : window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+			document.documentElement.setAttribute( "data-theme", dark ? "dark" : "light" );
+		} )();
+	</script>
+	<link rel="stylesheet" href="/assets/theme/matchbox-home.25cfa02a.css">
+	<link rel="stylesheet" href="/assets/theme/matchbox-playground.ac793562.css">
+	<link rel="stylesheet" href="/assets/bundle.233bcfed.css">
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "MatchBox Playground",
+		"url": "https://matchbox.boxlang.io/playground/",
+		"applicationCategory": "DeveloperApplication",
+		"operatingSystem": "Any, in a modern browser",
+		"description": "Write\x20and\x20run\x20BoxLang\x20in\x20your\x20browser\x20with\x20MatchBox\x20compiled\x20to\x20WebAssembly.\x20Real\x20compiler,\x20real\x20VM,\x20nothing\x20installed,\x20nothing\x20sent\x20to\x20a\x20server.",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+		"isPartOf": { "@type": "WebSite", "name": "MatchBox", "url": "https://matchbox.boxlang.io/" }
+	}
+	</script>
+</head>
+<body class="mxh pgpage" data-base="/">
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="prog" id="prog"></div>
+<nav><div class="wrap">
+  <a class="logo" href="/" aria-label="MatchBox home"><img src="/assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a>
+  <div class="links"><a href="/getting-started/">Docs</a><a href="/playground/">Playground</a><a href="/#targets">Targets</a><a href="/#fusion">Native Fusion</a><a href="/#ai">AI native</a><a href="/#mvm">Install</a></div>
+  <div class="sp"></div>
+  <a class="ibtn" href="https://boxlang.io" target="_blank" rel="noopener noreferrer" aria-label="BoxLang, boxlang.io" title="boxlang.io"><img src="/assets/ecosystem/boxlang-icon-full.svg" alt=""><span>BoxLang</span><i aria-hidden="true">&#8599;</i></a>
+  <a class="ibtn sq" href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer" aria-label="MatchBox on GitHub" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+  <button type="button" class="themebtn" id="themebtn" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  <a class="btn p sm" href="/getting-started/quick-start/">Get started</a>
+</div></nav>
+<script>
+( function () {
+	var b = document.getElementById( "themebtn" );
+	if ( !b ) return;
+	b.addEventListener( "click", function () {
+		var r = document.documentElement, dark = r.getAttribute( "data-theme" ) === "dark";
+		r.setAttribute( "data-theme", dark ? "light" : "dark" );
+		try { localStorage.setItem( "bxsites-theme", dark ? "light" : "dark" ); } catch ( e ) {}
+	} );
+} )();
+</script>
+
+
+<main id="main">
+<header class="pg-hero"><div class="wrap">
+	<span class="eyebrow"><span class="pg-dot"></span> BoxLang in WebAssembly</span>
+	<h1>A little code. <span class="grad">A live runtime.</span></h1>
+	<p class="pg-lede">No install and no JVM. This is MatchBox, the Rust runtime for BoxLang, running in your browser. Pick a demo, change something, see what happens.</p>
+	<div class="pg-meta"><span class="pg-badge" id="runtime-status" data-state="loading" role="status">Loading WebAssembly...</span><span>Real compiler. Real VM. Runs on your device.</span><a href="/building-and-deploying/javascript-and-wasm/">How browser builds work &#8599;</a></div>
+</div></header>
+
+<noscript><div class="wrap"><p class="pg-noscript"><strong>This playground needs JavaScript and WebAssembly.</strong> You can still <a href="/getting-started/quick-start/">run these ideas with the MatchBox CLI</a>.</p></div></noscript>
+
+<section class="pg-demos"><div class="wrap">
+	<div class="pg-demohead"><h2>Start with a spark.</h2><span>Six small experiments. Make them your own.</span></div>
+	<div id="demo-list" class="demo-list"></div>
+	<p id="demo-description" class="pg-demodesc">Functions, interpolation, and a little introduction. Change the name and make it yours.</p>
+</div></section>
+
+<section class="pg-bench"><div class="wrap">
+	<div class="workbench">
+		<div class="wb-toolbar"><div class="wb-left"><span class="wb-label">MATCHBOX PLAYGROUND</span><span class="wb-version" id="runtime-version" title="The MatchBox version compiled into this runtime">MatchBox</span></div><div class="wb-controls"><button type="button" id="clear-console" class="btn sm" title="Clear the console output">Clear</button><button type="button" id="stop-code" class="btn sm" disabled>Stop</button><button type="button" id="run-code" class="btn p sm" disabled>Run script <kbd id="run-shortcut">Ctrl &#8629;</kbd></button></div></div>
+		<div class="wb-panels">
+			<section class="editor-pane" aria-labelledby="source-title">
+				<div class="pane-head"><h2 id="source-title"><label for="source-code">Source</label></h2><span id="source-filename">hello.bxs</span></div>
+				<div class="editor-body"><div id="line-numbers" aria-hidden="true"></div><div class="code-wrap"><div id="cur-line" aria-hidden="true"></div><pre id="code-hl" aria-hidden="true"><code></code></pre><textarea id="source-code" aria-describedby="editor-help" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" maxlength="65536"></textarea></div></div>
+				<div class="pane-foot" id="editor-help"><span>BoxLang &middot; UTF-8</span><span>Ctrl / &#8984; + Enter to run</span></div>
+			</section>
+			<section class="console-pane" aria-labelledby="console-title">
+				<div class="pane-head"><h2 id="console-title">Session console</h2><div><button type="button" class="console-action" id="reset-session" disabled>Reset session</button></div></div>
+				<div id="console-output" class="console-output" role="log" aria-label="MatchBox output" aria-live="polite" aria-relevant="additions" tabindex="0"><p class="console-welcome">Your next idea starts here.<br><span>Run a script, or enter an expression below.</span></p></div>
+				<form id="repl-form" class="repl-form"><label for="repl-input"><span aria-hidden="true">bx&gt;</span><span class="sr-only">BoxLang expression</span></label><input id="repl-input" type="text" placeholder="Try 1 + 2" autocomplete="off" spellcheck="false" autocapitalize="off" maxlength="65536" aria-describedby="repl-help" readonly><button type="submit" id="repl-submit" aria-label="Evaluate expression" disabled>&#8629;</button></form>
+				<div class="pane-foot" id="repl-help"><span>Enter to evaluate &middot; &#8593; &#8595; history</span><span>Stateful REPL</span></div>
+			</section>
+		</div>
+		<div class="wb-foot"><p id="execution-status" role="status">Getting the runtime ready...</p><span>POWERED BY RUST + WASM</span></div>
+	</div>
+	<p class="pg-hint">Keep exploring: after running this demo, try <code id="demo-hint">greet("your name")</code> in the console.</p>
+</div></section>
+
+<section class="pg-notes"><div class="wrap">
+	<div class="pg-card"><small>01 / A REAL SESSION</small><h3>Write. Run. Repeat.</h3><p>The editor and the console share variables, functions and objects. Clear only removes output. Reset session starts a fresh VM, and so does choosing another demo.</p></div>
+	<div class="pg-card"><small>02 / YOUR BROWSER, YOUR CODE</small><h3>Local by design.</h3><p>Code is compiled and run on your device, not sent to a server. Edits and sessions are not saved when you reload, so copy anything you want to keep.</p></div>
+	<div class="pg-card"><small>03 / ROOM TO EXPERIMENT</small><h3>Small, on purpose.</h3><p>Runs stop after 5 seconds, with 128 MiB of memory and 64 KiB limits on source and output. There are no files, network, DOM, JVM APIs or JIT here. <a href="/differences-from-boxlang/">See target differences &rarr;</a></p></div>
+</div></section>
+
+<section class="pg-next"><div class="wrap"><p>Like what you can do in a tab? <strong>Take it to your terminal.</strong></p><a class="btn p" href="/getting-started/quick-start/">Build with MatchBox &rarr;</a></div></section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <div class="fgrid">
+    <div><a class="logo" href="/"><img src="/assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a><p>The Rust runtime for BoxLang. Part of the BoxLang productivity platform.</p></div>
+    <div><h4>Learn</h4><a href="/getting-started/quick-start/">Quick start</a><a href="/getting-started/installation/">Install with MVM</a><a href="/examples/">Examples</a><a href="/reference/cli/">CLI reference</a></div>
+    <div><h4>Targets</h4><a href="/building-and-deploying/native-builds/">Native</a><a href="/building-and-deploying/javascript-and-wasm/">Browser and JS</a><a href="/building-and-deploying/wasm-container/">WASI</a><a href="/building-and-deploying/esp32/">ESP32</a><a href="/building-and-deploying/native-fusion/">Native Fusion</a></div>
+    <div><h4>Community</h4><a href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">boxlang.io</a><a href="https://www.ortussolutions.com/community/slack" target="_blank" rel="noopener noreferrer">Slack</a><a href="https://www.ortussolutions.com/services" target="_blank" rel="noopener noreferrer">Consulting</a></div>
+  </div>
+  <div class="fbot"><span>&copy; 2026 Ortus Solutions, Corp. MatchBox is an independent Rust implementation of BoxLang.</span><a href="https://boxlang.io" target="_blank" rel="noopener noreferrer">Part of the BoxLang ecosystem</a></div>
+</div></footer>
+
+
+<script type="module" src="/assets/playground/playground.js"></script>
+</body>
+</html>
+
