@@ -14,7 +14,7 @@ This repository is the official MatchBox documentation site. It is built with bx
 - Keep navigation and page sources in the bxSites `docs/` tree. Use bxSites Markdown extensions and content blocks where they improve scanning or learning.
 - MatchBox is a pillar of the BoxLang software productivity platform. Keep Agentic Development and BoxLang AI distinct and easy to find.
 - Ground technical claims and examples in the sibling `../matchbox/` repository or current official BoxLang documentation. Call out platform and feature limitations explicitly.
-- The browser playground is published at `/playground/` (theme layout `docs/.theme/playground.bxm`, runtime and scripts in `docs/assets/playground/`). Rebuild the WebAssembly runtime with `bash tools/build-runtime.sh` and check it with `npm run test:playground`.
+- The browser playground is published at `/playground/` (layout `docs/.overrides/bootstrap/playground.bxm`, runtime and scripts in `docs/assets/playground/`). Rebuild the WebAssembly runtime with `bash tools/build-runtime.sh` and check it with `npm run test:playground`.
 - Keep branding assets in `docs/assets/`. Do not copy the legacy Python site's shell or generated HTML into the bxSites theme.
 
 ## Existing agent skills
