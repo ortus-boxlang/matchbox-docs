@@ -13,7 +13,7 @@ BoxLang is a software productivity platform for building, modernizing, and runni
 
 ## A runtime for more places
 
-MatchBox includes a compiler, bytecode virtual machine, command-line tools, and target-specific runners. Depending on the build and host, it can run `.bxs` scripts, package native applications, compile for JavaScript/WebAssembly or WASI-compatible hosts, build ESP32 applications, and serve web applications.
+MatchBox includes a compiler, bytecode virtual machine, command-line tools, and target-specific runners. Depending on the build and host, it can run `.bxs` scripts, package native applications, compile for JavaScript/WebAssembly in the browser, produce WASI modules and components (with [known issues in 0.11.0](../building-and-deploying/wasm-container.md)), build ESP32 applications, and serve web applications.
 
 The same language does not mean identical host APIs. Each target has its own capabilities and constraints; review [compatibility and target differences](../differences-from-boxlang.md) before relying on JVM libraries or platform-specific features.
 

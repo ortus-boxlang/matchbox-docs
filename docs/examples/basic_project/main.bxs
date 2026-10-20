@@ -1,4 +1,4 @@
-// main.bxs — Entry point for the Basic BoxLang Project example.
+// main.bxs - Entry point for the Basic BoxLang Project example.
 // Run with: matchbox main.bxs
 
 import models.Animal;
@@ -35,7 +35,7 @@ animalRoster = [
 ]
 
 for (entry in animalRoster) {
-    println("  " & entry.name & " — " & entry.kind)
+    println("  " & entry.name & " - " & entry.kind)
 }
 
 println("")

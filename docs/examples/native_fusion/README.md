@@ -7,7 +7,7 @@ description: Rust functions and a stateful native object used from BoxLang in a 
 
 **Native Fusion** lets you write performance-critical functions and stateful
 objects in Rust and use them directly from BoxLang. Everything is statically
-linked into a single native binary — no external libraries, no FFI boilerplate
+linked into a single native binary - no external libraries, no FFI boilerplate
 at call sites.
 
 This example demonstrates both interop styles:
@@ -31,7 +31,7 @@ that lives alongside your entry script and compiles them together with the VM.
 
 ## Building
 
-You need a Rust toolchain (`cargo`, `rustc`) in addition to the `matchbox` binary.
+You need a Rust toolchain (`cargo`, `rustc`) in addition to the `matchbox` binary. The generated Cargo project depends on the `crates/matchbox-vm` directory of the MatchBox source tree that built your `matchbox` binary, so that tree must still exist on disk at its original path. The first build compiles the VM and takes a minute or more.
 
 ```bash
 cd docs/examples/native_fusion
@@ -75,13 +75,13 @@ Expected output:
   min   : 4
   max   : 42
 
-All results computed in Rust — zero JVM, zero overhead.
+All results computed in Rust.
 ```
 
 ## Writing a Native BIF with `#[matchbox_fn]`
 
 Using the `#[matchbox_fn]` macro is the recommended way to write BIFs. You write
-a plain typed Rust function — the macro generates the `{name}_wrapper` with the
+a plain typed Rust function - the macro generates the `{name}_wrapper` with the
 correct BIF signature, argument-count validation, and type coercions for you.
 
 ```rust
@@ -180,7 +180,7 @@ impl Counter {
     }
 }
 
-// Constructor — called when BoxLang evaluates `new rust:mymodule.Counter(0)`.
+// Constructor - called when BoxLang evaluates `new rust:mymodule.Counter(0)`.
 // vm.native_object_new() stores the object on the VM heap and returns an id
 // wrapped in a BxValue pointer.
 pub fn create_counter(vm: &mut dyn BxVM, args: &[BxValue]) -> Result<BxValue, String> {
@@ -223,7 +223,7 @@ for the innermost loops where performance is measured and critical.
 | Feature | Status |
 |---|---|
 | Available in native builds | ✅ |
-| Available in WASM builds | ❌ Not supported |
+| Available in WASM builds | ❌ `--target js` with a `native/` directory fails to compile in v0.11.0 |
 | Multiple `.rs` files in `native/` | ✅ Each may export `register_bifs()` and/or `register_classes()` |
 | Using external Rust crates | ✅ Add a `Cargo.toml` to `native/` |
 | Mutable `self` in `#[matchbox_methods]` | ✅ Dispatcher takes `&mut self` |

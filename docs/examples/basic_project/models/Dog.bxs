@@ -1,7 +1,8 @@
-import models.Animal;
 import models.ISpeakable;
 
-class Dog extends Animal implements ISpeakable {
+class Dog implements="ISpeakable" {
+    property name;
+    property sound;
     property breed;
 
     function init(name, breed) {
@@ -9,6 +10,10 @@ class Dog extends Animal implements ISpeakable {
         this.sound = "Woof"
         this.breed = breed
         return this
+    }
+
+    function describe() {
+        println("I am " & this.name & " and I make the sound '" & this.sound & "'")
     }
 
     function speak() {

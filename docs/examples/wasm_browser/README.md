@@ -3,7 +3,7 @@ title: WASM browser Todo app
 description: A browser Todo app written in BoxLang, compiled to WebAssembly and wired to Alpine.
 ---
 
-# WASM Browser — Todo App
+# WASM Browser - Todo App
 
 A minimal browser Todo application written in BoxLang and compiled to WebAssembly.
 BoxLang owns the app state and state transitions. The HTML shell wires that
@@ -27,18 +27,20 @@ wasm_browser/
 
 ## Build
 
-You need the `matchbox` binary and `wasm-pack` / the WASM target available.
+You need the `matchbox` binary and the `wasm-bindgen` command-line tool on your `PATH` (`cargo install wasm-bindgen-cli`, or set `WASM_BINDGEN` to its path). `wasm-pack` is not used.
 
 ```bash
 cd docs/examples/wasm_browser
 matchbox --target js todo.bxs
 ```
 
-This produces two files alongside your source:
+This produces these files alongside your source:
 
 ```
-todo.js    ← ES module wrapper (import this in HTML)
-todo.wasm  ← WebAssembly binary (loaded automatically by todo.js)
+todo.js               ← ES module wrapper (import this in HTML)
+todo.wasm             ← WebAssembly binary (loaded automatically by todo.js)
+todo.d.ts             ← TypeScript declarations
+todo_bg.wasm.d.ts     ← TypeScript declarations for the wasm exports
 ```
 
 ## Run Locally
@@ -47,13 +49,13 @@ Browsers block WASM loading over `file://` for security reasons. Serve the
 directory with any local HTTP server:
 
 ```bash
-# Option A — Node.js (npx, no install required)
+# Option A - Node.js (npx, no install required)
 npx serve .
 
-# Option B — Python
+# Option B - Python
 python3 -m http.server 8080
 
-# Option C — any other static file server
+# Option C - any other static file server
 ```
 
 Then open the printed URL (usually `http://localhost:3000` or
@@ -67,7 +69,7 @@ Then open the printed URL (usually `http://localhost:3000` or
 
 ## Deploy to Production
 
-The compiled output (`todo.js` + `todo.wasm` + `index.html`) is a fully static
+The compiled output (`todo.js`, `todo.wasm` and `index.html`) is a fully static
 bundle. Upload it to any static host:
 
 ```bash

@@ -8,6 +8,8 @@
     "serve": "boxlang bxSites serve --port=8081",
     "test:playground": "node tools/check-playground.js",
     "test:playground:ui": "node tools/check-playground-ui.cjs",
-    "test:course": "node tools/check-course.js"
+    "test:course": "node tools/check-course.js",
+    "test:docs-snippets": "node tools/check-doc-snippets.js",
+    "test:functions": "node tools/gen-bif-reference.mjs ../matchbox --check"
   }
 }

@@ -18,7 +18,7 @@ MatchBox includes a multi-tier JIT compiler built on [Cranelift](https://craneli
 | WASM (browser / container) | No | Cranelift does not target WASM; the browser's own JIT runs the WASM module |
 | ESP32 / embedded | No | The `matchbox-esp32-runner` crate is workspace-excluded and has no Cranelift dependency |
 
-The JIT is compiled in via the `jit` Cargo feature, which is included in the default feature set of the `matchbox` CLI crate. The `matchbox_vm` library crate keeps `jit` opt-in (default off) so that consumers — the ESP32 runner, WASM runner, and native runner stubs — remain lean unless they explicitly request it.
+The JIT is compiled in via the `jit` Cargo feature, which is included in the default feature set of the `matchbox` CLI crate. The `matchbox_vm` library crate keeps `jit` opt-in (default off) so that consumers (the ESP32 runner, WASM runner, and native runner stubs) remain lean unless they explicitly request it.
 
 ---
 
@@ -26,25 +26,25 @@ The JIT is compiled in via the `jit` Cargo feature, which is included in the def
 
 The JIT uses a tiered strategy: cheap profiling runs first, and compilation only fires once a site has proven itself hot.
 
-### Tier 1 — Empty loop elimination
+### Tier 1: Empty loop elimination
 
 **Trigger:** A `for` loop whose body is empty, after ≥ 10 000 iterations.
 
 The entire loop is replaced by a single `select` instruction: the counter jumps straight to its final value in one native call. No iteration actually occurs.
 
-### Tier 2 — Numeric loop body
+### Tier 2: Numeric loop body
 
 **Trigger:** A `for` loop with a numeric-only body, after ≥ 10 000 cumulative iterations (counter persists across fiber scheduler quanta).
 
 The loop body is translated to Cranelift SSA IR. Local variables live in registers throughout; only the final values are written back to the VM's locals array on exit. Inline-cached struct member reads (monomorphic or bi-morphic) are also supported.
 
-### Tier 3 — Array iteration
+### Tier 3: Array iteration
 
 **Trigger:** A `for-in` loop over a float-only array, after ≥ 5 000 cumulative iterations.
 
 The array data pointer and length are passed directly to the compiled loop, bypassing the iterator protocol entirely.
 
-### Tier 4 — Hot function compilation
+### Tier 4: Hot function compilation
 
 **Trigger:** A function body that passes a translatability check, after ≥ 100 calls.
 
@@ -63,7 +63,16 @@ The entire function body is compiled to a native `fn(locals_ptr, heap_ptr, out_v
 | Strings | `STRING_CONCAT` (`&` operator, via `jit_concat` runtime helper) |
 | Return | `RETURN` |
 
-If any unsupported opcode is present, the function is silently skipped — it continues running in the interpreter with no correctness impact. If a type guard fails at runtime (e.g. a variable expected to be numeric turns out to be a heap pointer), the compiled frame **deopts**: execution transfers back to the interpreter at the current bytecode position and the function is not recompiled.
+If any unsupported opcode is present, the function is silently skipped and keeps running in the interpreter with no correctness impact. If a type guard fails at runtime (for example a variable expected to be numeric turns out to be a heap pointer), the compiled frame **deopts**: execution transfers back to the interpreter at the current bytecode position.
+
+Deopts are counted per function, and a function that keeps deopting is recompiled in a more tolerant mode (`crates/matchbox-vm/src/vm/jit.rs`, `inc_fn_deopt`):
+
+| Deopts of one function | Action |
+| :--- | :--- |
+| 5 | Recompile in **Mode 1** (polymorphic). Arithmetic keeps its numeric fast path and falls back to a runtime helper when an operand is not a number. |
+| 10 (after Mode 1) | Recompile in **Mode 2** (relaxed). Arithmetic always goes through the helper. |
+
+Each upgrade drops the compiled code and sets the call counter to 10 below the threshold, so the function is recompiled after 10 more calls. Mode 0 is the first compile. Each step prints a `[JIT] Tier-4 function ... deopted N times. Upgrading to Mode ...` line to stderr.
 
 ---
 
@@ -71,28 +80,36 @@ If any unsupported opcode is present, the function is silently skipped — it co
 
 The following categories cause a function to remain interpreted:
 
-- **Global variables** — `GET_GLOBAL`, `SET_GLOBAL`, `DEFINE_GLOBAL`, `GET_PRIVATE`, `SET_PRIVATE`
-- **I/O** — `PRINT`, `PRINTLN`
-- **Object / collection creation** — `NEW`, `ARRAY`, `STRUCT`
-- **Property and index access** — `MEMBER`, `SET_MEMBER`, `INC_MEMBER`, `INDEX`, `SET_INDEX`
-- **Dynamic calls** — `INVOKE`, `INVOKE_NAMED`, `CALL_NAMED`
-- **Loops inside functions** — `FOR_LOOP_STEP`, `LOOP`, `ITER_NEXT`
-- **Exception handling** — `PUSH_HANDLER`, `POP_HANDLER`, `THROW`
-- **Multi-word compare-jumps** — `LOCAL_COMPARE_JUMP`, `GLOBAL_COMPARE_JUMP`, `COMPARE_JUMP`, `LOCAL_JUMP_IF_NE_CONST`
-- **Miscellaneous** — `INC`, `DEC`, `INC_LOCAL`, `INC_GLOBAL`, `SWAP`, `OVER`, `JUMP_IF_NULL`
+- **Global variables**: `GET_GLOBAL`, `SET_GLOBAL`, `DEFINE_GLOBAL`, `GET_PRIVATE`, `SET_PRIVATE`
+- **I/O**: `PRINT`, `PRINTLN`
+- **Object / collection creation**: `NEW`, `ARRAY`, `STRUCT`
+- **Property and index access**: `MEMBER`, `SET_MEMBER`, `INC_MEMBER`, `INDEX`, `SET_INDEX`
+- **Dynamic calls**: `INVOKE`, `INVOKE_NAMED`, `CALL_NAMED`
+- **Loops inside functions**: `FOR_LOOP_STEP`, `LOOP`, `ITER_NEXT`
+- **Exception handling**: `PUSH_HANDLER`, `POP_HANDLER`, `THROW`
+- **Multi-word compare-jumps**: `LOCAL_COMPARE_JUMP`, `GLOBAL_COMPARE_JUMP`, `COMPARE_JUMP`, `LOCAL_JUMP_IF_NE_CONST`
+- **Miscellaneous**: `INC`, `DEC`, `INC_LOCAL`, `INC_GLOBAL`, `SWAP`, `OVER`, `JUMP_IF_NULL`
 
 In practice, Tier 4 is most effective for pure computational functions: numeric kernels, string-building loops, recursive math, and hot helper functions that operate only on their arguments and local variables.
 
 ---
 
+## Diagnostics
+
+The JIT reports through `eprintln!`, so its `[JIT] ...` lines (`compiled hot fn`, `compiled empty loop`, `compiled generic loop`, `compiled iter loop`, deopt upgrades and compile failures) go to stderr, not stdout. They are not controlled by `--verbose`.
+
+---
+
 ## Opting Out
 
-If you need to build the CLI without JIT (e.g. to reduce binary size for a constrained native target):
+To build the CLI without the JIT, leave out `jit` and also `server`. The `matchbox_server` crate enables `jit` on the VM itself, so with `server` on the JIT cannot be switched off (`cargo tree -e features` shows `cranelift-jit` for any feature set that includes `server`).
 
 ```bash
 cargo build --release --no-default-features \
-  --features "bif-io,bif-jni,bif-crypto,bif-cli"
+  --features "bif-io,bif-jni,bif-crypto,bif-cli,bif-http"
 ```
+
+This drops `--serve` and `--target wasi-http` along with the JIT. The dependency tree for this command contains no `cranelift-jit` and no `axum`; it was inspected, not built.
 
 ---
 
@@ -100,7 +117,7 @@ cargo build --release --no-default-features \
 
 ### JIT in native runner stubs
 
-The `build.rs` feature-forwarding block (lines 58–64) explicitly lists which features are passed to `matchbox-runner` stub builds. Adding `"jit"` there would give deployed native runner stubs the same JIT benefits as the CLI's local interpreter. The trade-off is binary size: Cranelift adds roughly 10–20 MB per stub, which multiplies across targets in cross-compile mode. When that trade-off becomes acceptable, the change is a one-liner in `build.rs`:
+The `build.rs` feature-forwarding block (the `features` list at lines 92 to 108) explicitly lists which features are passed to `matchbox-runner` stub builds. Adding `"jit"` there would give deployed native runner stubs the same JIT benefits as the CLI's local interpreter. The trade-off is binary size: Cranelift would be linked into every stub, which multiplies across targets in cross-compile mode. When that trade-off becomes acceptable, the change is a one-liner in `build.rs`:
 
 ```rust
 if env::var("CARGO_FEATURE_JIT").is_ok() { features.push("jit"); }

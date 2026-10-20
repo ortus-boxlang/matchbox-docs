@@ -6,7 +6,7 @@ description: Compile a BoxLang script to a raw WASM binary and run it in a minim
 # WASM Container Example
 
 This example shows how to compile a BoxLang script to a raw WebAssembly binary
-and run it as a serverless workload inside a minimal OCI container — with no OS,
+and run it as a serverless workload inside a minimal OCI container - with no OS,
 no JVM, and no MatchBox installation on the host.
 
 The same `.wasm` binary can also be executed directly by
@@ -20,20 +20,20 @@ wasm_container/
 └── Dockerfile   ← minimal OCI image (FROM scratch)
 ```
 
-## Step 1 — Prerequisites
+## Step 1 - Prerequisites
 
-No special prerequisites are needed. `matchbox --target wasi` uses a pre-built
-WASI runner stub and produces a `.wasm` binary in under a second with no `cargo`
-or Rust toolchain required at compile time.
+No special prerequisites are needed. `matchbox --target wasi` patches your
+bytecode into a pre-built WASI runner stub that is embedded in the `matchbox`
+binary, so no `cargo` or Rust toolchain is required at compile time.
 
 To run the binary outside of Docker you need a WASI runtime such as Wasmtime:
 
 ```bash
-# Install Wasmtime (macOS / Linux) — optional, for running without Docker
+# Install Wasmtime (macOS / Linux) - optional, for running without Docker
 curl https://wasmtime.dev/install.sh -sSf | bash
 ```
 
-## Step 2 — Compile to WASM
+## Step 2 - Compile to WASM
 
 ```bash
 cd docs/examples/wasm_container
@@ -41,17 +41,19 @@ matchbox --target wasi service.bxs
 ```
 
 > **`--target wasi` not `--target wasm`**  
-> `--target wasm` produces a browser-oriented binary. `--target wasi` compiles
-> to `wasm32-wasip1` using a pre-built runner stub — no `cargo` invocation
-> needed; compilation completes in under a second.
+> Both targets start from the same WASI runner stub. `--target wasi` writes the
+> bytecode into a fixed 1 MiB region of the stub, so the compiled script must
+> fit in 1 MiB less 12 bytes. `--target wasm` instead appends the bytecode as a
+> custom section named `boxlang_bytecode`; use `--target wasi` for this example.
+> For a browser, use `--target js` (see the [browser example](../wasm_browser/README.md)).
 
-This produces `service.wasm` — a self-contained WASI binary embedding the
+This produces `service.wasm` - a self-contained WASI binary embedding the
 MatchBox VM and your compiled BoxLang bytecode.
 
-## Step 3 — Run with Wasmtime (no Docker required)
+## Step 3 - Run with Wasmtime (no Docker required)
 
 If you installed Wasmtime, you can run the binary directly and see output in your
-terminal immediately — no Docker overhead:
+terminal immediately - no Docker overhead:
 
 ```bash
 wasmtime service.wasm
@@ -85,7 +87,7 @@ Grant filesystem access if your script reads files:
 wasmtime --dir=. service.wasm
 ```
 
-## Step 4 — Run with WasmEdge
+## Step 4 - Run with WasmEdge
 
 ```bash
 # Install WasmEdge
@@ -95,10 +97,10 @@ curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/insta
 wasmedge service.wasm
 ```
 
-## Step 5 — Build a Docker Image
+## Step 5 - Build a Docker Image
 
 ```bash
-# Compile first (produces service.wasm via a full wasm32-wasip1 cargo build)
+# Compile first (patches the prebuilt WASI runner; no cargo build)
 matchbox --target wasi service.bxs
 
 # Build the OCI image, annotating it for the wasi/wasm32 platform.
@@ -106,17 +108,18 @@ matchbox --target wasi service.bxs
 docker buildx build --platform wasi/wasm32 -t matchbox-service .
 ```
 
-The image is built `FROM scratch` — it contains only `service.wasm`. Total image
-size is the WASM file itself (~500 KB).
+The image is built `FROM scratch` - it contains only `service.wasm`. Total image
+size is the WASM file itself. The runner stub alone is about 2.1 MB in v0.11.0
+(`stubs/runner_stub_wasip1.wasm`), so expect a file of at least that size.
 
 > **Why `docker buildx build --platform wasi/wasm32`?**  
 > Plain `docker build` tags the image for your host's native platform
 > (e.g. `linux/arm64`). When `docker run --platform=wasi/wasm32` is given,
 > Docker looks for an image with a `wasi/wasm32` manifest, finds none locally,
-> and tries to pull from Docker Hub — causing a "repository does not exist" error.
+> and tries to pull from Docker Hub - causing a "repository does not exist" error.
 > Building with `--platform wasi/wasm32` ensures the manifest matches.
 
-## Step 6 — Run the Docker Container
+## Step 6 - Run the Docker Container
 
 The `containerd-shim-wasmtime` always routes the WASM process's stdout through
 Docker's log driver. It does not stream output to an attached terminal, regardless
@@ -134,7 +137,7 @@ docker rm matchbox-svc
 ```
 
 > **Tip:** For live terminal output during development, skip Docker and use
-> `wasmtime service.wasm` directly — it is simpler and faster.
+> `wasmtime service.wasm` directly - it is simpler and faster.
 
 ## Push to a Registry
 
@@ -168,7 +171,7 @@ fastly compute deploy
 | Network (sockets) | ⚠️ WASI preview2 / experimental |
 | DOM / `js.*` APIs | ❌ Browser context only |
 | Java interop | ❌ No JNI in WASM |
-| Native Fusion | ❌ Native builds only |
+| Native Fusion | Not tested for `--target wasi`; see the [Native Fusion guide](../../building-and-deploying/native-fusion.md) |
 
 See [wasm-container.md](../../building-and-deploying/wasm-container.md) for the
 full deployment reference.

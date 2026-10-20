@@ -5,10 +5,9 @@
 #
 # This image uses the WASM OCI image spec: the image contains only the
 # compiled .wasm binary; the container runtime (Wasmtime shim) executes it.
-# No OS, no shell, no libc — just the binary and the WASM runtime.
+# No OS, no shell, no libc - just the binary and the WASM runtime.
 #
 # Build (must specify --platform so the manifest matches the run command):
-#   rustup target add wasm32-wasip1
 #   matchbox --target wasi service.bxs   # compile BoxLang → service.wasm
 #   docker buildx build --platform wasi/wasm32 -t matchbox-service .
 #

@@ -50,12 +50,13 @@ The `channel` object currently supports:
 * `broadcastJson()`
 * `broadcastBytes()`
 * `close()`
+* `getId()`, `getPath()`, `getURL()` and `getHTTPHeader( name, [default] )`, which describe the connection and its upgrade request
 
-This example uses `sendJson()` to initialize new connections and `broadcastJson()` to fan out counter changes.
+The [Web server guide](../../building-and-deploying/web-server.md#websocket-channel-api) describes each method. This example uses `sendJson()` to initialize new connections and `broadcastJson()` to fan out counter changes.
 
 ## Running the Example
 
-From the project root:
+The `--app` flag belongs to the `matchbox_server` binary, which you build from the MatchBox source tree. From the project root:
 
 ```bash
 cargo run -p matchbox_server -- --app docs/examples/websocket_counter/app.bxs
@@ -65,4 +66,6 @@ Then open:
 
 * `http://localhost:8099/`
 
-Open the page in two tabs and click the button in either tab. Both tabs should update to the same counter value.
+Open the page in two tabs and click the button in either tab. Both tabs update to the same counter value. The count lives in the listener inside the WebSocket runtime, so it survives page reloads and resets when the server restarts.
+
+To attach a listener without a routed app, use the `websocket` block of `boxlang.json` in a webroot; see the guide.

@@ -1,4 +1,4 @@
-// todo.bxs — BoxLang Todo App logic (State-driven)
+// todo.bxs - BoxLang Todo App logic (State-driven)
 //
 // This version returns state snapshots and automatically registers itself
 // with Alpine.js if present, enabling zero-boilerplate HTML.
@@ -10,7 +10,7 @@ todos    = []
 nextId   = 1
 
 // --------------------------------------------------------------------------
-// Actions — return a state snapshot for the UI to apply
+// Actions - return a state snapshot for the UI to apply
 // --------------------------------------------------------------------------
 
 function submitTodo(text) {

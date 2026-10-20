@@ -18,24 +18,25 @@ event.json
 function run(event, context, response)
 ```
 
-The runtime passes the raw AWS Lambda event into `event`, an AWS-style context object into `context`, and a mutable Lambda proxy response struct into `response`.
+The runtime passes the raw AWS Lambda event into `event`, an AWS-style context object into `context`, and a mutable Lambda proxy response struct into `response`. The handler here sets its own `headers` struct, which includes CORS headers, so the runtime's default headers are not added. The [AWS Lambda guide](../../building-and-deploying/aws-lambda-aws-cli-setup.md) describes the full contract, class routing and the `Application.bx` hooks.
 
 ## Local Invoke
 
-From the repo root:
+From this directory:
 
 ```bash
-cargo run -- lambda invoke docs/examples/aws_lambda_single_file/Lambda.bx \
-  --event docs/examples/aws_lambda_single_file/event.json
+matchbox lambda invoke Lambda.bx --event event.json
 ```
 
-Expected response shape:
+`event.json` is a Function URL style event with `name=Lambda` in the query string. The response:
 
 ```json
 {
   "body": "{\"message\":\"Hello from Lambda\",\"path\":\"/\",\"requestId\":\"local-request\"}",
   "cookies": [],
   "headers": {
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json"
   },
@@ -44,38 +45,40 @@ Expected response shape:
 }
 ```
 
-## AWS CLI Setup
+A local invoke reports `local-request` as the request id.
 
-Before deploying, follow:
+## AWS Setup
 
-```text
-docs/building-and-deploying/aws-lambda-aws-cli-setup.md
-```
-
-You need:
+Before deploying, follow the [AWS account setup](../../building-and-deploying/aws-lambda-aws-cli-setup.md#aws-account-setup). You need:
 
 - AWS CLI v2
 - a configured AWS profile
 - a region
 - an existing Lambda execution role ARN
 
-## Deploy
+## Build the bootstrap
 
-Current development builds still require an explicit Linux Lambda bootstrap binary:
+The Lambda runtime executable is not part of the CLI. Build it from the MatchBox source tree for the architecture of your function (the default is `arm64`):
 
 ```bash
-cargo run -- lambda deploy docs/examples/aws_lambda_single_file/Lambda.bx \
+cargo build --release -p matchbox_lambda_runner --target aarch64-unknown-linux-gnu
+```
+
+The result is `target/aarch64-unknown-linux-gnu/release/matchbox_lambda_runner`. Building for another architecture needs that target installed and a linker for it.
+
+## Deploy
+
+```bash
+matchbox lambda deploy Lambda.bx \
   --function matchbox-single-file-demo \
   --role arn:aws:iam::123456789012:role/matchbox-lambda-execution \
   --profile matchbox-dev \
   --region us-east-1 \
   --public \
-  --bootstrap /path/to/linux-arm64-bootstrap
+  --bootstrap /path/to/matchbox_lambda_runner
 ```
 
-Use `--public` for an unauthenticated Function URL that anyone can invoke. Use `--url` instead if you want IAM-authenticated access.
-
-After embedded release stubs are added, `--bootstrap` should go away.
+Use `--public` for an unauthenticated Function URL that anyone can invoke. Use `--url` instead for IAM-authenticated access. Use `--arch x86_64` if the bootstrap is an x86_64 build. `--memory`, `--timeout` and `--out` are described in the guide.
 
 If deploy succeeds, the command prints the Function URL. Test it with:
 
@@ -83,7 +86,7 @@ If deploy succeeds, the command prints the Function URL. Test it with:
 curl "https://your-url.lambda-url.us-east-1.on.aws/?name=AWS"
 ```
 
-Expected body:
+The body has this shape:
 
 ```json
 {
@@ -92,4 +95,3 @@ Expected body:
   "path": "/"
 }
 ```
-

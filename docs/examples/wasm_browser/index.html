@@ -64,7 +64,7 @@
       <p><small x-text="`${remaining} remaining, ${completed} completed, ${total} total`"></small></p>
 
       <template x-if="total === 0">
-        <p class="empty">No tasks yet — add one above!</p>
+        <p class="empty">No tasks yet - add one above!</p>
       </template>
 
       <template x-for="todo in (filter === 'open' ? todos.filter(t => !t.done) : filter === 'done' ? todos.filter(t => t.done) : todos)" :key="todo.id">

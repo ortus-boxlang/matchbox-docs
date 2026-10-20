@@ -10,7 +10,7 @@ function registerComponent() {
 
     println("BoxLang: Registering 'bxCounter' component...");
 
-    Alpine.data( "bxCounter", ( initialValue = 0 ) => {
+    Alpine.data( "bxCounter", function( initialValue = 0 ) {
         return {
             "count" : initialValue,
             "step"  : 1,

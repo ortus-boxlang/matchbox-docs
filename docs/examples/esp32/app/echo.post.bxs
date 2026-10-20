@@ -1,0 +1,1 @@
+writeOutput( "Received " & len( form.msg ?: "" ) & " characters" );

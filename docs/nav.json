@@ -23,6 +23,7 @@
       "building-and-deploying/native-builds.md",
       "building-and-deploying/javascript-and-wasm.md",
       "building-and-deploying/wasm-container.md",
+      "building-and-deploying/wasi-http.md",
       "building-and-deploying/docker-image.md",
       "building-and-deploying/esp32.md",
       "building-and-deploying/aws-lambda-aws-cli-setup.md",
@@ -36,6 +37,7 @@
           "examples/esp32_camera/README.md",
           "examples/java_interop/README.md",
           "examples/native_fusion/README.md",
+          "examples/aws_lambda_single_file/README.md",
           "examples/wasm_browser/README.md",
           "examples/wasm_container/README.md"
         ]
@@ -46,6 +48,7 @@
     "title": "Web Development",
     "icon": "phosphor-duotone:globe-hemisphere-west",
     "children": [
+      "building-and-deploying/web-server.md",
       "examples/web_server/README.md",
       "examples/app_server/README.md",
       "http.md",
@@ -57,6 +60,52 @@
     "icon": "phosphor-duotone:book-open-text",
     "children": [
       "reference/cli.md",
+      "reference/configuration.md",
+      {
+        "title": "Language",
+        "icon": "phosphor-duotone:book-bookmark",
+        "path": "reference/language/index.md",
+        "children": [
+          "reference/language/operators.md",
+          "reference/language/destructuring-spread-ranges.md",
+          "reference/language/sets.md",
+          "reference/language/classes.md",
+          "reference/language/scopes.md",
+          "reference/language/error-handling.md",
+          "reference/language/async-and-futures.md",
+          "reference/language/templates-bxm.md",
+          "reference/language/modules.md",
+          "reference/language/java-interop.md",
+          "reference/language/query-and-data.md"
+        ]
+      },
+      {
+        "title": "Function Reference",
+        "path": "reference/functions/index.md",
+        "icon": "phosphor-duotone:function",
+        "children": [
+          "reference/functions/strings.md",
+          "reference/functions/arrays.md",
+          "reference/functions/structs.md",
+          "reference/functions/numbers-and-math.md",
+          "reference/functions/dates-and-time.md",
+          "reference/functions/lists.md",
+          "reference/functions/queries-and-datasources.md",
+          "reference/functions/types-and-decisions.md",
+          "reference/functions/system-and-cli.md",
+          "reference/functions/files-and-io.md",
+          "reference/functions/data-formats.md",
+          "reference/functions/encoding-and-crypto.md",
+          "reference/functions/async-and-futures.md",
+          "reference/functions/sets.md",
+          "reference/functions/cache-and-watchers.md",
+          "reference/functions/i18n.md",
+          "reference/functions/http.md",
+          "reference/functions/esp32.md",
+          "reference/functions/members.md",
+          "reference/functions/objects.md"
+        ]
+      },
       "reference/releases.md",
       "differences-from-boxlang.md",
       "building-and-deploying/native-fusion.md",
