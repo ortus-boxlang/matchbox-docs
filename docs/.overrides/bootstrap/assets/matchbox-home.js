@@ -28,7 +28,7 @@
 
   // hero terminal
   var targets = [
-    {n:'Native', w:'a native binary', cmd:'matchbox --target native hello.bxs', out:['<span class="ok">&#10003;</span> compiled to bytecode','<span class="ok">&#10003;</span> appended to runner stub','<span class="ok">&#10003;</span> wrote ./hello (no JVM needed)'], size:8, lbl:'runner stub (~500 KB) + bytecode'},
+    {n:'Native', w:'a native binary', cmd:'matchbox --target native hello.bxs', out:['<span class="ok">&#10003;</span> compiled to bytecode','<span class="ok">&#10003;</span> appended to runner stub','<span class="ok">&#10003;</span> wrote ./hello (no JVM needed)'], size:8, lbl:'runner stub (~4.7 MB) + bytecode'},
     {n:'Browser', w:'the browser', cmd:'matchbox --target js hello.bxs', out:['<span class="ok">&#10003;</span> compiled to bytecode','<span class="ok">&#10003;</span> wrote hello.js + hello.wasm','<span class="c">// import it in any page</span>'], size:6, lbl:'WASM module'},
     {n:'WASI', w:'a container', cmd:'matchbox --target wasm hello.bxs', out:['<span class="ok">&#10003;</span> compiled to bytecode','<span class="ok">&#10003;</span> wrote hello.wasm','<span class="c">$ wasmtime hello.wasm</span>'], size:6, lbl:'WASI module'},
     {n:'Lambda', w:'AWS Lambda', cmd:'matchbox lambda deploy Lambda.bx', out:['<span class="ok">&#10003;</span> compiled to bytecode','<span class="ok">&#10003;</span> packaged as a custom runtime','<span class="c">// preview: prints the Function URL</span>'], size:9, lbl:'Lambda bootstrap + bytecode'},

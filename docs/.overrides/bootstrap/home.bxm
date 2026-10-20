@@ -104,7 +104,7 @@
       <p class="lede">BoxLang is the platform, and MatchBox is its <b>Rust runtime</b>, alongside the JVM one. Same language, with a bytecode VM and a <b>tiered Cranelift JIT</b>, for <b>native, browser, WASI, AWS Lambda and ESP32</b>.</p>
       <div class="cta"><a class="btn p" href="##install">Install MatchBox &rarr;</a><a class="btn" href="##targets">See where it runs</a><a class="btn" href="##live">Try it live</a></div>
       <div class="install"><code><span class="pr">$</span> curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash</code><button type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash">Copy</button></div>
-      <div class="chips"><span class="chip"><b>5</b> deployment targets</span><span class="chip"><b>4</b> JIT tiers</span><span class="chip"><b>500+</b> transferred compat tests</span><span class="chip"><b>~500 KB</b> runner stub</span></div>
+      <div class="chips"><span class="chip"><b>5</b> deployment targets</span><span class="chip"><b>4</b> JIT tiers</span><span class="chip"><b>500+</b> transferred compat tests</span><span class="chip"><b>~4.8 MB</b> hello world binary</span></div>
     </div>
     <div class="term rv" aria-label="MatchBox command line demo">
       <div class="bar"><i class="dot" style="background:##ff5f56"></i><i class="dot" style="background:##ffbd2e"></i><i class="dot" style="background:##27c93f"></i><span style="margin-left:8px">hello.bxs</span></div>
@@ -227,7 +227,7 @@
 <section style="background:var(--bg2)" id="how"><div class="wrap">
   <div class="sh rv"><span class="eyebrow">How it ships</span><h2>A tiny runtime, <span class="grad">plus your code</span>. One file.</h2><p>MatchBox compiles your BoxLang to bytecode and appends it to a stripped runner stub. Nothing else to install on the destination.</p></div>
   <div class="pack rv" id="pack" aria-label="Runner stub plus bytecode makes one executable">
-    <div class="blk stub"><b>Runner stub</b><span>VM core, ~500 KB</span></div>
+    <div class="blk stub"><b>Runner stub</b><span>VM core, ~4.7 MB</span></div>
     <div class="plus" aria-hidden="true">+</div>
     <div class="blk code"><b>Your bytecode</b><span>from app.bxs</span></div>
     <div class="plus" aria-hidden="true">=</div>
