@@ -42,13 +42,23 @@ matchbox --target native hello.bxs
 ./hello
 ```
 
-On Windows, run `hello.exe`. The output is specific to its operating system and architecture. The executable includes the MatchBox runner, so the destination does not need Java or a separate MatchBox install. Native Fusion or host integrations may introduce their own platform requirements.
+```text
+Native binary produced: hello
+Hello, world!
+```
+
+On Windows, run `hello.exe`. The output is specific to its operating system and architecture. The executable includes the MatchBox runner (4.5 MiB on Linux x86_64 for MatchBox 0.11.0, see [native builds](../building-and-deploying/native-builds.md)), so the destination does not need Java or a separate MatchBox install. Native Fusion or host integrations may introduce their own platform requirements.
 
 ## Compile portable bytecode
 
 ```sh
 matchbox --build hello.bxs
 matchbox hello.bxb
+```
+
+```text
+Compiled to hello.bxb
+Hello, world!
 ```
 
 A `.bxb` file contains compiled bytecode, not a standalone runtime. Its destination still needs a compatible MatchBox runner. Keep compiler and runtime versions aligned.
@@ -63,11 +73,13 @@ Errors retain file and line information, but removing source reduces diagnostic 
 
 ## Explore interactively
 
-Start the REPL by running `matchbox` without a filename:
+Start the REPL by running `matchbox` without a filename. It reads one line at a time and prints the value of an expression after `=>`. Type `exit` or `quit`, or press Ctrl+D, to leave.
 
-```boxlang
-numbers = [1, 2, 3];
-println(arrayMap(numbers, (n) => n * 2));
+```text
+bx> x = 1 + 2
+=> 3
+bx> println(x)
+3
 ```
 
 Continue with [language essentials](features-overview.md), browse the [CLI reference](../reference/cli.md), or choose a [deployment target](../index.md#choose-where-matchbox-runs).

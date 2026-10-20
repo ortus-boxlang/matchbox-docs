@@ -26,7 +26,7 @@ It is a different product from the static/BXM webroot server. Use this app serve
 * server-rendered endpoints with explicit template rendering
 * apps that need explicit static asset mounts inside a routed server
 
-This example is for the native server runtime. ESP32 builds currently support only the lean routed direction and reject heavier features like `app.listen()`, templates, static asset mounts, webhooks, cookies, and sessions at compile time.
+This example is for the native `matchbox_server` binary. ESP32 firmware does not run `web.server()` scripts; it serves files from an `app/` directory instead. See [Building for ESP32](../../building-and-deploying/esp32.md). The [Web server guide](../../building-and-deploying/web-server.md) lists the whole app-server API.
 
 For a websocket-focused example, see [websocket_counter](../websocket_counter/README.md).
 
@@ -89,13 +89,13 @@ This serves files from the `public` directory at `/assets/...`. The directory is
 
 ### 5. Webhook Builder
 
-Webhook endpoints can be declared with a fluent builder:
+Webhook endpoints can be declared with a fluent builder. There is no `env` scope; read secrets from the process environment with `getSystemSetting( name, [default] )`:
 
 ```boxlang
 app.webhook(
     app.buildWebhook()
         .path( "/webhooks/stripe" )
-        .secret( env.STRIPE_SECRET )
+        .secret( getSystemSetting( "STRIPE_SECRET" ) )
         .signatureHeader( "stripe-signature" )
         .prefix( "sha256=" )
         .timestampHeader( "stripe-timestamp" )
@@ -110,17 +110,23 @@ app.webhook(
 
 ## Running the Example
 
-From the project root:
+The `--app` flag belongs to the `matchbox_server` binary, which you build from the MatchBox source tree. `matchbox app.bxs` cannot run this script. From the project root:
 
 ```bash
 cargo run -p matchbox_server -- --app docs/examples/app_server/app.bxs
 ```
+
+The address comes from `app.listen( 8090 )` in the script, which binds `127.0.0.1`. To listen on all interfaces pass a struct: `app.listen( { "host": "0.0.0.0", "port": 8090 } )`.
 
 Then visit:
 
 * `http://localhost:8090/`
 * `http://localhost:8090/api/hello/MatchBox`
 * `http://localhost:8090/assets/site.css`
+
+The script is compiled once, but its top level runs again on every request. Reload `/` to see the visit count in `session.visitCount` rise: session data is kept by the `MBX_SESSION_ID` cookie, while a plain variable at the top of the script would reset on each request.
+
+Because this app registers middleware with `app.use()`, an unknown URL such as `/missing` currently returns `500` instead of `404` in v0.11.0.
 
 ## What The Example Covers
 
