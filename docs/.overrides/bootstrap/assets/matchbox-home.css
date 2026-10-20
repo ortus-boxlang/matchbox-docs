@@ -426,3 +426,26 @@ nav .links{gap:20px}
 .mini-foot{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;margin-top:12px;font-size:.82rem;color:#8fb2ae}
 .mini-foot a{color:var(--g1);text-decoration:none;font-weight:700}
 .mini-clear{margin-left:auto;border-style:dashed;color:#8fb2ae}
+
+/* Learn MatchBox section */
+.lessons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.lessons a{display:flex;gap:14px;align-items:flex-start;height:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+.lessons a:hover{border-color:var(--accent);transform:translateY(-2px)}
+.lessons i{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);font:700 .8rem Manrope;font-style:normal;color:var(--g1)}
+.lessons b{display:block;margin-bottom:2px}
+.lessons span{color:var(--mut);font-size:.9rem}
+.learn-cta{margin-top:26px}
+@media(max-width:700px){.lessons{grid-template-columns:1fr}}
+
+/* Install steps */
+.final .steps{list-style:none;counter-reset:step;max-width:720px;margin:34px auto 0;padding:0;text-align:left;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.final .steps>li{counter-increment:step;position:relative;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px 20px 66px}
+.final .steps>li::before{content:counter(step);position:absolute;left:20px;top:18px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));color:#04130d;font:800 .9rem Manrope}
+.final .steps h3{margin:0 0 4px;font-size:1.1rem}
+.final .steps p{margin:0 0 10px;max-width:none;color:var(--mut);font-size:.92rem}
+.final .steps code:not(.install code){font:500 .84em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg2);border-radius:5px;padding:1px 6px}
+.final .steps .os{margin:12px 0 5px;color:var(--mut);font:700 .72rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+.final .steps .install{max-width:none;margin:6px 0 0}
+.final .steps-note{max-width:60ch;margin:22px auto 24px;font-size:.9rem}
+.final .steps-note a{color:var(--g1)}
+@media(max-width:600px){.final .steps>li{padding:16px 14px 16px 54px}.final .steps>li::before{left:14px}}
