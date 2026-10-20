@@ -293,7 +293,7 @@ function scanMemberTable() {
     }
     if (!type) throw new Error(`member block without a receiver type at ${rel}:${lineOf(m.index)}`);
     const block = s.slice(open + 1, close);
-    const armRe = /((?:"[\w]+"\s*\|?\s*)+)=>\s*(?:\{\s*)?Some\(\s*"(\w+)"\s*\.to_string\(\)\s*\)/g;
+    const armRe = /((?:"\w+"\s*(?:\|\s*)?)+)=>\s*(?:\{\s*)?Some\(\s*"(\w+)"\s*\.to_string\(\)\s*\)/g;
     for (const a of block.matchAll(armRe)) {
       const names = [...a[1].matchAll(/"(\w+)"/g)].map((x) => x[1]);
       const line = lineOf(open + 1 + a.index);
@@ -310,7 +310,7 @@ function scanMemberTable() {
 function topLevelArms(s, open, close, lineOf) {
   const arms = [];
   let i = open + 1;
-  const patRe = /^((?:"[^"\\]*"\s*\|?\s*)+)(?:if\s[^=]*)?=>/;
+  const patRe = /^((?:"[^"\\]*"\s*(?:\|\s*)?)+)(?:if\s[^=]*)?=>/;
   while (i < close) {
     while (i < close && /[\s,]/.test(s[i])) i++;
     if (i >= close) break;
@@ -1182,7 +1182,7 @@ function playgroundFeatures() {
 }
 
 // ====================================================================== build
-function mdCell(s) { return s.replace(/\|/g, '\\|'); }
+function mdCell(s) { return s.replace(/\\/g, '\\\\').replace(/\|/g, '\\|'); }
 const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const ci = (a, b) => cmp(a.toLowerCase(), b.toLowerCase()) || cmp(a, b);
 
