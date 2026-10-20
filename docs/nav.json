@@ -1,6 +1,7 @@
 [
   "index.md",
   "playground.md",
+  "course/index.md",
   {
     "title": "Getting Started",
     "icon": "phosphor-duotone:rocket-launch",

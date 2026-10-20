@@ -22,6 +22,12 @@ const ready = page => page.waitForFunction(() => document.getElementById('runtim
 const setCode = (page, code) => page.evaluate(value => { const e = document.getElementById('source-code'); e.value = value; e.dispatchEvent(new Event('input')); }, code);
 // Copying is asynchronous (compression, then the clipboard), so wait for the button's confirmation before reading anything.
 const flashed = (page, selector) => page.waitForSelector(`${selector}.flashed`, { timeout: 5000 });
+// Click a copy button once any earlier confirmation has cleared, then wait for its own confirmation.
+const copyClick = async (page, selector) => {
+  await page.waitForSelector(`${selector}.flashed`, { state: 'detached', timeout: 5000 });
+  await page.click(selector);
+  await flashed(page, selector);
+};
 const consoleText = page => page.locator('#console-output').innerText();
 
 (async () => {
@@ -69,8 +75,7 @@ const consoleText = page => page.locator('#console-output').innerText();
     // 2. Copy link and loading it ----------------------------------------------------------------------
     const script = 'name = "Ada Lovelace";\nprintln( "Hello, #name# \u{1F680}" );';
     await setCode(page, script);
-    await page.click('#copy-link');
-    await flashed(page, '#copy-link');
+    await copyClick(page, '#copy-link');
     const link = await page.evaluate(() => navigator.clipboard.readText());
     assert.ok(link.startsWith(`${origin}/playground/#code=`), `copied link points at the playground hash: ${link.slice(0, 80)}`);
     assert.ok(!link.includes('?'), 'no query string');
@@ -100,9 +105,8 @@ const consoleText = page => page.locator('#console-output').innerText();
     const noise = Array.from({ length: 20000 }, () => String.fromCharCode(33 + (((seed = (seed * 1103515245 + 12345) >>> 0) >>> 16) % 90))).join('');
     await setCode(page, noise);
     await page.evaluate(() => navigator.clipboard.writeText('untouched'));
-    await page.click('#copy-link');
-    await flashed(page, '#copy-link');
-    assert.match(await page.locator('#execution-status').innerText(), /too large/i);
+    await copyClick(page, '#copy-link');
+    await page.waitForFunction(() => /too large/i.test(document.getElementById('execution-status').textContent));
     assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'untouched', 'an oversized script is never half copied');
 
     // 4. Share dialog ----------------------------------------------------------------------------------
@@ -121,11 +125,9 @@ const consoleText = page => page.locator('#console-output').innerText();
     const preview = page.frameLocator('#share-preview');
     await preview.locator('#run-code:not([disabled])').waitFor({ timeout: 30000 });
     assert.equal(await preview.locator('#source-code').evaluate(e => e.readOnly), true, 'the preview is read only');
-    await page.click('#share-copy-snippet');
-    await flashed(page, '#share-copy-snippet');
+    await copyClick(page, '#share-copy-snippet');
     assert.equal(await page.evaluate(() => navigator.clipboard.readText()), await snippet());
-    await page.click('#share-copy-link');
-    await flashed(page, '#share-copy-link');
+    await copyClick(page, '#share-copy-link');
     assert.match(await page.evaluate(() => navigator.clipboard.readText()), /\/playground\/#code=/);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#share-dialog').evaluate(d => d.open), false, 'Escape closes the dialog');
@@ -147,8 +149,7 @@ const consoleText = page => page.locator('#console-output').innerText();
     assert.equal(await embed.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'no horizontal scroll at 600px');
     await embed.click('#run-code');
     await embed.waitForFunction(() => document.getElementById('console-output').innerText.includes('from the dialog'));
-    await embed.click('#copy-link');
-    await flashed(embed, '#copy-link');
+    await copyClick(embed, '#copy-link');
     assert.ok((await embed.evaluate(() => navigator.clipboard.readText())).startsWith(`${origin}/playground/#code=`), 'the embed copies a link to the full playground');
     await embed.press('#source-code', 'Control+End').catch(() => {});
     assert.equal(await embed.inputValue('#source-code'), 'println( "from the dialog" );', 'typing in a read only embed changes nothing');
@@ -199,8 +200,31 @@ const consoleText = page => page.locator('#console-output').innerText();
     await home.click('#mini-clear');
     assert.equal(await home.locator('#mini-out > *').count(), 0, 'the home REPL clears');
 
+    // 9. Course lessons: every .bxs snippet gets a Run button that opens the playground embed with that code -----
+    const lesson = await context.newPage();
+    lesson.on('pageerror', e => errors.push(e.message));
+    await lesson.goto(`${origin}/course/01-welcome/`);
+    assert.match(await lesson.locator('body').innerText(), /Lesson 1 of 10/, 'the course shows its position');
+    const runs = lesson.locator('.tryit-run');
+    assert.equal(await runs.count(), 1, 'one runnable snippet in lesson 1');
+    assert.equal(await lesson.locator('.tryit-frame').count(), 0, 'nothing loads until the reader asks');
+    await runs.first().click();
+    const lessonFrame = lesson.frameLocator('.tryit-frame');
+    await lessonFrame.locator('#run-code:not([disabled])').waitFor({ timeout: 30000 });
+    assert.match(await lessonFrame.locator('#source-code').inputValue(), /function greet/, 'the snippet is loaded in the playground');
+    assert.equal(await lessonFrame.locator('#source-filename').innerText(), 'hello.bxs', 'the snippet keeps its file name');
+    await lessonFrame.locator('#run-code').click();
+    await lessonFrame.locator('#console-output').getByText('Hello, MatchBox!').waitFor();
+    assert.ok((await lessonFrame.locator('#console-output').innerText()).includes('▶ hello.bxs'), 'the console labels the run with the file name');
+    await runs.first().click();
+    assert.equal(await lesson.locator('.tryit-frame').count(), 0, 'the button closes the playground again');
+    await lesson.goto(`${origin}/course/`);
+    assert.equal(await lesson.locator('ol a[href*="/course/"]').count(), 10, 'the course index lists ten lessons');
+    await lesson.goto(`${origin}/course/09-build-and-ship/`);
+    assert.equal(await lesson.locator('.tryit-run').count(), 1, 'shell snippets get no Run button, only the .bxs one');
+
     assert.deepEqual(errors, [], `no page errors: ${errors.join(' | ')}`);
-    console.log('PASS: playground UI: Clear, Copy link, Share dialog, embed (read only and editable), full screen, damaged and oversized links.');
+    console.log('PASS: playground UI: Clear, Copy link, Share dialog, embed (read only and editable), full screen, damaged and oversized links, course Run buttons.');
   } finally {
     await browser.close();
     server.close();

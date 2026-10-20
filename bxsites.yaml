@@ -24,6 +24,9 @@ markdown:
   enableDefinitionLists: true
 extraCss:
   - assets/brand.css
+  - assets/try-it.css
+extraJs:
+  - assets/try-it.js
 pageActions: true
 lastUpdated: true
 math: true

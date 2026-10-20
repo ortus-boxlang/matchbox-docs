@@ -1,0 +1,14 @@
+learn-matchbox:
+  title: "Learn MatchBox"
+  description: "Ten short lessons from your first script to a native executable. Every code sample has a Run button, so you can try it and change it right in your browser."
+  lessons:
+    - course/01-welcome.md
+    - course/02-install-and-run.md
+    - course/03-values-and-strings.md
+    - course/04-arrays-and-structs.md
+    - course/05-functions-and-callbacks.md
+    - course/06-classes.md
+    - course/07-errors-and-control-flow.md
+    - course/08-async.md
+    - course/09-build-and-ship.md
+    - course/10-whats-next.md
