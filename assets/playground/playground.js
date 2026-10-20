@@ -192,7 +192,7 @@ for (const [index, demo] of demoList ? demos.entries() : []) {
   demoList.append(button);
 }
 
-run.addEventListener('click', () => evaluate(editor.value, `▶ ${demos[selected].file}`));
+run.addEventListener('click', () => evaluate(editor.value, `▶ ${document.getElementById('source-filename').textContent}`));
 stop.addEventListener('click', () => failed('Stopped by you. Session reset; your script is unchanged.'));
 reset.disabled = false;
 reset.addEventListener('click', () => startSession());
@@ -336,7 +336,7 @@ async function boot() {
   readOnly = shared.readOnly && embedded;
   if (shared.present && shared.code != null) {
     editor.value = shared.code;
-    document.getElementById('source-filename').textContent = 'shared.bxs';
+    document.getElementById('source-filename').textContent = shared.name ?? 'shared.bxs';
     updateEditor();
     notice = 'Loaded shared code. Read it first, then run it. Nothing runs until you press Run.';
     startSession();

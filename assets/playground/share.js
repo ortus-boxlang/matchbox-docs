@@ -1,5 +1,5 @@
 // Share links and embeds for the playground. Code travels in the URL hash, which browsers never send to a server:
-//   #code=<base64url of deflate-raw( UTF-8 source )>&ro=true
+//   #code=<base64url of deflate-raw( UTF-8 source )>&ro=true&name=file.bxs
 // No dependencies: CompressionStream is built into current browsers and Node 18+.
 
 export const MAX_ENCODED_LENGTH = 8000;
@@ -41,15 +41,21 @@ export async function decodeCode(encoded) {
 export async function parseShareHash(hash) {
   const params = new URLSearchParams(String(hash).replace(/^#/, ''));
   const encoded = params.get('code');
-  return { code: encoded == null ? null : await decodeCode(encoded), readOnly: params.get('ro') === 'true', present: encoded != null };
+  const name = params.get('name');
+  return {
+    code: encoded == null ? null : await decodeCode(encoded),
+    readOnly: params.get('ro') === 'true',
+    present: encoded != null,
+    name: name && /^[\w.-]{1,60}$/.test(name) ? name : null,
+  };
 }
 
 // Absolute URL for a page plus the share hash. Returns null when the code is too large to share by URL.
-export async function buildShareUrl(pageUrl, source, { readOnly = false } = {}) {
+export async function buildShareUrl(pageUrl, source, { readOnly = false, name = '' } = {}) {
   const encoded = await encodeCode(source);
   if (encoded.length > MAX_ENCODED_LENGTH) return null;
   const url = new URL(pageUrl);
-  url.hash = `code=${encoded}${readOnly ? '&ro=true' : ''}`;
+  url.hash = `code=${encoded}${readOnly ? '&ro=true' : ''}${/^[\w.-]{1,60}$/.test(name) ? `&name=${name}` : ''}`;
   return url.href;
 }
 

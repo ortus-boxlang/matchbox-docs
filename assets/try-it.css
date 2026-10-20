@@ -1,0 +1,10 @@
+/* Run button and inline playground under course code blocks (assets/try-it.js). */
+.tryit{margin:-0.4rem 0 1.4rem}
+.tryit-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;padding:.55rem .75rem;border:1px solid var(--bxsites-border,#d9e2e0);border-top:0;border-radius:0 0 10px 10px;background:var(--bxsites-surface,rgba(0,0,0,.03))}
+.tryit-run{display:inline-flex;align-items:center;gap:.45rem;border:0;border-radius:999px;padding:.4rem .95rem;font:600 .85rem/1 inherit;font-family:inherit;color:#04130d;background:linear-gradient(135deg,#00ff78,#00dbff);cursor:pointer}
+.tryit-run:hover{filter:brightness(1.05)}
+.tryit-run:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.tryit-run[aria-expanded="true"]{background:transparent;color:inherit;border:1px solid currentColor}
+.tryit-note{font-size:.8rem;opacity:.7}
+.tryit-frame{display:block;width:100%;height:420px;margin-top:.75rem;border:1px solid var(--bxsites-border,#d9e2e0);border-radius:12px;background:#06141a}
+@media(max-width:600px){.tryit-frame{height:520px}}
