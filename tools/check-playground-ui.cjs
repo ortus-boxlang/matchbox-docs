@@ -223,8 +223,30 @@ const consoleText = page => page.locator('#console-output').innerText();
     await lesson.goto(`${origin}/course/09-build-and-ship/`);
     assert.equal(await lesson.locator('.tryit-run').count(), 1, 'shell snippets get no Run button, only the .bxs one');
 
+    // 10. Home page: the course section and a complete install section ---------------------------------------
+    const homePage = await context.newPage();
+    homePage.on('pageerror', e => errors.push(e.message));
+    await homePage.goto(`${origin}/`);
+    const lessonLinks = homePage.locator('#learn .lessons a');
+    assert.equal(await lessonLinks.count(), 10, 'the home page lists all ten lessons');
+    for (const href of await lessonLinks.evaluateAll(links => links.map(a => a.getAttribute('href')))) {
+      const response = await homePage.request.get(new URL(href, `${origin}/`).href);
+      assert.equal(response.status(), 200, `lesson link ${href} resolves`);
+    }
+    assert.match(await homePage.locator('#learn .cta a.btn.p').getAttribute('href'), /course\/$/);
+    const installText = await homePage.locator('#install').innerText();
+    for (const needle of ['install.sh', 'install.ps1', 'mvm install latest', 'matchbox --version', 'matchbox hello.bxs', 'matchbox --target native hello.bxs']) {
+      assert.ok(installText.includes(needle), `the install section shows ${needle}`);
+    }
+    assert.equal(await homePage.locator('#install .steps > li').count(), 3, 'three install steps');
+    assert.equal(await homePage.locator('#install .steps .install button[data-copy]').count(), 6, 'every command has a Copy button');
+    await homePage.locator('#install .steps > li').first().locator('.install button').first().click();
+    assert.match(await homePage.evaluate(() => navigator.clipboard.readText()), /^curl -fsSL https:\/\/raw\.githubusercontent\.com\/ortus-boxlang\/matchbox-quick-installer\/main\/install\/install\.sh \| bash$/, 'Copy puts the installer command on the clipboard');
+    await homePage.locator('#install .steps > li').nth(1).locator('.install button').first().click();
+    assert.equal(await homePage.evaluate(() => navigator.clipboard.readText()), 'mvm install latest && mvm use latest', 'entities are not copied');
+
     assert.deepEqual(errors, [], `no page errors: ${errors.join(' | ')}`);
-    console.log('PASS: playground UI: Clear, Copy link, Share dialog, embed (read only and editable), full screen, damaged and oversized links, course Run buttons.');
+    console.log('PASS: playground UI: Clear, Copy link, Share dialog, embed (read only and editable), full screen, damaged and oversized links, course Run buttons, home course and install sections.');
   } finally {
     await browser.close();
     server.close();

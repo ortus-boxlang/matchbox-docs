@@ -104,7 +104,7 @@
       <p class="lede">BoxLang is the platform, and MatchBox is its <b>Rust runtime</b>, alongside the JVM one. Same language, with a bytecode VM and a <b>tiered Cranelift JIT</b>, for <b>native, browser, WASI, AWS Lambda and ESP32</b>.</p>
       <div class="cta"><a class="btn p" href="##install">Install MatchBox &rarr;</a><a class="btn" href="##targets">See where it runs</a><a class="btn" href="##live">Try it live</a></div>
       <div class="install"><code><span class="pr">$</span> curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash</code><button type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash">Copy</button></div>
-      <div class="chips"><span class="chip"><b>5</b> deployment targets</span><span class="chip"><b>4</b> JIT tiers</span><span class="chip"><b>500+</b> transferred compat tests</span><span class="chip"><b>~500 KB</b> runner stub</span></div>
+      <div class="chips"><span class="chip"><b>5</b> deployment targets</span><span class="chip"><b>4</b> JIT tiers</span><span class="chip"><b>500+</b> transferred compat tests</span><span class="chip"><b>~4.8 MB</b> hello world binary</span></div>
     </div>
     <div class="term rv" aria-label="MatchBox command line demo">
       <div class="bar"><i class="dot" style="background:##ff5f56"></i><i class="dot" style="background:##ffbd2e"></i><i class="dot" style="background:##27c93f"></i><span style="margin-left:8px">hello.bxs</span></div>
@@ -133,6 +133,23 @@
 		</div>
 		<div class="mini-foot"><span id="mini-status">The runtime loads when you scroll here.</span><a href="#variables.basePath#playground/">Open the full playground &rarr;</a></div>
 	</div>
+</div></section>
+
+<section id="learn"><div class="wrap">
+	<div class="sh rv"><span class="eyebrow">Learn MatchBox</span><h2>Ten short lessons, <span class="grad">nothing to install</span>.</h2><p>Learn the language and ship your first binary. Every code sample has a Run button that opens a real MatchBox runtime right under it, so you can change the code and run it again.</p></div>
+	<ol class="lessons rv">
+		<li><a href="#variables.basePath#course/01-welcome/"><i>1</i><div><b>Welcome to MatchBox</b><span>What it is, and your first script.</span></div></a></li>
+		<li><a href="#variables.basePath#course/02-install-and-run/"><i>2</i><div><b>Install and run</b><span>MVM, running and compiling a file.</span></div></a></li>
+		<li><a href="#variables.basePath#course/03-values-and-strings/"><i>3</i><div><b>Values and strings</b><span>Variables, interpolation, operators.</span></div></a></li>
+		<li><a href="#variables.basePath#course/04-arrays-and-structs/"><i>4</i><div><b>Arrays and structs</b><span>Lists, key-value data and loops.</span></div></a></li>
+		<li><a href="#variables.basePath#course/05-functions-and-callbacks/"><i>5</i><div><b>Functions and callbacks</b><span>Arrow functions, map, filter, reduce.</span></div></a></li>
+		<li><a href="#variables.basePath#course/06-classes/"><i>6</i><div><b>Classes and objects</b><span>State, constructors and chaining.</span></div></a></li>
+		<li><a href="#variables.basePath#course/07-errors-and-control-flow/"><i>7</i><div><b>Errors and control flow</b><span>if, switch, try, catch, finally.</span></div></a></li>
+		<li><a href="#variables.basePath#course/08-async/"><i>8</i><div><b>Running work at the same time</b><span>Futures, runAsync and then.</span></div></a></li>
+		<li><a href="#variables.basePath#course/09-build-and-ship/"><i>9</i><div><b>Build and ship</b><span>A native executable, or bytecode.</span></div></a></li>
+		<li><a href="#variables.basePath#course/10-whats-next/"><i>10</i><div><b>Where to go next</b><span>Targets, Native Fusion, and gotchas.</span></div></a></li>
+	</ol>
+	<div class="cta rv learn-cta"><a class="btn p" href="#variables.basePath#course/">Start the course &rarr;</a><a class="btn" href="#variables.basePath#playground/">Open the playground</a></div>
 </div></section>
 
 <section id="why"><div class="wrap">
@@ -210,7 +227,7 @@
 <section style="background:var(--bg2)" id="how"><div class="wrap">
   <div class="sh rv"><span class="eyebrow">How it ships</span><h2>A tiny runtime, <span class="grad">plus your code</span>. One file.</h2><p>MatchBox compiles your BoxLang to bytecode and appends it to a stripped runner stub. Nothing else to install on the destination.</p></div>
   <div class="pack rv" id="pack" aria-label="Runner stub plus bytecode makes one executable">
-    <div class="blk stub"><b>Runner stub</b><span>VM core, ~500 KB</span></div>
+    <div class="blk stub"><b>Runner stub</b><span>VM core, ~4.7 MB</span></div>
     <div class="plus" aria-hidden="true">+</div>
     <div class="blk code"><b>Your bytecode</b><span>from app.bxs</span></div>
     <div class="plus" aria-hidden="true">=</div>
@@ -325,10 +342,26 @@
 
 <section class="final" id="install"><div class="wrap">
   <span class="eyebrow">Start in a minute</span>
-  <h2 class="rv">Start with a script. <span class="grad">Ship a binary.</span></h2>
-  <p class="rv">Install MVM, pick a MatchBox version, run a file, then build it for the target you need.</p>
-  <div class="cta rv"><a class="btn p" href="#variables.basePath#getting-started/quick-start/">Quick start &rarr;</a><a class="btn" href="#variables.basePath#getting-started/">Read the docs</a></div>
-  <div class="install rv"><code><span class="pr">$</span> mvm install latest &amp;&amp; mvm use latest</code><button type="button" data-copy="mvm install latest && mvm use latest">Copy</button></div>
+  <h2 class="rv">Install it. <span class="grad">Run a script.</span> Ship a binary.</h2>
+  <p class="rv">Three steps. MVM, the MatchBox Version Manager, installs MatchBox for you and keeps versions side by side.</p>
+  <ol class="steps rv">
+    <li><h3>Install MVM</h3><p>Run the installer for your system, then open a new terminal.</p>
+      <div class="os">Linux and macOS</div>
+      <div class="install"><code><span class="pr">$</span> curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash</code><button type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.sh | bash">Copy</button></div>
+      <div class="os">Windows PowerShell</div>
+      <div class="install"><code><span class="pr">&gt;</span> irm https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.ps1 | iex</code><button type="button" data-copy="irm https://raw.githubusercontent.com/ortus-boxlang/matchbox-quick-installer/main/install/install.ps1 | iex">Copy</button></div>
+    </li>
+    <li><h3>Install MatchBox</h3><p>Install the latest stable release and switch to it. If <code>matchbox</code> is not found, run <code>mvm doctor</code>.</p>
+      <div class="install"><code><span class="pr">$</span> mvm install latest &amp;&amp; mvm use latest</code><button type="button" data-copy="mvm install latest &amp;&amp; mvm use latest">Copy</button></div>
+      <div class="install"><code><span class="pr">$</span> matchbox --version</code><button type="button" data-copy="matchbox --version">Copy</button></div>
+    </li>
+    <li><h3>Run your first script</h3><p>Save <code>println( "Hello, MatchBox!" );</code> in a file called <code>hello.bxs</code>, run it, then build it into a single native executable.</p>
+      <div class="install"><code><span class="pr">$</span> matchbox hello.bxs</code><button type="button" data-copy="matchbox hello.bxs">Copy</button></div>
+      <div class="install"><code><span class="pr">$</span> matchbox --target native hello.bxs</code><button type="button" data-copy="matchbox --target native hello.bxs">Copy</button></div>
+    </li>
+  </ol>
+  <p class="rv steps-note">Not ready to install? <a href="#variables.basePath#playground/">Try MatchBox in your browser</a> or <a href="#variables.basePath#course/">take the course</a>. Review an installer before you run it if you prefer: both scripts are in the <a href="https://github.com/ortus-boxlang/matchbox-quick-installer">MVM repository</a>.</p>
+  <div class="cta rv"><a class="btn p" href="#variables.basePath#getting-started/quick-start/">Quick start &rarr;</a><a class="btn" href="#variables.basePath#course/">Learn MatchBox</a><a class="btn" href="#variables.basePath#getting-started/">Read the docs</a></div>
 </div></section>
 
 
