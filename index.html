@@ -42,7 +42,7 @@
 			document.documentElement.setAttribute( "data-theme", dark ? "dark" : "light" );
 		} )();
 	</script>
-	<link rel="stylesheet" href="/assets/theme/matchbox-home.93b26278.css">
+	<link rel="stylesheet" href="/assets/theme/matchbox-home.d5c0b258.css">
 	<link rel="stylesheet" href="/assets/bundle.39d97c77.css">
 	<script type="application/ld+json">
 	{
@@ -89,12 +89,11 @@
 <div class="prog" id="prog"></div>
 <nav><div class="wrap">
   <a class="logo" href="/" aria-label="MatchBox home"><img src="/assets/matchbox.svg" alt="" width="30" height="30">MatchBox</a>
-  <div class="links"><a href="/getting-started/">Docs</a><a href="/playground/">Playground</a><a href="/course/">Learn</a><a href="/#targets">Targets</a><a href="/#fusion">Native Fusion</a><a href="/#ai">AI native</a><a href="/#mvm">Install</a></div>
+  <div class="links"><a href="/getting-started/">Docs</a><a href="/playground/">Playground</a><a href="/#learn">Learn</a><a href="/#ai">AI native</a><a href="/#targets">Targets</a><a href="/#fusion">Native Fusion</a><a href="/#install">Install</a><a href="/#consult">Support</a></div>
   <div class="sp"></div>
   <a class="ibtn" href="https://boxlang.io" target="_blank" rel="noopener noreferrer" aria-label="BoxLang, boxlang.io" title="boxlang.io"><img src="/assets/ecosystem/boxlang-icon-full.svg" alt=""><span>BoxLang</span><i aria-hidden="true">&#8599;</i></a>
   <a class="ibtn sq" href="https://github.com/ortus-boxlang/matchbox" target="_blank" rel="noopener noreferrer" aria-label="MatchBox on GitHub" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg></a>
   <button type="button" class="themebtn" id="themebtn" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-  <a class="btn p sm" href="/getting-started/quick-start/">Get started</a>
 </div></nav>
 <script>
 ( function () {
@@ -298,20 +297,6 @@
   </div>
 </div></section>
 
-<section id="mvm" style="background:var(--bg2)"><div class="wrap">
-  <div class="sh rv"><span class="eyebrow">MVM, the MatchBox Version Manager</span><h2>Any version, <span class="grad">one command</span>.</h2><p>Install stable releases side by side, pin one per project, and follow the rolling snapshot. Every download is checked against its SHA-256 before it replaces anything.</p></div>
-  <div class="mvm rv">
-    <div class="term"><div class="bar"><i class="dot" style="background:#ff5f56"></i><i class="dot" style="background:#ffbd2e"></i><i class="dot" style="background:#27c93f"></i><span style="margin-left:8px">terminal</span></div><pre id="mvmout" aria-live="polite"></pre></div>
-    <div class="mvmf">
-      <div><b>Side by side</b><span>Keep several MatchBox versions installed and switch with <code>mvm use</code>.</span></div>
-      <div><b>Per project</b><span>Pin a version in <code>.mvmrc</code> and activate it with <code>mvm use</code>.</span></div>
-      <div><b>Verified</b><span>SHA-256 checked before install. A failed check leaves your current version intact.</span></div>
-      <div><b>Snapshots</b><span><code>mvm install snapshot</code> tracks the rolling build and refreshes only when it changes.</span></div>
-      <div class="dog"><b>Built with MatchBox</b><span>MVM is a BoxLang program compiled to a native executable by MatchBox itself.</span></div>
-    </div>
-  </div>
-</div></section>
-
 <section id="eco"><div class="wrap">
   <div class="sh rv"><span class="eyebrow">Part of the BoxLang ecosystem</span><h2>Built for <span class="grad">BoxLang</span>, with <span class="grad">BoxLang</span>.</h2><p>MatchBox is one runtime in a wider platform. These projects work alongside it.</p></div>
   <div class="eco9">
@@ -344,18 +329,6 @@
   </div>
 </div></section>
 
-<section id="faq"><div class="wrap">
-  <div class="sh rv"><span class="eyebrow">Questions</span><h2>Straight <span class="grad">answers</span>.</h2></div>
-  <div class="faq rv">
-    <details open><summary>What is MatchBox?</summary><p>MatchBox is a Rust implementation of the BoxLang runtime. BoxLang is the platform, and it now has two runtimes: the JVM runtime and MatchBox on Rust. MatchBox compiles BoxLang to bytecode and runs it on a Rust VM with a tiered JIT in the native CLI.</p></details>
-    <details><summary>Is MatchBox a replacement for BoxLang on the JVM?</summary><p>No. It complements it. Use the JVM runtime for the full Java ecosystem and broad module coverage. Use MatchBox to run BoxLang where a JVM does not fit, such as single binaries, the browser, WASI containers, serverless and microcontrollers. Runtime APIs and module support differ, so check compatibility for your target.</p></details>
-    <details><summary>Does MatchBox need a JVM?</summary><p>No, not for the core runtime or for native builds. Experimental Java interop exists in native builds and needs a JDK on the machine.</p></details>
-    <details><summary>Where can MatchBox run?</summary><p>Native executables, the browser and JavaScript (including Cloudflare Workers), WASI containers, AWS Lambda (preview) and ESP32 devices.</p></details>
-    <details><summary>How do I install it?</summary><p>Install MVM, the MatchBox Version Manager, then run <code>mvm install latest &amp;&amp; mvm use latest</code>. See the <a href="/getting-started/installation/">installation guide</a>.</p></details>
-    <details><summary>Can AI agents write MatchBox code?</summary><p>Yes. Install the BoxLang skills with <code>npx skills add ortus-boxlang/skills</code> and your agent learns the targets, commands and limits. This site also publishes an llms.txt index and an MCP endpoint.</p></details>
-  </div>
-</div></section>
-
 <section class="final" id="install"><div class="wrap">
   <span class="eyebrow">Start in a minute</span>
   <h2 class="rv">Install it. <span class="grad">Run a script.</span> Ship a binary.</h2>
@@ -380,6 +353,18 @@
   <div class="cta rv"><a class="btn p" href="/getting-started/quick-start/">Quick start &rarr;</a><a class="btn" href="/course/">Learn MatchBox</a><a class="btn" href="/getting-started/">Read the docs</a></div>
 </div></section>
 
+<section id="faq"><div class="wrap">
+  <div class="sh rv"><span class="eyebrow">Questions</span><h2>Straight <span class="grad">answers</span>.</h2></div>
+  <div class="faq rv">
+    <details open><summary>What is MatchBox?</summary><p>MatchBox is a Rust implementation of the BoxLang runtime. BoxLang is the platform, and it now has two runtimes: the JVM runtime and MatchBox on Rust. MatchBox compiles BoxLang to bytecode and runs it on a Rust VM with a tiered JIT in the native CLI.</p></details>
+    <details><summary>Is MatchBox a replacement for BoxLang on the JVM?</summary><p>No. It complements it. Use the JVM runtime for the full Java ecosystem and broad module coverage. Use MatchBox to run BoxLang where a JVM does not fit, such as single binaries, the browser, WASI containers, serverless and microcontrollers. Runtime APIs and module support differ, so check compatibility for your target.</p></details>
+    <details><summary>Does MatchBox need a JVM?</summary><p>No, not for the core runtime or for native builds. Experimental Java interop exists in native builds and needs a JDK on the machine.</p></details>
+    <details><summary>Where can MatchBox run?</summary><p>Native executables, the browser and JavaScript (including Cloudflare Workers), WASI containers, AWS Lambda (preview) and ESP32 devices.</p></details>
+    <details><summary>How do I install it?</summary><p>Install MVM, the MatchBox Version Manager, then run <code>mvm install latest &amp;&amp; mvm use latest</code>. See the <a href="/getting-started/installation/">installation guide</a>.</p></details>
+    <details><summary>Can AI agents write MatchBox code?</summary><p>Yes. Install the BoxLang skills with <code>npx skills add ortus-boxlang/skills</code> and your agent learns the targets, commands and limits. This site also publishes an llms.txt index and an MCP endpoint.</p></details>
+  </div>
+</div></section>
+
 
 </main>
 
@@ -395,7 +380,7 @@
 
 
 
-<script src="/assets/theme/matchbox-home.aae5ae5d.js" defer></script>
+<script src="/assets/theme/matchbox-home.2f56f7f4.js" defer></script>
 <script type="module" src="/assets/playground/mini-repl.js"></script>
 </body>
 </html>

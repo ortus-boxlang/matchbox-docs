@@ -178,23 +178,6 @@
   mxEl.insertAdjacentHTML('beforeend',mh);
   new IntersectionObserver(function(es,o){if(es[0].isIntersecting){mxEl.classList.add('in');o.disconnect()}},{threshold:.2}).observe(mxEl);
 
-  // mvm terminal
-  var mscript=[
-    ['mvm install latest','<span class="ok">&#10003;</span> downloaded matchbox 0.11.0\n<span class="ok">&#10003;</span> SHA-256 verified'],
-    ['mvm install snapshot','<span class="ok">&#10003;</span> snapshot installed, build id recorded'],
-    ['mvm list','  0.11.0\n  snapshot'],
-    ['mvm use latest','<span class="ok">&#10003;</span> now using 0.11.0'],
-    ['matchbox --version','matchbox 0.11.0']
-  ];
-  var mo=$('#mvmout'), mrun=0;
-  function mvmPlay(){var my=++mrun,acc='',i=0;mo.innerHTML='<span class="cur"></span>';
-    if(reduce){mo.innerHTML=mscript.map(function(l){return '<span class="ok">$</span> '+l[0]+'\n'+l[1]}).join('\n\n');return}
-    (function line(){if(my!==mrun)return;if(i>=mscript.length){setTimeout(mvmPlay,4500);return}
-      var cmd=mscript[i][0],out=mscript[i][1],n=0;
-      (function type(){if(my!==mrun)return;n++;mo.innerHTML=acc+'<span class="ok">$</span> '+cmd.slice(0,n)+'<span class="cur"></span>';
-        if(n<cmd.length){setTimeout(type,34);return}
-        acc+='<span class="ok">$</span> '+cmd+'\n'+out+'\n\n';mo.innerHTML=acc+'<span class="cur"></span>';i++;setTimeout(line,650)})()})()}
-  var mvmSec=$('.mvm');new IntersectionObserver(function(es,o){if(es[0].isIntersecting){mvmPlay();o.disconnect()}},{threshold:.3}).observe(mvmSec);
 
 
   // ai native
