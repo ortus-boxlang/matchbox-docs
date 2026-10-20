@@ -234,6 +234,17 @@ const consoleText = page => page.locator('#console-output').innerText();
       assert.equal(response.status(), 200, `lesson link ${href} resolves`);
     }
     assert.match(await homePage.locator('#learn .cta a.btn.p').getAttribute('href'), /course\/$/);
+
+    // header nav, section order and removed pieces
+    const navLabels = await homePage.locator('nav .links a').allInnerTexts();
+    assert.deepEqual(navLabels.slice(2), ['Learn', 'AI native', 'Targets', 'Native Fusion', 'Install', 'Support'], 'header order');
+    const navHrefs = await homePage.locator('nav .links a').evaluateAll(links => links.slice(2).map(a => new URL(a.href).hash));
+    assert.deepEqual(navHrefs, ['#learn', '#ai', '#targets', '#fusion', '#install', '#consult'], 'header anchors');
+    for (const id of navHrefs) assert.equal(await homePage.locator(id).count(), 1, `${id} exists`);
+    assert.equal(await homePage.locator('nav a.btn').count(), 0, 'no Get started button in the header');
+    assert.equal(await homePage.locator('#mvm').count(), 0, 'the MVM section is gone');
+    const lastSections = await homePage.locator('section').evaluateAll(s => s.slice(-2).map(x => x.id));
+    assert.deepEqual(lastSections, ['install', 'faq'], 'FAQ is the last section');
     const installText = await homePage.locator('#install').innerText();
     for (const needle of ['install.sh', 'install.ps1', 'mvm install latest', 'matchbox --version', 'matchbox hello.bxs', 'matchbox --target native hello.bxs']) {
       assert.ok(installText.includes(needle), `the install section shows ${needle}`);

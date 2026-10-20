@@ -278,17 +278,6 @@ tbody.in tr:nth-child(8){transition-delay:.42s}tbody.in tr:nth-child(9){transiti
 .mx small{color:var(--dim);font-size:.78rem;display:block;font-weight:500}
 @media(max-width:700px){.mx{font-size:.8rem}.mx>div{padding:12px 8px}.mx small{display:none}}
 
-/* mvm */
-.mvm{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:stretch}
-.mvm .term pre{min-height:300px}
-.mvmf{display:grid;gap:12px;align-content:start}
-.mvmf>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-.mvmf b{display:block;margin-bottom:4px}.mvmf span{color:var(--mut);font-size:.9rem}
-.mvmf code,.why3 code{font:500 .82em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg2);border-radius:5px;padding:1px 6px}
-.mvmf .dog{border-color:var(--accent);background:linear-gradient(135deg,var(--glow),var(--card))}
-@media(max-width:900px){.mvm{grid-template-columns:1fr}}
-
-
 /* ecosystem + consulting */
 .eco9{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .eco9 a{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px;display:block;text-decoration:none;transition:border-color .2s,transform .2s,opacity .7s}
@@ -449,3 +438,4 @@ nav .links{gap:20px}
 .final .steps-note{max-width:60ch;margin:22px auto 24px;font-size:.9rem}
 .final .steps-note a{color:var(--g1)}
 @media(max-width:600px){.final .steps>li{padding:16px 14px 16px 54px}.final .steps>li::before{left:14px}}
+.why3 code{font:500 .82em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg2);border-radius:5px;padding:1px 6px}
