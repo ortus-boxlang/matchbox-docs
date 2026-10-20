@@ -1,21 +1,9 @@
-component {
-    // MatchBox ESP32 Application – configures platform services
-    // via `application.esp32` during onApplicationStart.
-
+class {
+    // Runs once at boot, before the runner opens its own Wi-Fi connection.
     function onApplicationStart() {
-        // application.esp32 is pre-populated with defaults from
-        // the build profile. Modify any values you want to override.
-        //
-        // Supported fields:
-        //   application.esp32.wifi.ssid
-        //   application.esp32.wifi.password
-        //   application.esp32.wifi.hostname
-        //   application.esp32.web.port
+        println( "[app] starting" );
 
-        application.esp32.wifi.hostname = "my-esp32-device";
-    }
-
-    function hello() {
-        return "Hello from MatchBox ESP32!";
+        // Optional: connect from BoxLang instead of build-time settings.
+        // esp32WifiStation( "my-network", "my-password", "my-device" );
     }
 }

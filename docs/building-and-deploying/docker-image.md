@@ -13,7 +13,7 @@ ghcr.io/ortus-boxlang/matchbox
 
 The image supports Linux `amd64` and `arm64`. CI packages the same full CLI binaries published in GitHub releases using `Dockerfile.release`; the original `Dockerfile` remains available for local source builds.
 
-The image runs the main `matchbox` CLI as its entrypoint. That makes it useful for CI builds, direct script execution, bytecode compilation, WASM/native artifact generation, and webroot serving without installing MatchBox on the host.
+The image runs the main `matchbox` CLI as its entrypoint. That makes it useful for CI builds, direct script execution, bytecode compilation, native executable generation, and webroot serving without installing MatchBox on the host.
 
 ---
 
@@ -73,12 +73,6 @@ Compile bytecode into the mounted project directory:
 docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --build my_script.bxs
 ```
 
-Build a WASM/WASI artifact:
-
-```bash
-docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target wasm my_service.bxs
-```
-
 Build a native Linux artifact:
 
 ```bash
@@ -86,6 +80,8 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target na
 ```
 
 Native artifacts produced inside the container target Linux. Use the release binaries or source builds when you need macOS or Windows native artifacts.
+
+The image holds only the CLI binary and CA certificates (see `Dockerfile.release`). It has no Rust toolchain and no `wasm-bindgen`, so `--target js` and Native Fusion builds (a `native/` directory) cannot run inside it. `--target wasm` and `--target wasi` are not usable in 0.11.0, see [WASM container deployment](wasm-container.md).
 
 ---
 
@@ -111,7 +107,7 @@ Use the image in a CI job when you only need the MatchBox CLI:
 
 ```bash
 docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --build src/main.bxs
-docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target wasm src/main.bxs
+docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target native src/main.bxs
 ```
 
 For production and repeatable CI, pin a stable version tag such as `v0.11.0` or an image digest instead of `latest`. Snapshot tags, including `vX.Y.Z-snapshot`, are mutable and are not immutable build pins.

@@ -75,7 +75,15 @@ matchbox --help
 matchbox
 ```
 
-The last command starts the REPL. Try `println("Hello from MatchBox!");`, then press `Ctrl+D` to exit.
+`--version` prints three lines (`-v` does the same). Example output:
+
+```text
+matchbox version 0.11.0
+commit: 37be346
+built on: 2026-10-17
+```
+
+The last command starts the REPL. Try `println("Hello from MatchBox!");`, then type `exit` or press `Ctrl+D` to leave. See the [CLI reference](../reference/cli.md) for every command and option.
 
 ## Published distributions
 
@@ -98,4 +106,4 @@ For Docker, see [the Docker guide](../building-and-deploying/docker-image.md). F
 
 ## Do I need Rust?
 
-Not to run the prebuilt CLI or ordinary standalone applications. Rust is required to [build MatchBox from source](building-matchbox.md) or compile [Native Fusion](../building-and-deploying/native-fusion.md) code. Browser packaging and ESP32 builds have additional target-specific toolchain requirements; see [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md) and the [ESP32 guide](../building-and-deploying/esp32.md).
+Not to run the prebuilt CLI or ordinary standalone applications. Rust is required to [build MatchBox from source](building-matchbox.md) or compile [Native Fusion](../building-and-deploying/native-fusion.md) code. `--target js` needs the `wasm-bindgen` command line tool (version 0.2.114) but not Rust; see [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md). ESP32 builds have their own toolchain requirements; see the [ESP32 guide](../building-and-deploying/esp32.md).

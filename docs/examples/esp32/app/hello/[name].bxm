@@ -1,0 +1,6 @@
+<bx:script>
+    safe = replace( url.name, "&", "&amp;", "all" );
+    safe = replace( safe, "<", "&lt;", "all" );
+    safe = replace( safe, ">", "&gt;", "all" );
+</bx:script>
+<bx:output><h1>Hello, #safe#!</h1></bx:output>

@@ -1,8 +1,8 @@
-// app.bxs — Native Fusion demo
+// app.bxs - Native Fusion demo
 //
 // Demonstrates two forms of Native Fusion interop:
-//   1. Standalone BIFs  — plain functions callable anywhere (fast_fib, fast_factorial)
-//   2. Native objects   — stateful Rust structs instantiated with `new rust:module.Class()`
+//   1. Standalone BIFs  - plain functions callable anywhere (fast_fib, fast_factorial)
+//   2. Native objects   - stateful Rust structs instantiated with `new rust:module.Class()`
 //
 // MatchBox detects the native/ directory alongside this file, compiles the
 // Rust code, and links everything into the final binary automatically.
@@ -56,4 +56,4 @@ println("  min   : " & stats.min())
 println("  max   : " & stats.max())
 
 println("")
-println("All results computed in Rust — zero JVM, zero overhead.")
+println("All results computed in Rust.")

@@ -7,7 +7,7 @@
 //!    - fast_factorial(n)  → n! factorial (iterative)
 //!
 //! 2. **Native object** via `#[matchbox_class]` + `#[matchbox_methods]`:
-//!    - RunningStats — accumulates numbers pushed to it and reports
+//!    - RunningStats - accumulates numbers pushed to it and reports
 //!      count, sum, mean, min, and max.
 //!      BoxLang: `s = new rust:stats.RunningStats()`
 //!
@@ -148,7 +148,7 @@ pub fn create_running_stats(vm: &mut dyn BxVM, _args: &[BxValue]) -> Result<BxVa
 }
 
 // ---------------------------------------------------------------------------
-// Registration — required entry points
+// Registration - required entry points
 // ---------------------------------------------------------------------------
 
 /// Register standalone BIFs. MatchBox calls this at startup.
@@ -161,7 +161,7 @@ pub fn register_bifs() -> HashMap<String, BxNativeFunction> {
 }
 
 /// Register native object constructors. MatchBox calls this at startup.
-/// Key format: "<module_filename>.<ClassName>" — this file is `stats.rs`,
+/// Key format: "<module_filename>.<ClassName>" - this file is `stats.rs`,
 /// so the key is `"stats.RunningStats"` and BoxLang uses
 /// `new rust:stats.RunningStats()` to instantiate it.
 pub fn register_classes() -> HashMap<String, BxNativeFunction> {

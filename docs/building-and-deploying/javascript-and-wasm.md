@@ -1,30 +1,47 @@
 ---
 title: JavaScript and WebAssembly
-description: Compile BoxLang to an ES module or a raw WASM binary, or run source strings in the browser.
+description: Compile BoxLang to an ES module for the browser with --target js, and call its functions through BoxLangVM.
 ---
 
 # JavaScript + WebAssembly
 
-MatchBox can compile BoxLang for browser-oriented WebAssembly workflows. There are three distinct modes, chosen to match different use-cases.
+MatchBox compiles BoxLang for the browser with `--target js`. This page was checked against MatchBox 0.11.0, including a run of the generated module in Node 22.
 
-| Mode | Command | Use case |
+| Mode | Command | Status |
 | :--- | :--- | :--- |
-| **JS Module (AOT)** | `--target js` | Ship a pre-compiled browser app/library as an ES module |
-| **WASM binary (AOT)** | `--target wasm` | Raw browser-oriented `.wasm` binary, bring your own loader |
-| **Runtime (JIT-like)** | Build `pkg/` once, call `run_boxlang()` | Execute source strings at runtime in the browser |
+| **JS module (AOT)** | `--target js` | Works. Ship a compiled app or library as an ES module. |
+| **Raw `.wasm`** | `--target wasm` | Does not work. See the known issue below. |
+| **Runtime (source strings)** | your own crate | Needs a small Rust crate, described below. |
 
 ---
 
-## Mode 1: JavaScript ES Module (AOT)
+## Mode 1: JavaScript ES module (AOT)
 
-This is the recommended way to ship a BoxLang application to the browser today. MatchBox compiles your script to bytecode, embeds it in a WASM binary, and wraps it in a JavaScript ES module that bootstraps the runtime automatically.
+MatchBox compiles your script to bytecode and writes an ES module that loads a generic MatchBox runtime (`.wasm`) and the bytecode.
+
+### Prerequisites
+
+The `wasm-bindgen` command line tool, version 0.2.114, must be on `PATH`, or its location set in `WASM_BINDGEN`. Without it the command stops with `wasm-bindgen not found. Install wasm-bindgen-cli or set WASM_BINDGEN.`
 
 ### Compile
 
 ```bash
 matchbox --target js my_lib.bxs
-# Produces: my_lib.js  +  my_lib.wasm
 ```
+
+```text
+Standalone JS module produced: ./my_lib.js
+```
+
+The command writes four files next to the script, or next to `--output`:
+
+| File | Contents |
+| :--- | :--- |
+| `my_lib.js` | The ES module. The compiled bytecode is embedded in it as a base64 string. |
+| `my_lib.wasm` | The MatchBox runtime. It does not contain your program. For a three-line script it was 1,937,302 bytes, and `my_lib.js` was 50,747 bytes. |
+| `my_lib.d.ts`, `my_lib_bg.wasm.d.ts` | TypeScript declarations for the runtime. |
+
+`--output dist/my_lib.js` creates `dist/` and names the files from the stem `my_lib`.
 
 ### Use in HTML
 
@@ -43,25 +60,23 @@ matchbox --target js my_lib.bxs
 </html>
 ```
 
-### Current Runtime Contract
+### Runtime contract
 
-The generated module is browser-focused and currently assumes a real browser environment for the highest-usability path.
+The module starts loading as soon as it is imported. It exports:
 
-- Importing `./app.js` initializes the runtime automatically.
-- Exported top-level BoxLang functions are available as ES module exports.
-- The bundle also registers `window.MatchBox.modules["app"]`.
-- `window.MatchBox.ready("app")` resolves when the module is ready.
-- `window.MatchBox.State(moduleName, options)` creates a framework-agnostic state helper for state-snapshot style apps.
+- One `async` function per top-level BoxLang function. Every call returns a promise, so always `await` it. With `function greet(name)` and `function calculate(a, b)` in the script, `await greet('Developer')` returned `Hello, Developer!` and `await calculate(6, 7)` returned `42` in Node 22.
+- `ready`, a promise that resolves when the runtime and bytecode are loaded.
+- `BoxLangVM`, `run_bytecode`, `initSync` and the default `init` function from the runtime.
 
-This browser contract is the supported path today. Non-browser runtimes may work for simple imports, but they are not the documented target surface yet.
+In a browser the module also registers `window.MatchBox.modules["my_lib"]`, `window.MatchBox.ready("my_lib")`, `window.MatchBox.State(moduleName, options)`, and fires a `matchbox:ready` event on `window` with `detail.module` set to the module name.
 
-### Exporting Functions
+This browser contract is the supported path. Importing the module outside a browser worked in Node 22 only after the compiled `.wasm` was supplied through a global the module checks (`globalThis.__matchboxWasmModule`), so treat non-browser use as unsupported.
 
-BoxLang functions defined at the top level of your script are automatically exported. Access modifiers have no effect on WASM exports — all functions are accessible:
+### Exporting functions
+
+Functions declared at the top level of the script are exported. The exporter collects every top-level function declaration and does not look at access modifiers.
 
 ```boxlang
-// my_lib.bxs
-
 function greet(name) {
     return "Hello, " & name & "!"
 }
@@ -73,73 +88,37 @@ function calculate(a, b) {
 
 ---
 
-## Mode 2: Raw WASM Binary (AOT)
+## Mode 2: Raw WASM binary
 
-Use `--target wasm` when you want the raw `.wasm` file and full control over how it is loaded in a browser-oriented environment.
-
-```bash
-matchbox --target wasm my_app.bxs
-# Produces: my_app.wasm
-```
-
-Load it manually using the standard WebAssembly API:
-
-```js
-const response = await fetch('./my_app.wasm');
-const buffer   = await response.arrayBuffer();
-const module   = await WebAssembly.instantiate(buffer, importObject);
-```
-
-Refer to the [MDN WebAssembly docs](https://developer.mozilla.org/en-US/docs/WebAssembly) for the full instantiation API.
+!!! warning "Known issue: `--target wasm` does not produce a usable module"
+    `matchbox --target wasm my_app.bxs` prints `WASM binary produced: my_app.wasm`, but it builds the file from the WASI runner stub (not the browser stub that `--target js` uses) and appends bytes that are not a valid WebAssembly section. In Node 22, `WebAssembly.compile` rejects the result with `unknown section code #0xea`. Use `--target js` for the browser. Details and a WASI workaround are in the [CLI reference](../reference/cli.md#wasi-targets).
 
 ---
 
-## Mode 3: Runtime Mode (Dynamic Execution)
+## Mode 3: Calling functions and loading bytecode
 
-In runtime mode you ship the MatchBox engine itself (`pkg/`) and execute BoxLang source code dynamically at run time — similar to a JIT. This is useful for:
-
-- Allowing user-provided BoxLang scripts in your application.
-- Interactive BoxLang playgrounds.
-- Server-side rendering on a WASM-capable edge runtime.
-
-### HTML Integration
-
-```html
-<script type="module">
-    import init, { run_boxlang } from './pkg/matchbox.js';
-
-    await init();   // load and compile the WASM runtime
-
-    run_boxlang(`
-        name = "Browser"
-        println("Hello from BoxLang running in #name#!")
-    `);
-</script>
-```
-
-### Persistent VM (calling functions by name)
-
-For apps that need to call multiple BoxLang functions efficiently, use the persistent `BoxLangVM` instance rather than re-initialising on every call:
+`BoxLangVM` is exported by every `--target js` module. It runs bytecode produced by `matchbox --build`:
 
 ```js
-import init, { BoxLangVM } from './pkg/matchbox.js';
+import { ready, BoxLangVM } from './my_lib.js';
 
-await init();
+await ready;                        // runtime is initialised
+
+const bytes = new Uint8Array(await (await fetch('./other.bxb')).arrayBuffer());
 
 const vm = new BoxLangVM();
+vm.load_bytecode(bytes);            // runs the script's top level
 
-// Load a script once  
-vm.load_source(`
-    function add(a, b) { return a + b }
-    function greet(name) { return "Hello, " & name }
-`);
-
-// Call functions by name as many times as you like
-const sum     = vm.call("add",   [10, 20]);
-const message = vm.call("greet", ["BoxLang"]);
-
-console.log(sum, message);
+// call() is async: it returns a Promise
+const message = await vm.call("greet", ["BoxLang"]);
+console.log(message);               // Hello, BoxLang!
 ```
+
+`load_bytecode(bytes)`, `call(name, args)` (async), `pump()` and `vm_ptr()` are the methods on `BoxLangVM`. There is no `load_source` method. In Node 22, loading `lib.bxb` into a new `BoxLangVM` and awaiting `vm.call('greet', ['BoxLang'])` returned `Hello, BoxLang!`.
+
+### Compiling source strings in the browser
+
+The `.wasm` produced by `--target js` contains the VM but not the compiler, so it can only run bytecode. To compile and run source text in the browser you need a WebAssembly build that includes `matchbox_compiler`. The root `matchbox` crate defines `run_boxlang(source)` for `wasm32`, but the root crate could not be built for `wasm32-unknown-unknown` in testing (see [Building from source](../getting-started/building-matchbox.md#4-browser-runtime-for-source-strings)). The supported pattern is the one this site's playground uses: a small `cdylib` crate that depends on `matchbox_compiler` and `matchbox_vm` with `default-features = false`, parses and compiles each snippet, and runs it with the synchronous `interpret_sync`. Its source is `playground-runtime/` in the documentation repository.
 
 ---
 
@@ -189,9 +168,8 @@ Then open `http://localhost:8080` in your browser.
 
 The WASM output files (`*.js` + `*.wasm`) can be deployed to any static hosting service:
 
-- **CDN** — Upload to S3, Cloudflare R2, or a similar object store.
-- **Vercel / Netlify** — Drop the files into your project's output directory.
-- **Edge Workers** — The raw WASM binary can be loaded directly into Cloudflare Workers or similar runtimes. See [WASM Container](wasm-container.md) for details.
+- **CDN**: upload to S3, Cloudflare R2, or a similar object store.
+- **Vercel / Netlify**: drop the files into your project's output directory.
 
 Ensure your server sets the correct `Content-Type` for `.wasm` files:
 

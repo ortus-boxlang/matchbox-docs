@@ -10,8 +10,7 @@
     <p>MatchBox is a native Rust implementation of BoxLang. It provides:</p>
     <ul>
         <li>Zero-JVM overhead</li>
-        <li>Sub-millisecond startup times</li>
-        <li>Built-in High Performance Web Server</li>
+        <li>A built-in web server</li>
     </ul>
     <div class="footer">Server Port: <bx:output>#cgi.server_port#</bx:output></div>
 </body>

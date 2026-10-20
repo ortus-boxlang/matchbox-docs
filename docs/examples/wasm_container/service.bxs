@@ -1,4 +1,4 @@
-// service.bxs — BoxLang WASM container service
+// service.bxs - BoxLang WASM container service
 //
 // This script runs in a WASI environment:
 //   - No DOM access (no js.*)

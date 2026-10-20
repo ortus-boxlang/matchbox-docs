@@ -1,50 +1,44 @@
 ---
 title: Web server example
-description: The built-in MatchBox web runtime serving .bxm pages and static assets with session and form scopes.
+description: The built-in MatchBox web server serving .bxm pages and static assets with session and form scopes.
 ---
 
-# MatchBox Web Server Example
+# MatchBox web server example
 
-This example demonstrates the built-in MatchBox high-performance web runtime. It includes support for BoxLang Markup (`.bxm`), static asset serving, and automatic scope injection (URL, Form, Cookie, Session).
+This example serves a directory with `matchbox --serve`. It has BoxLang Markup (`.bxm`) pages, a static CSS file, and the `url`, `form`, `cookie`, `session` and `cgi` scopes. The [Web server guide](../../building-and-deploying/web-server.md) covers the server in full.
 
-## Project Structure
+## Project structure
 
-*   `index.bxm`: The home page, demonstrating **Session** persistence and **Dynamic Output**.
-*   `about.bxm`: An informational page showing **CGI Scope** and simple loops.
-*   `contact.bxm`: A page demonstrating **URL Scope** and **Conditional Logic** (`<bx:if>`).
-*   `styles.css`: A static CSS file served automatically by the runtime.
+* `index.bxm`: Home page. Counts visits in the **session** and prints the time.
+* `about.bxm`: Prints `cgi.server_port`.
+* `contact.bxm`: Reads `url.name` and shows the session id from the **cookie** scope.
+* `styles.css`: A static file, served as `text/css`.
 
-## How it Works
+## How it works
 
-### 1. BXM Transpilation
-MatchBox includes a specialized markup transpiler that converts HTML-like templates into standard BoxLang bytecode. For example:
-```html
-<bx:output>Hello #user.name#!</bx:output>
-```
-Is converted into:
-```boxlang
-writeOutput("Hello ");
-writeOutput(user.name);
-writeOutput("!");
-```
+Every `.bxm` or `.bxs` file under the webroot is rendered as a template when you request it. Other files are sent as they are. A request for a directory is answered by its `index.bxm` or `index.bxs`.
 
-### 2. Built-in Scopes
-The runtime automatically populates and injects the following global scopes into every request:
-*   `url`: Populated from query string parameters.
-*   `form`: Populated from POST request bodies.
-*   `cookie`: Access to browser cookies (including `MBX_SESSION_ID`).
-*   `session`: A persistent, in-memory struct that survives across requests.
-*   `cgi`: Server environment variables.
+Each page render starts with these scopes:
 
-### 3. Native Performance
-The web server is built on **Axum** and **Tokio**, and the MatchBox VM executes the compiled bytecode at near-native speeds.
+* `url`: query-string parameters.
+* `form`: fields of a URL-encoded POST body.
+* `cookie`: request cookies, including `MBX_SESSION_ID`.
+* `session`: a struct held in server memory for each `MBX_SESSION_ID` cookie. Values are kept as strings.
+* `cgi`: `request_method`, `script_name`, `path_info`, `server_name`, `server_port`, `http_host`, `content_type` and `content_length`.
 
-## Running the Example
+The server is built on Axum and Tokio and runs the same VM as the `matchbox` command.
 
-1.  From the project root, run the following command:
-    ```bash
-    cargo run -p matchbox_server -- --port 8080 --webroot docs/examples/web_server
-    ```
-2.  Open your browser to `http://localhost:8080`.
-3.  Visit `http://localhost:8080/contact.bxm?name=MatchBox` to see URL parameter handling.
-4.  Refresh the home page to see the `session.visitCount` increment.
+## Running the example
+
+1. From the `docs/examples` directory of the MatchBox source tree, or any directory that contains a copy of `web_server`:
+   ```bash
+   matchbox --serve --webroot web_server --port 8080
+   ```
+2. Open `http://localhost:8080`.
+3. Visit `http://localhost:8080/contact.bxm?name=MatchBox` to see URL parameter handling.
+4. Reload the home page. The visit count in `session.visitCount` goes up each time your browser sends the same session cookie.
+
+The server listens on `127.0.0.1` unless you pass `--host 0.0.0.0`.
+
+> [!note] Template tags
+> In a `.bxm` file, `#expression#` is evaluated only inside `<bx:output>`. A `condition` attribute on `<bx:if>` is evaluated as an expression only when written as `condition="#expression#"`, and `<bx:output>` inside `<bx:if>` ends the page output in v0.11.0. `contact.bxm` therefore does its branching in a `<bx:script>` block and prints the result with one `<bx:output>`.

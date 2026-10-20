@@ -6,7 +6,7 @@ description: A minimal multi-file BoxLang project with a script entry point and 
 # Basic BoxLang Project
 
 This example shows a minimal multi-file BoxLang project with a script entry point
-and model classes split across separate files — the most common project structure
+and model classes split across separate files - the most common project structure
 for a BoxLang application.
 
 ## Project Layout
@@ -17,7 +17,7 @@ basic_project/
 └── models/
     ├── ISpeakable.bxs  ← interface definition
     ├── Animal.bxs      ← base class
-    └── Dog.bxs         ← subclass (extends Animal, implements ISpeakable)
+    └── Dog.bxs         ← class that implements ISpeakable
 ```
 
 ## Running
@@ -46,8 +46,8 @@ Rex fetches the ball!
 Rex fetches the frisbee!
 
 --- Roster ---
-  Whiskers — Cat
-  Rex — Dog
+  Whiskers - Cat
+  Rex - Dog
 
 All done!
 ```
@@ -63,7 +63,7 @@ matchbox main.bxb
 
 ## Compile to a Native Binary
 
-Produce a single self-contained executable (~500 KB, no runtime required):
+Produce a single self-contained executable with no runtime to install. The file is the MatchBox runner plus your bytecode, about 4.7 MB on x86_64 Linux for this project in v0.11.0. Measure the file you produce:
 
 ```bash
 matchbox --target native main.bxs
@@ -75,8 +75,7 @@ matchbox --target native main.bxs
 | Concept | Where to look |
 |---|---|
 | Class definition | `models/Animal.bxs` |
-| Inheritance | `models/Dog.bxs` (`extends Animal`) |
-| Interface | `models/ISpeakable.bxs` |
+| Interface | `models/ISpeakable.bxs`, implemented with `implements="ISpeakable"` in `models/Dog.bxs` |
 | Multi-file imports | `main.bxs` (`import models.Animal`) |
 | Struct literals | `main.bxs` (roster array) |
 | For-in loop | `main.bxs` (roster iteration) |

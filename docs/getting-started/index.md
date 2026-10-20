@@ -17,7 +17,7 @@ Use MVM or the direct macOS/Linux or Windows installer, or download a full CLI e
 Start with a script or the interactive REPL. The CLI and standalone programs do not require Java.
 :::
 ::: step "Choose a target"
-Use the native CLI for local execution, then package for native, WebAssembly, WASI, or ESP32 as appropriate.
+Use the native CLI for local execution, then package for native, browser WebAssembly (`--target js`), WASI, or ESP32 as appropriate.
 :::
 :::
 
@@ -40,7 +40,7 @@ Understand how AI features in an application differ from AI-assisted development
 
 - **Native application:** Start with [native builds](../building-and-deploying/native-builds.md).
 - **Browser module:** Read [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md).
-- **WASI host or container:** See [WASM containers](../building-and-deploying/wasm-container.md).
+- **WASI host or container:** See [WASM containers](../building-and-deploying/wasm-container.md) for what works in MatchBox 0.11.0 and the known issues.
 - **Embedded device:** Follow the [ESP32 guide](../building-and-deploying/esp32.md).
 - **Web application:** Explore the [webroot server](../examples/web_server/README.md) or [application server](../examples/app_server/README.md).
 

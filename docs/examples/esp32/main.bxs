@@ -1,0 +1,4 @@
+// Entry script for `matchbox main.bxs --target esp32 --esp32-web`.
+// The device serves the files under app/ and runs Application.bx at boot.
+// This file is compiled and checked but is not what the device runs.
+println( "Building ESP32 firmware" );
