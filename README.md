@@ -1,12 +1,3 @@
-# MatchBox website & documentation
-
-A static marketing website, 19-page documentation hub, and live browser playground for [MatchBox](https://github.com/ortus-boxlang/matchbox). Dark/light themes, responsive layouts, local full-text search, keyboard navigation, and copyable examples. Content and navigation are rendered HTML; the playground additionally requires JavaScript, WebAssembly, and module workers.
-
-## Build & preview
-
-Requires Python 3.9+. No packages to install, no application server, and no runtime CDN dependencies.
-
-```sh
 # MatchBox Documentation
 
 Official documentation for [MatchBox](https://github.com/ortus-boxlang/matchbox), the portable Rust implementation of BoxLang. The site is built with bxSites from Markdown in `docs/` and published at [matchbox.boxlang.io](https://matchbox.boxlang.io/).

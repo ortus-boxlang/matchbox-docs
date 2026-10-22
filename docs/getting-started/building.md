@@ -35,4 +35,4 @@ matchbox --target native hello.bxs  # native executable: Native binary produced:
 matchbox --target js hello.bxs      # ES module + WebAssembly runtime for browsers
 ```
 
-The `--target wasm` and `--target wasi` values exist but do not produce a usable module in MatchBox 0.11.0; see the [CLI reference](../reference/cli.md#wasi-targets). The targets available also depend on how your MatchBox was built; `--target <rust-triple>` needs a CLI built with `cross-compile`. See the full [CLI reference](../reference/cli.md) and the [target guides](../index.md#choose-where-matchbox-runs). A successful compilation does not validate execution on a different host.
+WASI targets are [experimental](../building-and-deploying/wasm-container.md). Cross-compilation with `--target <rust-triple>` needs an embedded runner for that platform. See the [CLI reference](../reference/cli.md) and [target guides](../index.md#targets), and test each artifact on its destination.

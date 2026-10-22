@@ -90,12 +90,12 @@ layout: home
 				<ul>
 					<li>Core native runtime does not require a JVM</li>
 					<li>Target-specific builds for browser, WASI, and ESP32</li>
-					<li>Rust Native Fusion for native-only extensions</li>
+					<li>Rust Native Fusion across all targets</li>
 				</ul>
 				<a href="/differences-from-boxlang/">See compatibility and target differences <span aria-hidden="true">&rarr;</span></a>
 			</article>
 		</div>
-		<p class="mbx-runtime-note"><strong>Portability is a design choice, not a blanket promise.</strong> MatchBox implements a strict, evolving subset of BoxLang. Code that runs on MatchBox generally has a path to the JVM; JVM applications may use APIs that MatchBox does not provide. Check the target matrix before choosing libraries or moving an application.</p>
+		<p class="mbx-runtime-note">Use familiar BoxLang syntax across runtimes, and choose libraries and host APIs for the destination. The compatibility guide helps you pick a target.</p>
 	</div>
 </section>
 
@@ -108,10 +108,10 @@ layout: home
 	Bundle a MatchBox runner with compiled BoxLang bytecode. Ordinary native applications need neither Java nor a separate MatchBox install on the destination.
 	:::
 	::: card title="Browser and JavaScript" icon="phosphor-duotone:browser" href="building-and-deploying/javascript-and-wasm.md"
-	Ship an AOT JavaScript module, a raw WebAssembly binary, or the browser runtime for dynamic BoxLang execution.
+	Ship a compiled JavaScript/WebAssembly module or use the browser runtime for dynamic BoxLang execution.
 	:::
 	::: card title="WASI and containers" icon="phosphor-duotone:cube" href="building-and-deploying/wasm-container.md"
-	Run isolated WebAssembly workloads in compatible hosts such as Wasmtime or WasmEdge. Filesystem and network access depend on host capabilities.
+	Experiment with WebAssembly workloads in WASI hosts such as Wasmtime or WasmEdge. Filesystem and network access depend on the host.
 	:::
 	::: card title="ESP32 devices" icon="phosphor-duotone:cpu" href="building-and-deploying/esp32.md"
 	Cross-compile the embedded runner for supported Xtensa and RISC-V boards. The embedded web surface is intentionally smaller than the native server.
@@ -131,7 +131,7 @@ layout: home
 			<div><strong>Rust</strong><span>Independent VM implementation</span></div>
 			<div><strong>Bytecode</strong><span>Compile once for a compatible runner</span></div>
 			<div><strong>Cranelift</strong><span>Tiered JIT in the native CLI</span></div>
-			<p>JIT is not enabled in WASM, ESP32, or cross-deployed native runner stubs. See the target-specific guide before comparing performance.</p>
+			<p>JIT is a native build feature. WASM and ESP32 use the interpreter.</p>
 		</div>
 	</div>
 </section>

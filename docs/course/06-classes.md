@@ -41,7 +41,6 @@ Output:
 ```
 
 - `init` is the **constructor**. It runs when you call `new Counter( 5 )`.
-- **Always end `init` with `return this`.** In MatchBox 0.11.0 a constructor without it gives you `null` instead of an object.
 - `variables.count` is **private** state, stored inside the object. Code outside the class reaches it only through the methods.
 - `this` is the object itself.
 
@@ -162,7 +161,7 @@ Output:
 
 ## Going further
 
-Inheritance, interfaces and the other class features are covered, along with where MatchBox differs from BoxLang on the JVM, in [differences from BoxLang](../differences-from-boxlang.md). Check there before relying on them: some forms of inheritance syntax are not supported yet.
+Explore inheritance, interfaces and properties in the [class reference](../reference/language/classes.md).
 
 ## Try it
 

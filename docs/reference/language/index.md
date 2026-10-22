@@ -1,23 +1,23 @@
 ---
 title: Language reference
-description: A reference for the BoxLang language as MatchBox 0.11.0 implements it, page by page, with what works, what does not and how it differs from BoxLang on the JVM.
+description: Explore BoxLang syntax, classes, collections, errors and host integrations in MatchBox.
 icon: phosphor-duotone:book-bookmark
 ---
 
 # Language reference
 
-These pages are a reference, not a tutorial. They describe what the MatchBox 0.11.0 language does when you run it. For the basics, use the [course](../../course/index.md). For a one-page summary of what differs from BoxLang on the JVM, see [BoxLang compatibility](../../differences-from-boxlang.md). For functions, see the [function reference](../functions/index.md).
+Use these pages to explore language features and common patterns. Start with the [course](../../course/index.md) for a guided introduction, or browse the [function reference](../functions/index.md) for built-in functions.
 
 | Page | Covers |
 | --- | --- |
-| [Operators](operators.md) | Arithmetic, comparison, bitwise, `castAs`, `instanceOf`, elvis, safe navigation, missing word operators |
+| [Operators](operators.md) | Arithmetic, comparison, bitwise, `castAs`, `instanceOf`, elvis and safe navigation |
 | [Destructuring, spread and ranges](destructuring-spread-ranges.md) | `{ a, b } = s`, `...`, `1..5` |
 | [Sets](sets.md) | `set{}`, `setNew`, algebra operators, member functions |
-| [Classes](classes.md) | `init`, inheritance, interfaces, properties, what is missing |
+| [Classes](classes.md) | `init`, inheritance, interfaces and properties |
 | [Scopes](scopes.md) | `variables`, `arguments`, closures, web scopes |
-| [Error handling](error-handling.md) | `try`, `catch`, `throw`, `rethrow`, ignored catch types |
+| [Error handling](error-handling.md) | `try`, typed `catch`, `finally`, `throw` and `rethrow` |
 | [Async and futures](async-and-futures.md) | `runAsync`, `then`, errors, browser behavior |
-| [Templates (.bxm)](templates-bxm.md) | Tags that work, stubs, bugs |
+| [Templates (.bxm)](templates-bxm.md) | Markup, expressions and script blocks |
 | [Modules](modules.md) | `--module`, `ModuleConfig.bx`, discovery |
 | [Java interop](java-interop.md) | The JNI bridge and its limits |
 | [Queries and data](query-and-data.md) | `queryNew`, datasources, query of queries, build features |
@@ -33,6 +33,4 @@ These pages are a reference, not a tutorial. They describe what the MatchBox 0.1
 
 `.cfm`, `.cfc` and `.cfs` files are not supported. `matchbox page.cfm` fails with a parse error.
 
-## How these pages were checked
-
-Each example was run on the 0.11.0 CLI. Examples with a Run button also run in the browser playground, and their shown output is checked by a test. Comparisons with BoxLang name the BoxLang version used, 1.13 on the JVM. Where a fix is being worked on in a GitHub issue or pull request, the page links it. Linked work is not a released fix.
+For an overview of runtime and target differences, see [BoxLang compatibility](../../differences-from-boxlang.md).

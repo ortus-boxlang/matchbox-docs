@@ -20,6 +20,7 @@ assert.equal(evaluate('getTickCount() > 0').value, 'true', 'getTickCount must no
 assert.equal(evaluate('sleep( 5 ); "awake"').value, 'awake', 'sleep must not trap');
 assert.equal(evaluate('runAsync( () => 21 * 2 ).get()').value, '42', 'Cooperative futures must work');
 assert.match(evaluate('function broken(').error, /error:/i);
+assert.equal(evaluate('try { throw(type="Other", message="boom"); } catch (BadInput e) { println("wrong"); } catch (any e) { println(e.type); }').output, 'Other\n', 'typed catches must skip nonmatching handlers');
 const failure = evaluate('println("before error"); throw "deliberate error";');
 assert.match(failure.error, /deliberate error/);
 assert.equal(failure.output, 'before error\n');

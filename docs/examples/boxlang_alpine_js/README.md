@@ -14,7 +14,7 @@ This example demonstrates how to define an **Alpine.js Data Component** using 10
 3.  **Closures**: The `increment`, `decrement` and `isEven` functions in the struct are wrapped as JS functions that Alpine can call.
 4.  **Calls from HTML**: The buttons in `index.html` call `count = increment(count, step)`. The BoxLang function receives the current values and returns the new count, which Alpine assigns.
 
-Write the component function with the `function( initialValue = 0 ) { ... }` form. An arrow function with a default parameter, `( initialValue = 0 ) => { ... }`, does not parse in v0.11.0.
+The component uses `function( initialValue = 0 ) { ... }` to provide a default initial value.
 
 ## Building the Example
 
@@ -27,7 +27,7 @@ matchbox --target js counter.bxs
 
 This produces:
 - `counter.js`: The ES module entry point. `index.html` imports its `ready` and `registerComponent` exports.
-- `counter.wasm`: The WASM binary containing the BoxLang VM and your compiled code (about 1.9 MB in v0.11.0).
+- `counter.wasm`: The WASM binary containing the BoxLang VM and your compiled code for the browser.
 - `counter.d.ts` and `counter_bg.wasm.d.ts`: TypeScript declarations.
 
 ## Running the Example

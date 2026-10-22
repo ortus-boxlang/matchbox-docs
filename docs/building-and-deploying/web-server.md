@@ -86,7 +86,7 @@ Place `boxlang.json` in the webroot. All keys are optional.
 
 If `boxlang.json` is not valid JSON, or a `websocket` block is missing one of `uri`, `listenerClass` or `listenerState`, the whole file is ignored without a warning and the defaults apply. Check the "Rewrites:" line printed at startup.
 
-A directory request that finds no index file also does not fall back to the rewrite file. In v0.11.0 it answers `500` with `Is a directory (os error 21)`.
+Give each directory an index template; directory requests do not fall back to the rewrite file.
 
 ### WebSockets in the webroot server
 
@@ -178,9 +178,6 @@ Routes:
 - An unmatched request returns `404` with the text `Not Found`.
 
 Middleware has the signature `function( event, rc, prc, next )` and continues the chain with `next.run()`. Handlers have the signature `function( event, rc, prc )`.
-
-> [!warning] Known issue in v0.11.0
-> When the application registers any `app.use()` middleware, an unmatched URL returns `500` with a "Not Found" error text instead of `404`. Without middleware the `404` is returned normally.
 
 ### Request collections
 

@@ -40,7 +40,7 @@ Understand how AI features in an application differ from AI-assisted development
 
 - **Native application:** Start with [native builds](../building-and-deploying/native-builds.md).
 - **Browser module:** Read [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md).
-- **WASI host or container:** See [WASM containers](../building-and-deploying/wasm-container.md) for what works in MatchBox 0.11.0 and the known issues.
+- **WASI host or container:** Explore experimental [WASI deployment](../building-and-deploying/wasm-container.md).
 - **Embedded device:** Follow the [ESP32 guide](../building-and-deploying/esp32.md).
 - **Web application:** Explore the [webroot server](../examples/web_server/README.md) or [application server](../examples/app_server/README.md).
 

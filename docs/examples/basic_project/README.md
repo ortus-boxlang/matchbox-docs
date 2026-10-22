@@ -63,7 +63,7 @@ matchbox main.bxb
 
 ## Compile to a Native Binary
 
-Produce a single self-contained executable with no runtime to install. The file is the MatchBox runner plus your bytecode, about 4.7 MB on x86_64 Linux for this project in v0.11.0. Measure the file you produce:
+Produce a single self-contained executable with no runtime to install. The file combines the MatchBox runner and your bytecode:
 
 ```bash
 matchbox --target native main.bxs

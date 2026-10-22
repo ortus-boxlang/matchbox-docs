@@ -1,106 +1,47 @@
 ---
 title: Templates (.bxm)
-description: The .bxm template tags that work in MatchBox 0.11.0, the ones that are stubs, and the bugs to avoid.
+description: Mix markup and BoxLang to render pages from the CLI or web server.
 icon: phosphor-duotone:file-html
 ---
 
 # Templates (.bxm)
 
-A `.bxm` file mixes markup with `<bx:...>` tags. Run one from the CLI with `matchbox page.bxm`, or serve a folder of them with `matchbox --serve --webroot .`. The playground does not run templates, so these snippets have no Run button.
+A `.bxm` file combines markup with BoxLang tags and script blocks. Run a template with `matchbox page.bxm`, or serve a directory with `matchbox --serve --webroot www`.
 
-Only the `bx:` prefix is recognized. `<cfoutput>` and the other CFML tags are copied to the output as text, and `.cfm` and `.cfc` files do not run.
-
-## What works
-
-| Tag | Notes |
-| --- | --- |
-| `<bx:set name = value>` | Assigns a variable. |
-| `<bx:output>...</bx:output>` | Evaluates `#expression#` inside the body. |
-| `<bx:if expr>`, `<bx:elseif expr>`, `<bx:else>`, `</bx:if>` | Conditionals. |
-| `<bx:script>...</bx:script>` | Full script. `writeOutput()` and `println()` both write into the page. |
-| `<!--- comment --->` | Removed from the output. |
+## A simple template
 
 ```boxlang
-<!--- a comment is removed --->
 <bx:set name = "MatchBox">
-<bx:set count = 3>
-<p>Plain text keeps #name# as is.</p>
-<bx:output><p>Hello #name#, count is #count + 1#.</p></bx:output>
-<bx:if count gt 5>
-  <p>big</p>
-<bx:elseif count gt 1>
-  <p>medium</p>
-<bx:else>
-  <p>small</p>
-</bx:if>
+<bx:output><h1>Hello, #name#!</h1></bx:output>
+
 <bx:script>
-  items = [ "a", "b" ];
-  for ( item in items ) {
-    writeOutput( "<li>" & item & "</li>" );
-  }
+    items = [ "native", "browser", "embedded" ];
+    for ( item in items ) {
+        writeOutput( "<p>Build for " & item & "</p>" );
+    }
 </bx:script>
 ```
 
-Running `matchbox demo.bxm` prints:
+`<bx:output>` evaluates `#expression#` inside its body. `<bx:script>` runs BoxLang code; `writeOutput()` writes into the page. Escape untrusted text with `encodeForHTML()` before inserting it into HTML.
 
-```text
+## Common tags
 
-
-
-<p>Plain text keeps #name# as is.</p>
-<p>Hello MatchBox, count is 4.</p>
-
-  <p>medium</p>
-
-<li>a</li><li>b</li>
-```
-
-- `#expression#` is only evaluated inside `<bx:output>`. Outside it, `#name#` stays literal text.
-- Tags do not need a closing slash. `<bx:set x = 5>` is enough.
-- Write conditions with `gt`, `lt`, `eq` and friends. A `>` inside `<bx:if x > 3>` ends the tag early and leaves ` 3>` in the page.
-
-## Bugs to work around
-
-### bx:set and bx:output inside bx:if
-
-A `<bx:set>` or `<bx:output>` placed inside an `<bx:if>` body drops the rest of the template, including everything after `</bx:if>`.
-
-```boxlang
-<bx:set x = 5>
-<bx:if x gt 3>A<bx:output>#x#</bx:output>B</bx:if>Z
-```
-
-This prints `A` and nothing else. `<bx:script>`, plain markup and a nested `<bx:if>` inside the body are fine:
-
-```boxlang
-<bx:set x = 5>
-<bx:if x gt 3><bx:script>writeOutput( x );</bx:script></bx:if>Z
-```
-
-This prints `5Z`. Put the output in a `<bx:script>` block, or move the `<bx:output>` outside the `if`.
-
-### bx:loop hangs
-
-`<bx:loop>` compiles to an endless loop. The attributes are ignored, so this never finishes:
-
-```boxlang
-<bx:loop array="#[ 1, 2 ]#" item="i"><bx:output>#i#</bx:output></bx:loop>
-```
-
-The CLI had to be killed after a timeout. In a web server the request does not return. Use a `for` loop in `<bx:script>` instead. This is [issue #93](https://github.com/ortus-boxlang/matchbox/issues/93).
-
-### Other tags are stubs
-
-| Tag | What happens |
+| Tag | Purpose |
 | --- | --- |
-| `<bx:switch>` with `<bx:case>` | No `<bx:case>` body is ever printed, even when the value matches. A `<bx:defaultcase>` body runs instead, and the text after `</bx:switch>` was missing from the output when tested. |
-| `<bx:try>` with `<bx:catch>` | The try body runs, but an error inside it is not caught: the request fails and the `<bx:catch>` body never runs. |
-| `<bx:include template="x.bxm">` | Fails with `Include file not found:` and an empty path. |
-| `<bx:import class="a.b">` | Ignored. |
-| `<bx:throw message="boom">` | Raises an error, but the message is lost (`CustomException: null`). |
+| `<bx:set>` | Assign a value. |
+| `<bx:output>` | Render expressions inside markup. |
+| `<bx:if>`, `<bx:elseif>`, `<bx:else>` | Choose a branch. |
+| `<bx:loop>` | Repeat template content. |
+| `<bx:include>` | Include another template. |
+| `<bx:script>` | Use script syntax within a template. |
+| `<!--- comment --->` | Add a comment that is not rendered. |
 
-In `<bx:script>` use `switch`, `try`, `include "file.bxs"` and `throw` as in any script. `include` works in scripts.
+Use word operators such as `gt` and `lt` in tag conditions so a `>` character does not end the tag early. Script blocks are useful for more involved control flow.
 
-## Web scopes in a served template
+## Serving templates
 
-With `--serve`, templates can read `url`, `form`, `cookie` and `cgi`, and keep state in `session`. See [scopes](scopes.md). The [web server example](../../examples/web_server/README.md) shows the folder layout.
+Server-rendered templates can read request scopes such as `url`, `form` and `cgi`, and keep session state. These belong to the server environment; the browser playground does not serve templates.
+
+See [Web server](../../building-and-deploying/web-server.md), [scopes](scopes.md) and the [web server example](../../examples/web_server/README.md) for complete applications.
+
+MatchBox uses BoxLang's `bx:` tags, not CFML's `cf` tags.

@@ -47,7 +47,7 @@ Running `mvm install snapshot` again refreshes the installation when its build I
 
 MVM verifies the binary's SHA-256 checksum before replacing an installation. A failed verification leaves the existing installation intact. Verification uses Linux `sha256sum`, macOS `shasum`, or Windows PowerShell `Get-FileHash`. Historical releases without `version.json` cannot be newly installed with verified-download MVM.
 
-Use `latest` for the latest stable release, `snapshot` for the rolling development build, or a stable version such as `0.11.0`. Versioned snapshot names are not MVM install selectors. See [releases and downloads](../reference/releases.md) for channels and build identity.
+Use `latest` for the latest stable release, `snapshot` for the rolling development build, or a specific stable version number. Versioned snapshot names are not MVM install selectors. See [releases and downloads](../reference/releases.md) for channels and build identity.
 
 ## Direct CLI installation
 
@@ -75,13 +75,7 @@ matchbox --help
 matchbox
 ```
 
-`--version` prints three lines (`-v` does the same). Example output:
-
-```text
-matchbox version 0.11.0
-commit: 37be346
-built on: 2026-10-17
-```
+`--version` shows the installed version, source commit and build date (`-v` does the same).
 
 The last command starts the REPL. Try `println("Hello from MatchBox!");`, then type `exit` or press `Ctrl+D` to leave. See the [CLI reference](../reference/cli.md) for every command and option.
 
@@ -106,4 +100,4 @@ For Docker, see [the Docker guide](../building-and-deploying/docker-image.md). F
 
 ## Do I need Rust?
 
-Not to run the prebuilt CLI or ordinary standalone applications. Rust is required to [build MatchBox from source](building-matchbox.md) or compile [Native Fusion](../building-and-deploying/native-fusion.md) code. `--target js` needs the `wasm-bindgen` command line tool (version 0.2.114) but not Rust; see [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md). ESP32 builds have their own toolchain requirements; see the [ESP32 guide](../building-and-deploying/esp32.md).
+Not to run the prebuilt CLI or ordinary standalone applications. Rust is required to [build MatchBox from source](building-matchbox.md) or compile [Native Fusion](../building-and-deploying/native-fusion.md) code. Browser packaging without Fusion needs `wasm-bindgen` 0.2.114, not Rust; see [JavaScript and WebAssembly](../building-and-deploying/javascript-and-wasm.md). ESP32 builds have their own toolchain requirements; see the [ESP32 guide](../building-and-deploying/esp32.md).

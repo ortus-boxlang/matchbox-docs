@@ -61,7 +61,7 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest my_script.b
 
 Because `matchbox` is the entrypoint, arguments after the image name are passed directly to MatchBox. Docker selects the matching image architecture automatically; use `--platform linux/amd64` or `--platform linux/arm64` when selecting it explicitly.
 
-The CLI's `--version` output and the image's `org.opencontainers.image.version` label include the build number, for example `0.12.0-snapshot+133`. Tags omit the `+133` suffix. After a stable release succeeds, CI advances `develop` to the next minor version and builds its snapshot. See [releases and downloads](../reference/releases.md).
+Use `--version` or the image's version label to identify a build. See [releases and downloads](../reference/releases.md) for stable and snapshot channels.
 
 ---
 
@@ -81,7 +81,7 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target na
 
 Native artifacts produced inside the container target Linux. Use the release binaries or source builds when you need macOS or Windows native artifacts.
 
-The image holds only the CLI binary and CA certificates (see `Dockerfile.release`). It has no Rust toolchain and no `wasm-bindgen`, so `--target js` and Native Fusion builds (a `native/` directory) cannot run inside it. `--target wasm` and `--target wasi` are not usable in 0.11.0, see [WASM container deployment](wasm-container.md).
+The image holds only the CLI binary and CA certificates (see `Dockerfile.release`). It has no Rust toolchain and no `wasm-bindgen`, so `--target js` and Native Fusion builds (a `native/` directory) cannot run inside it. WASI targets are [experimental](wasm-container.md).
 
 ---
 
@@ -110,4 +110,4 @@ docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --build src
 docker run --rm -v "$PWD:/app" ghcr.io/ortus-boxlang/matchbox:latest --target native src/main.bxs
 ```
 
-For production and repeatable CI, pin a stable version tag such as `v0.11.0` or an image digest instead of `latest`. Snapshot tags, including `vX.Y.Z-snapshot`, are mutable and are not immutable build pins.
+For production and repeatable CI, pin a stable version tag or an image digest instead of `latest`. Snapshot tags, including `vX.Y.Z-snapshot`, are mutable and are not immutable build pins.

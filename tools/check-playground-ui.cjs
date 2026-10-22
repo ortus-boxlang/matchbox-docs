@@ -235,6 +235,13 @@ const consoleText = page => page.locator('#console-output').innerText();
     }
     assert.match(await homePage.locator('#learn .cta a.btn.p').getAttribute('href'), /course\/$/);
 
+    const fusionCells = await homePage.locator('#mx .rl').filter({ hasText: 'Native Fusion (Rust)' }).evaluate(label => {
+      const cells = [];
+      for (let cell = label.nextElementSibling; cell && cells.length < 3; cell = cell.nextElementSibling) cells.push(cell.innerText.trim());
+      return cells;
+    });
+    assert.deepEqual(fusionCells, ['Yes', 'Yes', 'Yes'], 'Native Fusion supports native, browser and ESP32 builds');
+
     // header nav, section order and removed pieces
     const navLabels = await homePage.locator('nav .links a').allInnerTexts();
     assert.deepEqual(navLabels.slice(2), ['Learn', 'AI native', 'Targets', 'Native Fusion', 'Install', 'Support'], 'header order');

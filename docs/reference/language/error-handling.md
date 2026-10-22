@@ -1,12 +1,12 @@
 ---
 title: Error handling
-description: try, catch, finally, throw and rethrow in MatchBox 0.11.0, including the fact that catch types are ignored.
+description: Handle errors with typed catch blocks, finally, throw and rethrow.
 icon: phosphor-duotone:warning
 ---
 
 # Error handling
 
-The [errors lesson](../../course/07-errors-and-control-flow.md) covers the basics. Snippets with a Run button ran in the browser playground and on the CLI with the same output.
+Use `try` and `catch` to handle errors, and `finally` for cleanup. The [errors lesson](../../course/07-errors-and-control-flow.md) introduces the basics.
 
 ## try, catch, finally
 
@@ -68,26 +68,27 @@ from try
 - `catch ( e )` without the `any` keyword is accepted.
 - An uncaught error prints `Error: ...` with the source line and the CLI exits with status 1.
 
-## Catch types are ignored
+## Typed catches
 
-The type in `catch ( SomeType e )` is parsed and then ignored. The first `catch` block always runs, whatever was thrown.
+The first matching catch runs. Types are case-insensitive: `Custom` also matches `Custom.Input`, but not `CustomInput`. Use `any` as a fallback. Errors with no matching catch propagate outward, after `finally` runs.
 
-```boxlang
+```boxlang title="catch-selection.bxs"
 try {
-    throw( type = "A", message = "m" );
-} catch ( B e ) {
-    println( "B" );
-} catch ( A e ) {
-    println( "A" );
+    throw( type = "Custom.Input", message = "bad value" );
+} catch ( Other e ) {
+    println( "wrong handler" );
+} catch ( "custom" e ) {
+    println( e.message );
+} catch ( any e ) {
+    println( "fallback" );
 }
 ```
 
-This prints `B`. BoxLang prints `A`. Two more consequences:
+```text
+bad value
+```
 
-- A typed catch placed before `catch ( any e )` swallows everything.
-- `catch ( "Custom.Sub" e )` with a quoted type is a parse error.
-
-Workaround: use one `catch ( any e )` and branch on `e.type`, then `rethrow` what you do not handle.
+You can also inspect `e.type` inside a catch when handling several cases together.
 
 ```boxlang title="errors-typed.bxs"
 function risky( kind ) {

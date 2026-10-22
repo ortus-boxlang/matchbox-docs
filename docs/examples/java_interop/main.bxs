@@ -7,18 +7,16 @@
 //   - JAVA_HOME set, or `java` on your PATH.
 //   - A native build - Java interop is NOT available in WASM builds.
 //
-// Build & run:
-//   matchbox --target native main.bxs
-//   ./main
+// Run with a CLI that includes JNI:
+//   matchbox main.bxs
 
 println("=== BoxLang Java Interop ===")
 println("")
 
 // ---- java.lang.StringBuilder ----
 println("--- StringBuilder ---")
-import java:java.lang.StringBuilder as SB;
-
-sb = new SB("Hello")
+sb = createObject("java", "java.lang.StringBuilder").init()
+sb.append("Hello")
 sb.append(", World")
 sb.append("!")
 println(sb.toString())        // Hello, World!
@@ -30,13 +28,13 @@ println("")
 println("--- ArrayList ---")
 import java:java.util.ArrayList as List;
 
-list = new List()
-list.add("BoxLang")
-list.add("MatchBox")
-list.add("Rust")
-println("Size:   " & list.size())
-println("Item 0: " & list.get(0))
-println("Item 1: " & list.get(1))
+items = new List()
+items.add("BoxLang")
+items.add("MatchBox")
+items.add("Rust")
+println("Size:   " & items.size())
+println("Item 0: " & items.get(0))
+println("Item 1: " & items.get(1))
 
 println("")
 
@@ -54,9 +52,9 @@ println("Contains 'backend': " & map.containsKey("backend"))
 
 println("")
 
-// ---- java.lang.Math (instantiated via java.new) ----
+// ---- java.lang.Math static methods ----
 println("--- Math ---")
-mathVal = java.new("java.lang.Math")
+mathVal = createObject("java", "java.lang.Math")
 println("sqrt(144)  = " & mathVal.sqrt(144))
 println("pow(2, 10) = " & mathVal.pow(2, 10))
 println("abs(-42)   = " & mathVal.abs(-42))

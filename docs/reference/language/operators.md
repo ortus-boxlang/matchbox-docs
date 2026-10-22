@@ -1,28 +1,26 @@
 ---
 title: Operators
-description: Arithmetic, string, comparison, logical, bitwise, castAs, instanceOf, elvis and safe navigation operators in MatchBox 0.11.0, with the word operators that are missing.
+description: Arithmetic, comparison, logic, bitwise operations and null handling in BoxLang.
 icon: phosphor-duotone:plus-minus
 ---
 
 # Operators
 
-Every row below was run on MatchBox 0.11.0. Where BoxLang 1.13 on the JVM behaves differently, the table says so.
+BoxLang provides symbolic and word operators for calculations, comparisons and control flow.
 
 ## Arithmetic and strings
 
 | Operator | Meaning | Example | Result |
 | --- | --- | --- | --- |
 | `+` `-` `*` `/` | Arithmetic | `10 / 4` | `2.5` |
-| `%` | Remainder, sign follows the left operand | `-7 % 3` | `-1` |
+| `%`, `mod` | Remainder, sign follows the left operand | `-7 % 3` | `-1` |
 | `\` | Integer division | `10 \ 3` | `3` |
 | `^` | Power | `2 ^ 10` | `1024` |
 | `&` | String concatenation | `"abc" & 1` | `abc1` |
 | `+=` `-=` `*=` `/=` `%=` `&=` | Compound assignment | `x = 10; x %= 3` | `1` |
 | `++` `--` | Increment and decrement | `i++` | |
 
-`**` and `<=>` are parse errors. Division by zero throws `ExpressionException: Division by zero`.
-
-`+` on two numeric strings adds them (`"5" + "6"` is `11`). `1 + "x"` returns `1x`, while BoxLang throws `Can't cast [x] to a Number`.
+Use `+` for arithmetic and `&` for joining text. Numeric strings can participate in arithmetic: `"5" + "6"` is `11`. Division by zero throws an error.
 
 ## Comparison and logic
 
@@ -66,17 +64,7 @@ true
 
 String comparison ignores case: `"a" == "A"` is `true`. `===` behaves like `==`, which BoxLang does too.
 
-### Word operators that are missing
-
-| Operator | MatchBox 0.11.0 | BoxLang 1.13 |
-| --- | --- | --- |
-| `not` | Parse error: `unexpected token in expression: not`. Use `!`. | Works. |
-| `mod` | `7 mod 3` inside an expression is a parse error. As a statement, `y = 7 mod 3;` stores `7` with no error: the `mod 3` part is ignored. Use `%`. | `1` |
-| `ne` | Parse error. Use `neq` or `!=`. | Not tested. |
-| `imp`, `doesnotcontain` | Parse error. | Not tested. |
-| `??=` | Parse error: `unexpected token in expression: ?`. Write `x = x ?: 3`. | Also a parse error in the 1.13 build used here. |
-
-The silent `mod` case is the dangerous one. Search ported code for ` mod `.
+Use `!` or `not` for negation, `&&` or `and` for conjunction, and `||` or `or` for alternatives.
 
 ## Bitwise
 
@@ -169,9 +157,5 @@ true
 `?:` only replaces null. An empty string passes through, so the second line prints an empty line.
 
 A `?.` guards only the step it is on. `n?.a.b` with `n` null throws `Member access only supported on structs, instances, JS objects, and native objects`. BoxLang returns null. Write `n?.a?.b`.
-
-## Statements that fail
-
-`variables.n++` as a statement throws `Fused increment only supported on structs and instances for now`. `variables.n += 1`, `this.n++` and `x = variables.n++` work. See [known issues](../../differences-from-boxlang.md).
 
 For sets and ranges see [sets](sets.md) and [destructuring, spread and ranges](destructuring-spread-ranges.md).

@@ -1,49 +1,36 @@
 ---
 title: Java interop
-description: What works and what fails when a native MatchBox 0.11.0 script calls Java classes through the experimental JNI bridge.
+description: Call Java classes from native MatchBox through the experimental JNI bridge.
 icon: phosphor-duotone:coffee
 ---
 
 # Java interop
 
-Java interop is experimental. It needs a JDK on the host and a native MatchBox build with the `bif-jni` feature, which is in the default feature set. It does not exist in the browser. The [Java interop example](../../examples/java_interop/README.md) shows the intended use. This page records what actually ran on the 0.11.0 CLI, so none of these snippets have a Run button.
+Native MatchBox can call Java classes through an experimental JNI bridge. This path needs a JDK on the host and a runtime built with `bif-jni`; it is not available in the browser.
 
-## What works
+## Calling a class
+
+Use a `java:` import to refer to a Java class:
 
 ```boxlang
 import java:java.util.ArrayList as List;
-import java:java.util.HashMap;
 
-l = new List();
-l.add( "x" );
-l.add( "y" );
-println( l.size() );
-println( l.contains( "x" ) );
-
-m = new HashMap();
-m.put( "a", "b" );
-println( m.get( "a" ) );
+items = new List();
+items.add( "hello" );
+items.add( "MatchBox" );
+println( items.size() );
 ```
 
 ```text
 2
-true
-b
 ```
 
-Instantiating a class with `new`, either from an `import java:` or from `createObject( "java", "java.util.ArrayList" )`, and calling methods with string arguments works.
+Java collection indexes follow Java's rules, so they start at 0 rather than BoxLang's 1.
 
-## What fails
+## Choosing an integration
 
-| Code | Result |
-| --- | --- |
-| `list.get( 0 )` | `Invocation of get failed: Java exception was thrown`, with `java.lang.IllegalArgumentException: argument type mismatch` printed on the error stream. |
-| `sb = new StringBuilder(); sb.append( "x" )` | The same `argument type mismatch` failure. |
-| `import java:java.lang.Math;` then `Math.sqrt( 16 )` | `Method sqrt not found on null.` Static-only classes cannot be called through an import. |
-| `createObject( "java", "java.lang.Math" )` | `Constructor with 0 arguments not found on class java.lang.Math`. The same happens for `java.util.UUID`. |
-| `import java:java.lang.System;` then `System.getProperty( ... )` | `Method getProperty not found on null.` |
-| `java.new( "java.lang.StringBuilder", "Hello" )` | Parse error: `expected identifier, found new`. |
+The bridge is useful for accessing host libraries, but MatchBox is not a JVM implementation. Check the methods and runtime dependencies your application uses.
 
-The cause of the first row is that every MatchBox number is passed to Java as a `java.lang.Double`, so a method that takes an `int` is not matched. `add`, `contains` and map `put` and `get` with string arguments work. `StringBuilder.append( "x" )` fails even though its argument is a string, so test each method you depend on.
+A MatchBox-compatible module can also provide a native backend for selected Java-facing APIs. For Rust code owned by your application, use [Native Fusion](../../building-and-deploying/native-fusion.md).
 
-BoxLang 1.13 on the JVM runs `list.get( 0 )`, `Math.sqrt( 16 )` and `sb.append( "x" )` without error, so Java code that runs there can fail here. Use a [Native Fusion](../../examples/native_fusion/README.md) Rust module for numeric work.
+See the [Java interop example](../../examples/java_interop/README.md) for a complete project. A standalone executable needs the same required integration support as the CLI that runs it.

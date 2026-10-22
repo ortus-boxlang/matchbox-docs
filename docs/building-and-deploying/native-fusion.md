@@ -5,15 +5,9 @@ description: Expose Rust functions and classes to BoxLang as BIFs and native obj
 
 # Native Fusion: Rust Interop Reference
 
-**Native Fusion** is the mechanism that lets you write Rust functions and classes
-and expose them as first-class BoxLang Built-In Functions (BIFs) and native
-objects. Everything is statically linked into your final binary, with no shared
-libraries, no FFI boilerplate at the BoxLang call site.
+**Native Fusion** links Rust functions and objects into your BoxLang application. It supports every MatchBox target: native, browser/JavaScript, WASI and ESP32.
 
-> Native Fusion works with `--target native` and `--target wasi`. With `--target js` and
-> `--target wasm` the generated build fails to compile in MatchBox 0.11.0. `--target esp32`
-> also has a Fusion path that could not be run in this review (no ESP32 toolchain).
-> The [Limitations](#limitations) table lists exactly what was run.
+Rust code and dependencies must support the selected target. Browser builds cannot use desktop OS APIs, and ESP32 code must fit the device. [WASI remains experimental](wasm-container.md).
 
 ---
 
@@ -32,15 +26,9 @@ Native Fusion binary produced: app
 
 MatchBox detects `native/`, generates a temporary Cargo project that contains the
 `.rs` files, the bytecode and the VM, merges all BIF and class registrations, builds
-it with `cargo build --release`, and copies the result next to the script. A native
-build of a one-function example took about 90 seconds on first use and produced a
-12,528,504 byte executable that printed `30` for `add(10, 20)`.
+it with Cargo for the selected target, and writes the artifact.
 
-The generated project refers to `matchbox_vm` by the absolute path of the MatchBox
-checkout that the CLI was compiled from, and the build adds `--offline` whenever that
-checkout has a `Cargo.lock`. Native Fusion therefore needs a Rust toolchain and that
-source tree, and every crate it uses must already be in the local Cargo cache.
-It was run with a CLI built from source, not with a downloaded release binary.
+You need Rust, the target's toolchain and the MatchBox source checkout used to build the CLI. Builds may run offline; cache dependencies first.
 
 ---
 
@@ -298,7 +286,7 @@ pub fn greet(vm: &mut dyn BxVM, args: &[BxValue]) -> Result<BxValue, String> {
         return Err("greet: expected one argument".to_string());
     }
     let name = vm.to_string(args[0]);
-    Ok(BxValue::new_string(format!("Hello, {}!", name)))
+    Ok(BxValue::new_ptr(vm.string_new(format!("Hello, {}!", name))))
 }
 
 pub fn register_bifs() -> HashMap<String, BxNativeFunction> {
@@ -328,47 +316,25 @@ all files.
 
 ## Using External Rust Crates
 
-A `Cargo.toml` inside `native/` is **not read**. The CLI generates its own `Cargo.toml` and
-copies only the `*.rs` files from `native/` into it, so a dependency listed in
-`native/Cargo.toml` is not available. In a test, `native/ver.rs` that used the `semver`
-crate failed with `error[E0433]: cannot find module or crate 'semver' in this scope`.
+Declare dependencies in `native/Cargo.toml`:
 
-To use external crates, put the Rust code in a [module](../reference/configuration.md#modules)
-instead. A module directory that contains `matchbox/Cargo.toml` is added to the generated
-project as a path dependency, so its own dependencies are resolved. The crate's `src` files
-export `register_bifs()` and/or `register_classes()` as above.
-
-```text
-modules/vermod/
-  ModuleConfig.bx
-  matchbox/
-    Cargo.toml        (depends on matchbox_vm and semver)
-    src/lib.rs        (pub fn register_bifs() ...)
+```toml
+[dependencies]
+semver = "1"
 ```
 
-With this layout `matchbox --target native app.bxs` built and the program printed `1` for
-`semver::Version::parse("1.2.3")`'s major version. The crate in `matchbox/Cargo.toml`
-must name `matchbox_vm` as a dependency with a path that exists on your machine.
+MatchBox merges them into the generated build. Relative path dependencies resolve against `native/`. Do not redeclare crates supplied by Fusion, such as `matchbox_vm`.
+
+Reusable native functionality can also live in a [module](../reference/language/modules.md).
 
 ---
 
 ## Limitations
 
-Rows marked "run" were run with MatchBox 0.11.0 on Linux x86_64.
-
-| Feature | Status |
-|---|---|
-| `--target native` | Works (run). |
-| `--target wasi` | Works (run). Output is a WASI module that printed `30` under Node's WASI. |
-| `--target js` | Fails to compile (run): the generated code calls `Window::console()`, but the `web-sys` dependency enables only the `Window` feature. |
-| `--target wasm` | Fails to compile (run): `getrandom` reports that `wasm32-unknown-unknown` needs its `wasm_js` feature. |
-| `--target esp32` | A Fusion path exists in the source. Not run. |
-| Multiple `.rs` files in `native/` | Works. |
-| Dependencies through `native/Cargo.toml` | No. The file is ignored. |
-| Dependencies through a module's `matchbox/Cargo.toml` | Works (run). |
-| Return types other than `f64` from `#[matchbox_fn]` | Use a manual BIF signature. |
-| Mutable `self` in `#[matchbox_methods]` | The dispatcher takes `&mut self`. |
-| Property access on native objects (`obj.field`) | Override `get_property` in `BxNativeObject`. |
+- All targets support Fusion, but Rust APIs and dependencies must match the target.
+- Use `--target js` for browsers and `--target wasi` for WASI hosts.
+- Return types other than `f64` from `#[matchbox_fn]` need a manual BIF.
+- Native object property access requires `get_property` in `BxNativeObject`.
 
 See [native-builds.md](native-builds.md) for the complete native build reference
 and [differences-from-boxlang.md](../differences-from-boxlang.md) for the full

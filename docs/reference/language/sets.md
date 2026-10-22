@@ -1,14 +1,12 @@
 ---
 title: Sets
-description: The Set type in MatchBox 0.11.0, how to create one, the algebra operators and member functions that work, and the gaps.
+description: Create sets, compare collections and combine values with set algebra.
 icon: phosphor-duotone:circles-three
 ---
 
 # Sets
 
 A set holds each value once. Create one with a literal, `setNew()`, `setOf()` or `toSet()`.
-
-Everything on this page was run against MatchBox 0.11.0, in the browser playground unless a note says otherwise.
 
 ## Creating a set
 
@@ -43,7 +41,7 @@ x,y
 
 ## Order
 
-| Type | Behavior in 0.11.0 |
+| Type | Ordering |
 | --- | --- |
 | default and `linked` | Insertion order. |
 | `sorted` | Sorted once, when `setNew()` builds it from `values`. Values you `add()` later are appended, not sorted. |
@@ -107,8 +105,6 @@ Only an array works as the loose right operand. `a + "7,8"` is string concatenat
 
 ## Member functions
 
-Checked one by one in the playground and the CLI.
-
 | Group | Works |
 | --- | --- |
 | Add and remove | `add`, `append`, `addAll`, `remove`, `delete`, `removeAll`, `retainAll`, `clear` |
@@ -140,34 +136,8 @@ true
 3
 ```
 
-## Known issues in 0.11.0
+## Adding unique values
 
-These were reproduced on the CLI built from the 0.11.0 sources.
-
-- `add()`, `append()` and `addAll()` do not skip duplicates. They behave like array appends, so a set can end up holding the same value twice. `union`, `+` and the constructors do deduplicate.
-- Missing member functions: `equals`, `containsAll`, `any` and `toString` fail with `Method ... not found`.
-- `reject` fails in the CLI with `BIF arrayreject not found` because tree shaking drops the function. It works in the playground and with `--no-shaking`.
-- `sorted` does not keep values sorted after creation, as shown above.
-
-Workaround for the first one: build with `union`.
-
-```boxlang title="set-add-workaround.bxs"
-s = setOf( 1, 2 );
-s.add( 2 );
-println( s.size() );
-
-t = setOf( 1, 2 );
-t = t.union( setOf( 2 ) );
-println( t.size() );
-```
-
-Output:
-
-```text
-3
-2
-```
-
-The first `size()` is 3, which is the bug. The second is 2.
+Use `union` or `+` when adding values that may already exist. These operations preserve uniqueness; direct append-style methods can introduce duplicates.
 
 See also [destructuring, spread and ranges](destructuring-spread-ranges.md) and [operators](operators.md).

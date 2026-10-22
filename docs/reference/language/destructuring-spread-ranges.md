@@ -1,12 +1,12 @@
 ---
 title: Destructuring, spread and ranges
-description: What destructuring assignment, the spread operator and range expressions support in MatchBox 0.11.0, and where they stop.
+description: Unpack collections, expand values and iterate over ranges.
 icon: phosphor-duotone:arrows-out-line-horizontal
 ---
 
 # Destructuring, spread and ranges
 
-Snippets with a Run button ran in the browser playground, and the CLI printed the same output.
+Destructuring extracts values, spread expands collections, and ranges describe sequences for iteration.
 
 ## Destructuring
 
@@ -39,16 +39,18 @@ true
 - A key that is missing from the struct leaves the variable null.
 - Destructuring works inside functions too.
 
-### Limits
+Use `...rest` to collect remaining values:
 
-| Form | Result in MatchBox 0.11.0 | BoxLang 1.13 on the JVM |
-| --- | --- | --- |
-| `[ a, ...rest ] = [ 1, 2, 3 ]` | Parses, but `rest` is null with no error. | `rest` is `[ 2, 3 ]`. |
-| `{ p, ...others } = { p: 1, q: 2 }` | Parses, but `others` is null with no error. | `others` is `{ q : 2 }`. |
-| `[ x, y ] = [ 1 ]` | Fails with `Array index out of bounds`. | `y` is null. |
-| `var { a, b } = { a: 1, b: 2 }` | Parse error: `expected identifier, found {`. | Supported. |
+```boxlang title="destructure-rest.bxs"
+[ first, ...rest ] = [ 10, 20, 30 ];
+println( first );
+println( serializeJSON( rest ) );
+```
 
-Workaround for the rest of an array: `arraySlice( a, 2, arrayLen( a ) )`.
+```text
+10
+[20,30]
+```
 
 ## Spread
 
@@ -77,11 +79,12 @@ Output:
 7
 ```
 
-Not supported:
+To override existing struct keys, use `structAppend` rather than spreading a duplicate key into a literal:
 
-- A rest parameter such as `function f( ...nums )` is a parse error (`expected identifier, found ...`).
-- Destructuring in a parameter list, `function f( { a, b } )`, is a parse error too.
-- A struct literal that spreads a struct and also sets one of its keys crashes the VM, in either order. `{ ...defaults, color: "blue" }` aborts the CLI with exit code 134 and panics in the playground. To override a key, copy and append: `merged = duplicate( defaults ); structAppend( merged, { color: "blue" } );`.
+```boxlang
+merged = duplicate( defaults );
+structAppend( merged, { color: "blue" } );
+```
 
 ## Ranges
 
@@ -126,13 +129,6 @@ var 3
 5050
 ```
 
-A range stored in a variable prints as `1..5` and `arrayLen( r )` returns its size. It is not an array:
-
-- `r.len()` and `r.toArray()` fail with `Method ... not found`.
-- `arrayMap( 1..3, fn )` fails with `Invalid access: base must be array or struct`.
-- `a[ 2..3 ]` fails with `Array index must be a number`.
-- `for ( i in 1..<1 )` runs twice, with `i` set to 1 and then 0. `1..<1` should be empty. Guard it with `if ( start < end )`.
-
-For a slice of an array use `arraySlice`. Its third argument is an end position in 0.11.0, not a length: `arraySlice( [ 10, 20, 30, 40 ], 2, 3 )` returns `[ 20, 30 ]`, and `arraySlice( a, 2 )` with no third argument returns an empty array.
+Ranges are useful in loops; use `arraySlice( array, start, length )` for a portion of an array. If an exclusive range might be empty, check the bounds before iterating.
 
 See also [operators](operators.md) and [sets](sets.md).

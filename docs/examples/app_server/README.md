@@ -126,8 +126,6 @@ Then visit:
 
 The script is compiled once, but its top level runs again on every request. Reload `/` to see the visit count in `session.visitCount` rise: session data is kept by the `MBX_SESSION_ID` cookie, while a plain variable at the top of the script would reset on each request.
 
-Because this app registers middleware with `app.use()`, an unknown URL such as `/missing` currently returns `500` instead of `404` in v0.11.0.
-
 ## What The Example Covers
 
 * app-level middleware
