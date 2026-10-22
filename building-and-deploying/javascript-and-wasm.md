@@ -5,12 +5,12 @@ description: Compile BoxLang to an ES module for the browser with --target js, a
 
 # JavaScript + WebAssembly
 
-MatchBox compiles BoxLang for the browser with `--target js`. This page was checked against MatchBox 0.11.0, including a run of the generated module in Node 22.
+Use `--target js` to package a BoxLang application or library for the browser.
 
 | Mode | Command | Status |
 | :--- | :--- | :--- |
 | **JS module (AOT)** | `--target js` | Works. Ship a compiled app or library as an ES module. |
-| **Raw `.wasm`** | `--target wasm` | Does not work. See the known issue below. |
+| **WASI (experimental)** | `--target wasi` / `--target wasm` | For WASI hosts, not browsers. See [WASI deployment](wasm-container.md). |
 | **Runtime (source strings)** | your own crate | Needs a small Rust crate, described below. |
 
 ---
@@ -38,7 +38,7 @@ The command writes four files next to the script, or next to `--output`:
 | File | Contents |
 | :--- | :--- |
 | `my_lib.js` | The ES module. The compiled bytecode is embedded in it as a base64 string. |
-| `my_lib.wasm` | The MatchBox runtime. It does not contain your program. For a three-line script it was 1,937,302 bytes, and `my_lib.js` was 50,747 bytes. |
+| `my_lib.wasm` | The MatchBox runtime. |
 | `my_lib.d.ts`, `my_lib_bg.wasm.d.ts` | TypeScript declarations for the runtime. |
 
 `--output dist/my_lib.js` creates `dist/` and names the files from the stem `my_lib`.
@@ -64,13 +64,13 @@ The command writes four files next to the script, or next to `--output`:
 
 The module starts loading as soon as it is imported. It exports:
 
-- One `async` function per top-level BoxLang function. Every call returns a promise, so always `await` it. With `function greet(name)` and `function calculate(a, b)` in the script, `await greet('Developer')` returned `Hello, Developer!` and `await calculate(6, 7)` returned `42` in Node 22.
+- An `async` export for each top-level BoxLang function. Use `await` to collect its result.
 - `ready`, a promise that resolves when the runtime and bytecode are loaded.
 - `BoxLangVM`, `run_bytecode`, `initSync` and the default `init` function from the runtime.
 
 In a browser the module also registers `window.MatchBox.modules["my_lib"]`, `window.MatchBox.ready("my_lib")`, `window.MatchBox.State(moduleName, options)`, and fires a `matchbox:ready` event on `window` with `detail.module` set to the module name.
 
-This browser contract is the supported path. Importing the module outside a browser worked in Node 22 only after the compiled `.wasm` was supplied through a global the module checks (`globalThis.__matchboxWasmModule`), so treat non-browser use as unsupported.
+These modules are intended for browsers. Other JavaScript hosts may need their own WebAssembly loading integration.
 
 ### Exporting functions
 
@@ -88,10 +88,11 @@ function calculate(a, b) {
 
 ---
 
-## Mode 2: Raw WASM binary
+## Mode 2: WASI (experimental)
 
-!!! warning "Known issue: `--target wasm` does not produce a usable module"
-    `matchbox --target wasm my_app.bxs` prints `WASM binary produced: my_app.wasm`, but it builds the file from the WASI runner stub (not the browser stub that `--target js` uses) and appends bytes that are not a valid WebAssembly section. In Node 22, `WebAssembly.compile` rejects the result with `unknown section code #0xea`. Use `--target js` for the browser. Details and a WASI workaround are in the [CLI reference](../reference/cli.md#wasi-targets).
+Use `--target wasi` for workloads outside the browser. See [WASI deployment](wasm-container.md) for experimental host support.
+
+Native Fusion supports browser builds through `--target js`; Rust code and dependencies must support that target.
 
 ---
 
@@ -114,11 +115,11 @@ const message = await vm.call("greet", ["BoxLang"]);
 console.log(message);               // Hello, BoxLang!
 ```
 
-`load_bytecode(bytes)`, `call(name, args)` (async), `pump()` and `vm_ptr()` are the methods on `BoxLangVM`. There is no `load_source` method. In Node 22, loading `lib.bxb` into a new `BoxLangVM` and awaiting `vm.call('greet', ['BoxLang'])` returned `Hello, BoxLang!`.
+`BoxLangVM` exposes `load_bytecode(bytes)`, asynchronous `call(name, args)`, `pump()` and `vm_ptr()`.
 
 ### Compiling source strings in the browser
 
-The `.wasm` produced by `--target js` contains the VM but not the compiler, so it can only run bytecode. To compile and run source text in the browser you need a WebAssembly build that includes `matchbox_compiler`. The root `matchbox` crate defines `run_boxlang(source)` for `wasm32`, but the root crate could not be built for `wasm32-unknown-unknown` in testing (see [Building from source](../getting-started/building-matchbox.md#4-browser-runtime-for-source-strings)). The supported pattern is the one this site's playground uses: a small `cdylib` crate that depends on `matchbox_compiler` and `matchbox_vm` with `default-features = false`, parses and compiles each snippet, and runs it with the synchronous `interpret_sync`. Its source is `playground-runtime/` in the documentation repository.
+The packaged browser module runs bytecode. To compile source text dynamically, include `matchbox_compiler` in a custom WebAssembly runtime. This site's `playground-runtime/` is an example; see [source builds](../getting-started/building-matchbox.md#browser-runtime-for-source-strings).
 
 ---
 

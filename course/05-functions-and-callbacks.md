@@ -129,10 +129,6 @@ SHOUT
 42
 ```
 
-## Known limitation in 0.11.0
-
-An arrow function can read and update variables at the top level of your script. A function that **returns** another function which uses the outer function's own variables (a counter factory, for example) does not capture those variables correctly yet: they read as `null`. Until that is fixed, keep state in a [class](06-classes.md) instead.
-
 ## Try it
 
 Write an arrow function `isLong` that returns true for words longer than 4 letters, then use it with `filter` on the `words` array.

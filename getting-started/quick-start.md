@@ -47,7 +47,7 @@ Native binary produced: hello
 Hello, world!
 ```
 
-On Windows, run `hello.exe`. The output is specific to its operating system and architecture. The executable includes the MatchBox runner (4.5 MiB on Linux x86_64 for MatchBox 0.11.0, see [native builds](../building-and-deploying/native-builds.md)), so the destination does not need Java or a separate MatchBox install. Native Fusion or host integrations may introduce their own platform requirements.
+On Windows, run `hello.exe`. The output is specific to its operating system and architecture. The executable includes the MatchBox runner, so the destination does not need Java or a separate MatchBox install. See [native builds](../building-and-deploying/native-builds.md). Native Fusion or host integrations may introduce their own platform requirements.
 
 ## Compile portable bytecode
 
@@ -82,4 +82,4 @@ bx> println(x)
 3
 ```
 
-Continue with [language essentials](features-overview.md), browse the [CLI reference](../reference/cli.md), or choose a [deployment target](../index.md#choose-where-matchbox-runs).
+Continue with [language essentials](features-overview.md), browse the [CLI reference](../reference/cli.md), or choose a [deployment target](../index.md#targets).

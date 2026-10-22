@@ -76,10 +76,10 @@
 	<url><loc>https://matchbox.boxlang.io/examples/aws_lambda_single_file/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/reference/language/templates-bxm/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/course/03-values-and-strings/index.html</loc></url>
-	<url><loc>https://matchbox.boxlang.io/building-and-deploying/wasi-http/index.html</loc></url>
-	<url><loc>https://matchbox.boxlang.io/examples/wasm_browser/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/wasm-container/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/examples/wasm_container/README/index.html</loc></url>
+	<url><loc>https://matchbox.boxlang.io/building-and-deploying/wasi-http/index.html</loc></url>
+	<url><loc>https://matchbox.boxlang.io/examples/wasm_browser/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/building-and-deploying/web-server/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/examples/web_server/README/index.html</loc></url>
 	<url><loc>https://matchbox.boxlang.io/examples/websocket_counter/README/index.html</loc></url>

@@ -79,7 +79,7 @@ true
 
 ## In the browser
 
-The playground runs on a single thread, so futures take turns rather than running truly in parallel. That is enough to learn the shape of the API. On a native build the same code can use the machine's threads. The playground also stops any run after five seconds, so a script that waits too long ends with an error.
+BoxLang futures take turns on the VM's thread, in both native and browser builds. Native I/O can run independently; CPU-heavy callbacks do not run across multiple cores. The playground stops runs after five seconds.
 
 ## Try it
 

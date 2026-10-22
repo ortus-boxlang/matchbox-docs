@@ -166,8 +166,8 @@
   // capability matrix
   var rows=[
     ['No JVM for the core runtime','','y','y','y'],
-    ['Cranelift JIT','Native CLI builds','y','n','n'],
-    ['Native Fusion (Rust)','','y','n','n'],
+    ['Cranelift JIT','Native builds with JIT enabled','y','n','n'],
+    ['Native Fusion (Rust)','Target-compatible Rust code','y','y','y'],
     ['Java interop','Experimental JNI, needs a JDK','p','n','n'],
     ['Web server','Server build, or embedded scope','y','n','p'],
     ['Browser js.* bridge','','n','y','n']
@@ -183,9 +183,9 @@
   // ai native
   var chatLines=[
     ['u','Build a blink app for my ESP32-S3 and flash it.'],
-    ['a','<span class="sk">boxlang-runtime-esp32</span><br>Compiling the BoxLang script and flashing it:<br><code>matchbox blink.bxs --target esp32 --chip esp32s3 --flash</code>'],
+    ['a','<span class="sk">boxlang-runtime-esp32</span><br>Compiling the BoxLang script and flashing it:<br><code>matchbox --target esp32 --chip esp32s3 --flash blink.bxs</code>'],
     ['u','Can this also run in the browser?'],
-    ['a','<span class="sk">boxlang-runtime-wasm-in-the-browser</span><br>Yes, with the JS target:<br><code>matchbox --target js blink.bxs</code><br>Native Fusion and the JIT are native only, so I kept the logic portable.']
+    ['a','<span class="sk">boxlang-runtime-wasm-in-the-browser</span><br>Yes, with the JS target:<br><code>matchbox --target js blink.bxs</code><br>Native Fusion also supports browser builds. Rust code must use APIs available on that target.']
   ];
   var cb=$('#cbody'),crun=0;
   function chatPlay(){var my=++crun;cb.innerHTML='';var els=chatLines.map(function(l){var d=document.createElement('div');d.className='msg '+l[0];d.innerHTML=l[1];cb.appendChild(d);return d});
@@ -199,8 +199,8 @@
   // target cards
   var cards=[
     ['cpu','Native executable','Bundle the runner stub with your bytecode. No JVM and no separate MatchBox install on the destination.','--target native','building-and-deploying/native-builds/'],
-    ['web','Browser and JavaScript','An AOT JS module, a raw WASM binary, or the browser runtime for dynamic BoxLang.','--target js','building-and-deploying/javascript-and-wasm/'],
-    ['cube','WASI and containers','Isolated WASM workloads in Wasmtime or WasmEdge, with host capabilities controlling access.','--target wasm','building-and-deploying/wasm-container/'],
+    ['web','Browser and JavaScript','A compiled JS/WebAssembly module or the browser runtime for dynamic BoxLang.','--target js','building-and-deploying/javascript-and-wasm/'],
+    ['cube','WASI (experimental)','Run WASM workloads in a compatible host. Packaging and host compatibility are still evolving.','--target wasi','building-and-deploying/wasm-container/'],
     ['bolt','AWS Lambda (preview)','A Lambda runner and a deploy command for single file serverless BoxLang, with a step by step setup guide.','matchbox lambda deploy','building-and-deploying/aws-lambda-aws-cli-setup/'],
     ['chip','ESP32 devices','Cross compile the embedded runner for supported Xtensa and RISC-V boards, with USB HID and a web UI.','--target esp32 --chip','building-and-deploying/esp32/'],
     ['srv','Web server','A built-in server for .bxm pages and a routed app server with middleware and ColdBox-style handlers.','--serve','examples/web_server/']

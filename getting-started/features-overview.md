@@ -1,15 +1,15 @@
 ---
 title: Language Essentials
-description: A tour of the BoxLang syntax and features MatchBox 0.11.0 implements, each example run, with links to the language reference.
+description: A practical tour of BoxLang syntax, collections, functions, classes and errors.
 order: 5
 icon: phosphor-duotone:brackets-curly
 ---
 
 # Language essentials
 
-MatchBox runs BoxLang source on its own Rust VM. It covers the core of the language and a large function library, and it leaves some features out. Every snippet below was run on MatchBox 0.11.0, and the ones with a Run button run in your browser.
+MatchBox runs BoxLang on a Rust VM. This tour introduces the core language; use the Run buttons to try examples in your browser.
 
-Before moving a JVM application, read [BoxLang compatibility](../differences-from-boxlang.md). It lists what is missing and the bugs to avoid. For the language in depth, use the [language reference](../reference/language/index.md). To learn by doing, start with the [course](../course/index.md).
+For runtime and target differences, see [BoxLang compatibility](../differences-from-boxlang.md). For the language in depth, use the [language reference](../reference/language/index.md). To learn by doing, start with the [course](../course/index.md).
 
 ## Variables, strings and operators
 
@@ -111,7 +111,7 @@ Hello, Ada
 42
 ```
 
-Also supported: `while`, `do ... while`, `break`, `continue`, ranges (`for ( i in 1..3 )`), closures and arrow functions. Labeled `continue`, `lock` and `thread` statements are not supported. A closure inside a function cannot see that function's variables, so use a loop there. See [scopes](../reference/language/scopes.md).
+Use `while`, `do ... while`, `break`, `continue` and ranges for other loop shapes. Closures can use values from their enclosing function; see [scopes](../reference/language/scopes.md).
 
 ## Classes
 
@@ -136,7 +136,7 @@ Output:
 Widget
 ```
 
-`init` must end with `return this`, and a class extends another with `extends="Parent"`, not the keyword form. `super` is not available. See [classes](../reference/language/classes.md).
+Use `init` to initialize objects and `extends="Parent"` to inherit behavior. See [classes](../reference/language/classes.md).
 
 ## Errors and asynchronous work
 
@@ -164,7 +164,7 @@ done
 finished
 ```
 
-The type in `catch ( SomeType e )` is ignored, so catch `any` and test `e.type`. See [error handling](../reference/language/error-handling.md) and [async and futures](../reference/language/async-and-futures.md). In the browser, futures take turns on one thread.
+A typed catch handles matching errors; `catch ( any e )` is a fallback. See [error handling](../reference/language/error-handling.md) and [async and futures](../reference/language/async-and-futures.md).
 
 ## Function library
 
@@ -180,11 +180,11 @@ MatchBox ships built-in functions for strings, arrays, structs, dates, JSON, reg
 | Zip and tar | `bif-zip` | Not tested |
 | Queries and datasources | `bif-datasource`; `qoq` for query of queries | No |
 
-See [Building MatchBox](building-matchbox.md) for the feature table. The default CLI also removes functions it thinks your script does not use; `--no-shaking` turns that off. A member call such as `a.sort( "numeric" )` can fail with `BIF arraysort not found.` until you do.
+See [Building MatchBox](building-matchbox.md) for custom build options.
 
 ## Other parts of the language
 
-- [Templates (.bxm)](../reference/language/templates-bxm.md): a few tags work, `<bx:loop>` does not.
+- [Templates (.bxm)](../reference/language/templates-bxm.md): mix markup with BoxLang.
 - [Modules](../reference/language/modules.md): add functions and classes with `--module`.
 - [Queries and data](../reference/language/query-and-data.md).
 - [Java interop](../reference/language/java-interop.md): experimental.

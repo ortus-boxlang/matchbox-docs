@@ -1,10 +1,13 @@
 ---
-title: WASI HTTP
+title: WASI HTTP (experimental)
 description: Package a webroot of static files and BoxLang templates as a single WebAssembly component that handles HTTP requests.
 icon: phosphor-duotone:cube
 ---
 
 # WASI HTTP
+
+!!! warning "Experimental"
+    WASI HTTP packaging and host compatibility are still evolving. Test the component on your intended host before deployment.
 
 `--target wasi-http` turns a webroot directory into one `.wasm` component that exports the WASI HTTP incoming handler. The component serves the same files and templates as [`matchbox --serve`](web-server.md), with the webroot embedded in the binary.
 

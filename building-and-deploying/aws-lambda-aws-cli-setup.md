@@ -108,7 +108,7 @@ Use at most one of `--public` and `--url`. Without either, no Function URL is to
 
 The command writes the zip, checks for the function with `lambda get-function`, then either runs `update-function-code` or, when it does not exist, `create-function` with `--runtime provided.al2023 --handler bootstrap`. `--memory` and `--timeout` are applied afterwards when given. Memory and timeout are numbers up to 65535.
 
-`--bootstrap` is required in v0.11.0, and the deploy command does not add a bootstrap for you.
+Supply the Lambda runtime executable with `--bootstrap`; the deploy command does not build it for you.
 
 ### Package layout
 

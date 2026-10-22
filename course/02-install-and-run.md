@@ -31,7 +31,7 @@ mvm use latest
 matchbox --version
 ```
 
-The last command prints the version, for example `matchbox version 0.11.0`. If `matchbox` is not found, run `mvm doctor`. The [installation page](../getting-started/installation.md) covers other options.
+The last command prints the installed version and build information. If `matchbox` is not found, run `mvm doctor`. The [installation page](../getting-started/installation.md) covers other options.
 
 ## Run a script
 

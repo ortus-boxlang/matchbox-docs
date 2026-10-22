@@ -41,4 +41,4 @@ The server is built on Axum and Tokio and runs the same VM as the `matchbox` com
 The server listens on `127.0.0.1` unless you pass `--host 0.0.0.0`.
 
 > [!note] Template tags
-> In a `.bxm` file, `#expression#` is evaluated only inside `<bx:output>`. A `condition` attribute on `<bx:if>` is evaluated as an expression only when written as `condition="#expression#"`, and `<bx:output>` inside `<bx:if>` ends the page output in v0.11.0. `contact.bxm` therefore does its branching in a `<bx:script>` block and prints the result with one `<bx:output>`.
+> Use `<bx:output>` to evaluate `#expression#` in markup. This example keeps branching in `<bx:script>` and renders the result with one output block.

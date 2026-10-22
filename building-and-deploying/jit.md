@@ -1,6 +1,6 @@
 ---
 title: JIT compilation
-description: How the four-tier Cranelift JIT in the native CLI compiles hot loops and functions, and where it is off.
+description: How MatchBox uses Cranelift to compile hot loops and functions in native builds.
 ---
 
 # JIT Compilation
@@ -11,14 +11,7 @@ MatchBox includes a multi-tier JIT compiler built on [Cranelift](https://craneli
 
 ## Where JIT is Available
 
-| Build target | JIT active? | Reason |
-| :--- | :---: | :--- |
-| Native CLI (`matchbox script.bxs`) | Yes | Enabled by default in the native CLI binary |
-| Native runner stubs (cross-deployed) | No | Stubs are built without the `jit` feature to keep their embedded size down |
-| WASM (browser / container) | No | Cranelift does not target WASM; the browser's own JIT runs the WASM module |
-| ESP32 / embedded | No | The `matchbox-esp32-runner` crate is workspace-excluded and has no Cranelift dependency |
-
-The JIT is compiled in via the `jit` Cargo feature, which is included in the default feature set of the `matchbox` CLI crate. The `matchbox_vm` library crate keeps `jit` opt-in (default off) so that consumers (the ESP32 runner, WASM runner, and native runner stubs) remain lean unless they explicitly request it.
+JIT is available in native builds with the `jit` feature, including the default CLI and native runners built with it. Browser/WASI and ESP32 builds use the interpreter. A browser's WebAssembly engine may optimize the module independently.
 
 ---
 

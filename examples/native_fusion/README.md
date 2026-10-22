@@ -222,10 +222,9 @@ for the innermost loops where performance is measured and critical.
 
 | Feature | Status |
 |---|---|
-| Available in native builds | ✅ |
-| Available in WASM builds | ❌ `--target js` with a `native/` directory fails to compile in v0.11.0 |
+| Supported targets | Native, browser/JavaScript, WASI (experimental), and ESP32; Rust code must support the target. |
 | Multiple `.rs` files in `native/` | ✅ Each may export `register_bifs()` and/or `register_classes()` |
-| Using external Rust crates | ✅ Add a `Cargo.toml` to `native/` |
+| Using external Rust crates | Add a `Cargo.toml` to `native/`. |
 | Mutable `self` in `#[matchbox_methods]` | ✅ Dispatcher takes `&mut self` |
 | Property access on native objects | ⚠️ Override `get_property` in `BxNativeObject` manually |
 
