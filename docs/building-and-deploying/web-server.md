@@ -4,8 +4,6 @@ description: Serve a directory of static files and BoxLang templates with matchb
 icon: phosphor-duotone:browser
 ---
 
-# Web server
-
 MatchBox has two web runtimes. Both are implemented in the `matchbox_server` crate and run on the same VM as the CLI.
 
 | | Webroot server | App server |

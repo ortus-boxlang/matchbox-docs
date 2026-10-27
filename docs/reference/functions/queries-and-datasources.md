@@ -6,8 +6,6 @@ icon: phosphor-duotone:database
 order: 8
 ---
 
-# Queries and Datasources
-
 Query objects, queryExecute, transactions and datasource registration. 43 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

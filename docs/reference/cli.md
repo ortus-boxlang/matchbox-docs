@@ -4,8 +4,6 @@ description: Run scripts, build applications and select deployment targets with 
 icon: phosphor-duotone:terminal-window
 ---
 
-# MatchBox CLI
-
 Use `matchbox` to run BoxLang, explore the REPL or package an application. Run `matchbox --help` for the options available in your installation.
 
 ```text

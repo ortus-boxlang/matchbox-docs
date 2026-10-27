@@ -6,8 +6,6 @@ icon: phosphor-duotone:terminal-window
 order: 10
 ---
 
-# System and CLI
-
 Output, runtime information, process execution, command-line input, Java interop and TUI classes. 50 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

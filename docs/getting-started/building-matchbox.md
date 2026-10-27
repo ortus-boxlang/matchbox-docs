@@ -3,8 +3,6 @@ title: Building MatchBox from source
 description: Build the MatchBox CLI, choose Cargo features and prepare target toolchains.
 ---
 
-# Building MatchBox from source
-
 You do not need Rust to use a prebuilt CLI. Build from source when you want to contribute to MatchBox or customize the runtime.
 
 ## Build the CLI

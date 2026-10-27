@@ -3,8 +3,6 @@ title: Basic BoxLang project
 description: A minimal multi-file BoxLang project with a script entry point and model classes.
 ---
 
-# Basic BoxLang Project
-
 This example shows a minimal multi-file BoxLang project with a script entry point
 and model classes split across separate files - the most common project structure
 for a BoxLang application.

@@ -5,8 +5,6 @@ icon: phosphor-duotone:graduation-cap
 tags: [course]
 ---
 
-# Learn MatchBox
-
 MatchBox is the Rust runtime for BoxLang. This course takes you from a first script to a native executable in ten short lessons. You do not need to install anything to start: every code sample has a **Run this in your browser** button that opens a real MatchBox runtime, compiled to WebAssembly, right under the code. Edit the sample, break it, run it again.
 
 Your progress is remembered in this browser, so you can stop and pick up where you left off.

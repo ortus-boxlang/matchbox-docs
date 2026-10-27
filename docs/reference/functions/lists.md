@@ -6,8 +6,6 @@ icon: phosphor-duotone:list-bullets
 order: 7
 ---
 
-# Lists
-
 Delimited-list functions. 35 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

@@ -4,8 +4,6 @@ description: Explore working MatchBox examples across native, web, serverless, W
 icon: phosphor-duotone:code
 ---
 
-# Explore MatchBox examples
-
 Start with a focused example and check its README for prerequisites and target-specific validation.
 
 ::: cards

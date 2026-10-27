@@ -3,8 +3,6 @@ title: JavaScript and WebAssembly
 description: Compile BoxLang to an ES module for the browser with --target js, and call its functions through BoxLangVM.
 ---
 
-# JavaScript + WebAssembly
-
 Use `--target js` to package a BoxLang application or library for the browser.
 
 | Mode | Command | Status |

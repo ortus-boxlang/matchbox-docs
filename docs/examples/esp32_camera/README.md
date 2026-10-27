@@ -3,8 +3,6 @@ title: ESP32 Camera Streamer
 description: An ESP32 example showing BoxLang-to-native BIF registration and serial output.
 ---
 
-# ESP32 camera streamer
-
 This example shows a BoxLang script calling native Rust functions for `cameraInit()`, `cameraTake()`, and `serialWrite()`. The script sends ten byte arrays over the serial interface.
 
 > [!warning] Camera capture is simulated

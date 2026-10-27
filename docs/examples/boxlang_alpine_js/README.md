@@ -3,8 +3,6 @@ title: BoxLang and Alpine.js
 description: Define an Alpine.js data component in BoxLang through the browser js bridge.
 ---
 
-# BoxLang + Alpine.js Example
-
 This example demonstrates how to define an **Alpine.js Data Component** using 100% BoxLang code.
 
 ## How it works

@@ -4,8 +4,6 @@ description: Explore BoxLang syntax, classes, collections, errors and host integ
 icon: phosphor-duotone:book-bookmark
 ---
 
-# Language reference
-
 Use these pages to explore language features and common patterns. Start with the [course](../../course/index.md) for a guided introduction, or browse the [function reference](../functions/index.md) for built-in functions.
 
 | Page | Covers |

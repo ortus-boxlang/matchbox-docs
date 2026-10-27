@@ -5,8 +5,6 @@ icon: phosphor-duotone:git-branch
 tags: [course]
 ---
 
-# Errors and control flow
-
 ## Choosing a path
 
 ```boxlang title="conditions.bxs"

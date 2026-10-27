@@ -5,8 +5,6 @@ icon: phosphor-duotone:hand-waving
 tags: [course]
 ---
 
-# Welcome to MatchBox
-
 **BoxLang** is a dynamic language for building applications. It normally runs on the JVM. **MatchBox** is a second runtime for the same language, written in Rust. It compiles your code to bytecode and runs it on a small virtual machine, which lets BoxLang go places the JVM does not fit: a single native executable, a browser tab, a serverless function, even a microcontroller.
 
 You write the same language either way. What changes is where it runs and what you can reach from it. MatchBox complements the JVM runtime, it does not replace it. See [what is MatchBox](../getting-started/what-is-matchbox.md) and [differences from BoxLang](../differences-from-boxlang.md) for the details.

@@ -4,8 +4,6 @@ description: Unpack collections, expand values and iterate over ranges.
 icon: phosphor-duotone:arrows-out-line-horizontal
 ---
 
-# Destructuring, spread and ranges
-
 Destructuring extracts values, spread expands collections, and ranges describe sequences for iteration.
 
 ## Destructuring

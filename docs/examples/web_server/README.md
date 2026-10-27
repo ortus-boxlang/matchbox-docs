@@ -3,8 +3,6 @@ title: Web server example
 description: The built-in MatchBox web server serving .bxm pages and static assets with session and form scopes.
 ---
 
-# MatchBox web server example
-
 This example serves a directory with `matchbox --serve`. It has BoxLang Markup (`.bxm`) pages, a static CSS file, and the `url`, `form`, `cookie`, `session` and `cgi` scopes. The [Web server guide](../../building-and-deploying/web-server.md) covers the server in full.
 
 ## Project structure

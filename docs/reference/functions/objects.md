@@ -6,8 +6,6 @@ icon: phosphor-duotone:cube
 order: 21
 ---
 
-# Native object methods
-
 Some built-in functions return native objects (a query, a file handle, a watcher, ...). These objects have their own methods, listed here by object. Method names are matched without regard to case. Web server, Lambda and TUI objects are only available in those runtimes or builds; the gate is shown for each object.
 
 ## Cache

@@ -4,8 +4,6 @@ description: Find runnable MatchBox examples and the source material behind thes
 icon: phosphor-duotone:code
 ---
 
-# Examples & resources
-
 The MatchBox repository contains examples for CLI applications, native builds, browser modules, WASI containers, HTTP servers, Lambda, ESP32, and Rust interoperability.
 
 ::: cards

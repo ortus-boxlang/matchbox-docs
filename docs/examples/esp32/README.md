@@ -3,8 +3,6 @@ title: ESP32 example
 description: Flash a small routed web app to an ESP32 board, with route files under app/ and an Application.bx.
 ---
 
-# ESP32 example
-
 This example is a small web app for an ESP32 board. The device joins Wi-Fi and serves the files under `app/`.
 
 ```

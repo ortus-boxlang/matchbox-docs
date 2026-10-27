@@ -5,8 +5,6 @@ icon: phosphor-duotone:download-simple
 tags: [course]
 ---
 
-# Install and run
-
 The browser is great for learning, but real projects live on your machine. This lesson installs MatchBox and runs the same script from a terminal.
 
 ## Install with MVM

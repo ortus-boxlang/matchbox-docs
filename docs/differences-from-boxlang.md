@@ -4,8 +4,6 @@ description: How MatchBox relates to BoxLang on the JVM, and what changes across
 icon: phosphor-duotone:arrows-left-right
 ---
 
-# BoxLang compatibility
-
 MatchBox is an independent Rust runtime for BoxLang. It shares the language's core syntax and programming model while bringing it to native binaries, browsers, WASI hosts and ESP32 devices.
 
 ## Familiar language, different runtime
