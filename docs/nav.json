@@ -1,7 +1,27 @@
 [
-  "index.md",
-  "playground.md",
-  "course/index.md",
+  {
+    "path": "index.md",
+    "icon": "phosphor-duotone:house"
+  },
+  {
+    "path": "playground.md",
+    "icon": "phosphor-duotone:play-circle"
+  },
+  {
+    "path": "course/index.md",
+    "children": [
+      "course/01-welcome.md",
+      "course/02-install-and-run.md",
+      "course/03-values-and-strings.md",
+      "course/04-arrays-and-structs.md",
+      "course/05-functions-and-callbacks.md",
+      "course/06-classes.md",
+      "course/07-errors-and-control-flow.md",
+      "course/08-async.md",
+      "course/09-build-and-ship.md",
+      "course/10-whats-next.md"
+    ]
+  },
   {
     "title": "Getting Started",
     "icon": "phosphor-duotone:rocket-launch",
@@ -17,30 +37,131 @@
     ]
   },
   {
-    "title": "Build & Deploy",
-    "icon": "phosphor-duotone:rocket",
+    "title": "Native Binaries",
+    "icon": "phosphor-duotone:cpu",
     "children": [
-      "building-and-deploying/native-builds.md",
-      "building-and-deploying/javascript-and-wasm.md",
-      "building-and-deploying/wasm-container.md",
-      "building-and-deploying/wasi-http.md",
-      "building-and-deploying/docker-image.md",
-      "building-and-deploying/esp32.md",
-      "building-and-deploying/aws-lambda-aws-cli-setup.md",
+      {
+        "path": "building-and-deploying/native-builds.md"
+      },
+      {
+        "title": "Native Fusion",
+        "path": "building-and-deploying/native-fusion.md",
+        "icon": "phosphor-duotone:puzzle-piece"
+      },
+      {
+        "title": "Docker",
+        "path": "building-and-deploying/docker-image.md",
+        "icon": "phosphor-duotone:shipping-container"
+      },
       {
         "title": "Examples",
-        "path": "examples/index.md",
+        "icon": "phosphor-duotone:code",
         "children": [
-          "examples/basic_project/README.md",
-          "examples/boxlang_alpine_js/README.md",
-          "examples/esp32/README.md",
-          "examples/esp32_camera/README.md",
-          "examples/java_interop/README.md",
-          "examples/native_fusion/README.md",
-          "examples/aws_lambda_single_file/README.md",
-          "examples/wasm_browser/README.md",
-          "examples/wasm_container/README.md"
+          {
+            "title": "Basic Project",
+            "path": "examples/basic_project/README.md",
+            "icon": "phosphor-duotone:file-code"
+          },
+          {
+            "title": "Native Fusion",
+            "path": "examples/native_fusion/README.md",
+            "icon": "phosphor-duotone:puzzle-piece"
+          },
+          {
+            "title": "Java Interop",
+            "path": "examples/java_interop/README.md",
+            "icon": "phosphor-duotone:coffee"
+          }
         ]
+      }
+    ]
+  },
+  {
+    "title": "WebAssembly",
+    "icon": "phosphor-duotone:browsers",
+    "children": [
+      {
+        "title": "JavaScript and WASM",
+        "path": "building-and-deploying/javascript-and-wasm.md",
+        "icon": "phosphor-duotone:file-code"
+      },
+      {
+        "title": "WASI Containers",
+        "path": "building-and-deploying/wasm-container.md",
+        "icon": "phosphor-duotone:cube"
+      },
+      {
+        "title": "WASI HTTP",
+        "path": "building-and-deploying/wasi-http.md"
+      },
+      {
+        "title": "Examples",
+        "icon": "phosphor-duotone:code",
+        "children": [
+          {
+            "title": "Browser Todo App",
+            "path": "examples/wasm_browser/README.md",
+            "icon": "phosphor-duotone:browser"
+          },
+          {
+            "title": "Alpine.js",
+            "path": "examples/boxlang_alpine_js/README.md",
+            "icon": "phosphor-duotone:lightning"
+          },
+          {
+            "title": "WASI Container",
+            "path": "examples/wasm_container/README.md",
+            "icon": "phosphor-duotone:cube"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "ESP32",
+    "icon": "phosphor-duotone:circuitry",
+    "children": [
+      {
+        "title": "Building for ESP32",
+        "path": "building-and-deploying/esp32.md",
+        "icon": "phosphor-duotone:wrench"
+      },
+      {
+        "title": "ESP32 Functions",
+        "path": "reference/functions/esp32.md",
+        "icon": "phosphor-duotone:function"
+      },
+      {
+        "title": "Examples",
+        "icon": "phosphor-duotone:code",
+        "children": [
+          {
+            "title": "Basics",
+            "path": "examples/esp32/README.md",
+            "icon": "phosphor-duotone:circuitry"
+          },
+          {
+            "title": "Camera Streamer",
+            "path": "examples/esp32_camera/README.md",
+            "icon": "phosphor-duotone:camera"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "AWS Lambda",
+    "icon": "phosphor-duotone:cloud-arrow-up",
+    "children": [
+      {
+        "title": "Setup",
+        "path": "building-and-deploying/aws-lambda-aws-cli-setup.md",
+        "icon": "phosphor-duotone:cloud-arrow-up"
+      },
+      {
+        "title": "Single-File Example",
+        "path": "examples/aws_lambda_single_file/README.md",
+        "icon": "phosphor-duotone:file-code"
       }
     ]
   },
@@ -48,11 +169,29 @@
     "title": "Web Development",
     "icon": "phosphor-duotone:globe-hemisphere-west",
     "children": [
-      "building-and-deploying/web-server.md",
-      "examples/web_server/README.md",
-      "examples/app_server/README.md",
-      "http.md",
-      "examples/websocket_counter/README.md"
+      {
+        "path": "building-and-deploying/web-server.md"
+      },
+      {
+        "title": "HTTP Requests",
+        "path": "http.md",
+        "icon": "phosphor-duotone:cloud"
+      },
+      {
+        "title": "Web Server Demo",
+        "path": "examples/web_server/README.md",
+        "icon": "phosphor-duotone:hard-drives"
+      },
+      {
+        "title": "App Server Demo",
+        "path": "examples/app_server/README.md",
+        "icon": "phosphor-duotone:stack"
+      },
+      {
+        "title": "WebSocket Counter",
+        "path": "examples/websocket_counter/README.md",
+        "icon": "phosphor-duotone:broadcast"
+      }
     ]
   },
   {
@@ -80,7 +219,7 @@
         ]
       },
       {
-        "title": "Function Reference",
+        "title": "Functions",
         "path": "reference/functions/index.md",
         "icon": "phosphor-duotone:function",
         "children": [
@@ -101,17 +240,59 @@
           "reference/functions/cache-and-watchers.md",
           "reference/functions/i18n.md",
           "reference/functions/http.md",
-          "reference/functions/esp32.md",
           "reference/functions/members.md",
           "reference/functions/objects.md"
         ]
       },
-      "reference/releases.md",
-      "differences-from-boxlang.md",
-      "building-and-deploying/native-fusion.md",
-      "building-and-deploying/jit.md",
-      "getting-started/building-matchbox.md",
-      "reference/examples.md"
+      {
+        "title": "Downloads",
+        "path": "reference/releases.md",
+        "icon": "phosphor-duotone:download-simple"
+      },
+      {
+        "title": "Release History",
+        "path": "reference/release-history/index.md",
+        "icon": "phosphor-duotone:clock-counter-clockwise",
+        "children": [
+          "reference/release-history/v0-12-0.md",
+          "reference/release-history/v0-11-0.md",
+          "reference/release-history/v0-10-2.md",
+          "reference/release-history/v0-10-1.md",
+          "reference/release-history/v0-10-0.md",
+          "reference/release-history/v0-8-0.md",
+          "reference/release-history/v0-7-0.md",
+          "reference/release-history/v0-6-3.md",
+          "reference/release-history/v0-6-1.md",
+          "reference/release-history/v0-6-0.md",
+          "reference/release-history/v0-5-0.md",
+          "reference/release-history/v0-4-0.md",
+          "reference/release-history/v0-3-0.md",
+          "reference/release-history/v0-2-0.md",
+          "reference/release-history/v0-1-0.md"
+        ]
+      },
+      {
+        "title": "JIT Compiler",
+        "path": "building-and-deploying/jit.md",
+        "icon": "phosphor-duotone:lightning"
+      },
+      {
+        "title": "Compatibility",
+        "path": "differences-from-boxlang.md"
+      },
+      {
+        "title": "Build from Source",
+        "path": "getting-started/building-matchbox.md",
+        "icon": "phosphor-duotone:hammer"
+      },
+      {
+        "title": "Examples",
+        "path": "examples/index.md"
+      },
+      {
+        "title": "Resources",
+        "path": "reference/examples.md"
+      }
     ]
   }
 ]
