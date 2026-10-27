@@ -4,8 +4,6 @@ description: Call Java classes from native MatchBox through the experimental JNI
 icon: phosphor-duotone:coffee
 ---
 
-# Java interop
-
 Native MatchBox can call Java classes through an experimental JNI bridge. This path needs a JDK on the host and a runtime built with `bif-jni`; it is not available in the browser.
 
 ## Calling a class

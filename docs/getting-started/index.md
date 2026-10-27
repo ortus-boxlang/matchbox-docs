@@ -5,8 +5,6 @@ order: 1
 icon: phosphor-duotone:rocket-launch
 ---
 
-# Get productive with MatchBox
-
 MatchBox brings BoxLang to environments where a JVM runtime is not the right fit: native applications, browsers, WASI hosts, serverless functions, and embedded devices. Start with the CLI, then select a target based on the capabilities your application needs.
 
 ::: stepper

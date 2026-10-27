@@ -6,8 +6,6 @@ icon: phosphor-duotone:folder-open
 order: 11
 ---
 
-# Files and I/O
-
 File, directory and path functions, plus ZIP and archive functions. 44 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

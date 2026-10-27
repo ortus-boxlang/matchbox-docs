@@ -4,8 +4,6 @@ description: Work with query objects and run SQL against configured datasources.
 icon: phosphor-duotone:database
 ---
 
-# Queries and data
-
 A query is a table of rows and named columns. You can build one in memory or obtain one from a database.
 
 Database functions are available in native builds with datasource support, not in the browser playground.

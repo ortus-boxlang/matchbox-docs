@@ -5,8 +5,6 @@ icon: phosphor-duotone:text-aa
 tags: [course]
 ---
 
-# Values and strings
-
 ## Variables
 
 You create a variable by assigning to it. There is no declaration keyword, and a variable can hold any type.

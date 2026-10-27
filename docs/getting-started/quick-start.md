@@ -5,8 +5,6 @@ order: 3
 icon: phosphor-duotone:terminal
 ---
 
-# Your first MatchBox application
-
 This walkthrough uses the MatchBox CLI and a single BoxLang script. If MatchBox is not installed yet, start with [Installation](installation.md).
 
 ## Write a script

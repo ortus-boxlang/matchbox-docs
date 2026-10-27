@@ -6,8 +6,6 @@ icon: phosphor-duotone:brackets-square
 order: 3
 ---
 
-# Arrays
-
 Array functions and array member functions. 72 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

@@ -1250,8 +1250,6 @@ function renderCategoryPage(cat, rows, order, extra = '') {
   lines.push(`order: ${order}`);
   lines.push('---');
   lines.push('');
-  lines.push(`# ${cat.title}`);
-  lines.push('');
   lines.push(`${cat.summary} ${rows.length} entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.`);
   lines.push('');
   if (extra) { lines.push(extra); lines.push(''); }
@@ -1277,8 +1275,6 @@ const RECEIVER_LABEL = {
 function renderMembersPage(members, order) {
   const lines = [];
   lines.push(frontmatter('Member Functions', 'Every member function the VM resolves for built-in types, and the function each one calls.', 'arrow-elbow-down-right', order));
-  lines.push('# Member functions');
-  lines.push('');
   lines.push('A member call such as `"abc".ucase()` or `items.map( fn )` is resolved by a fixed table in the VM (`resolve_member_method`). Each entry maps `(type, member name)` to a function and calls it with the value as the first argument. Names are matched without regard to case. A function that has no entry for a type cannot be called as a member on that type, even when the global function exists.');
   lines.push('');
   lines.push('Struct values also run any function stored under the member name in the struct itself, before the table is consulted. Class instances, native objects and Java objects use their own methods; see [Native object methods](objects.md).');
@@ -1304,8 +1300,6 @@ function renderMembersPage(members, order) {
 function renderObjectsPage(methods, order) {
   const lines = [];
   lines.push(frontmatter('Native Object Methods', 'Methods of the objects that built-in functions and the runtimes return.', 'cube', order));
-  lines.push('# Native object methods');
-  lines.push('');
   lines.push('Some built-in functions return native objects (a query, a file handle, a watcher, ...). These objects have their own methods, listed here by object. Method names are matched without regard to case. Web server, Lambda and TUI objects are only available in those runtimes or builds; the gate is shown for each object.');
   lines.push('');
   const objs = [...new Set(methods.map((m) => m.receiver))].sort(ci);
@@ -1328,8 +1322,6 @@ function renderIndex(ctx) {
   const { counts, pageRows, parity, pageOrder } = ctx;
   const L = [];
   L.push(frontmatter('Function Reference', 'Built-in functions and member functions, grouped by purpose.', 'function', 1));
-  L.push('# Function reference');
-  L.push('');
   L.push('Explore built-in functions and member methods by topic. These pages are generated from runtime registrations; availability depends on the target and build. For broader language documentation, see [BoxLang](https://boxlang.ortusbooks.com/).');
   L.push('');
   L.push('## How to read the tables');

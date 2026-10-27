@@ -6,8 +6,6 @@ icon: phosphor-duotone:file-code
 order: 12
 ---
 
-# JSON, YAML, TOML and XML
-
 Serialization and parsing of JSON, YAML, TOML and XML. 27 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

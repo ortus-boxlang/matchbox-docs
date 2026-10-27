@@ -4,8 +4,6 @@ description: Package a BoxLang application as a standalone executable for a desk
 icon: phosphor-duotone:cpu
 ---
 
-# Native builds
-
 Build a standalone executable with the MatchBox runner and your compiled BoxLang code. The destination does not need a separate MatchBox installation or Java for ordinary BoxLang execution.
 
 ## Build for the current host

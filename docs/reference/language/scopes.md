@@ -4,8 +4,6 @@ description: Variables, function arguments, closures and web request scopes in M
 icon: phosphor-duotone:stack
 ---
 
-# Scopes
-
 A scope is a named place to store variables. Scripts, functions, classes and web requests each provide context for the values you use.
 
 ## Scripts and functions

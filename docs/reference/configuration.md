@@ -4,8 +4,6 @@ description: Project settings for modules, datasources and ESP32 builds.
 icon: phosphor-duotone:sliders-horizontal
 ---
 
-# Configuration
-
 Run MatchBox from your project directory so relative paths and project settings resolve together.
 
 | File or directory | Purpose |

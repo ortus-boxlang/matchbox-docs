@@ -6,8 +6,6 @@ icon: phosphor-duotone:lock-key
 order: 13
 ---
 
-# Encoding and Crypto
-
 Hashing, encryption, Base64, binary encoding and character sets. 18 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

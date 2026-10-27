@@ -5,8 +5,6 @@ order: 3
 icon: phosphor-duotone:download-simple
 ---
 
-# Install MatchBox
-
 MatchBox publishes one full CLI per supported operating system and architecture, with the VM, compiler, REPL, built-in webroot server, and embedded cross-platform runners. Running ordinary BoxLang code does not require a JVM.
 
 ## Install with MVM

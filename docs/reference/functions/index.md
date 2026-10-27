@@ -6,8 +6,6 @@ icon: phosphor-duotone:function
 order: 1
 ---
 
-# Function reference
-
 Explore built-in functions and member methods by topic. These pages are generated from runtime registrations; availability depends on the target and build. For broader language documentation, see [BoxLang](https://boxlang.ortusbooks.com/).
 
 ## How to read the tables

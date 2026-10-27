@@ -3,8 +3,6 @@ title: WASI deployment (experimental)
 description: Build experimental WebAssembly workloads for a WASI host.
 ---
 
-# WASI deployment
-
 !!! warning "Experimental"
     WASI packaging and host compatibility are still evolving. Start with a small workload on your intended host.
 

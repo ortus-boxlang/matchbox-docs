@@ -5,8 +5,6 @@ order: 2
 icon: phosphor-duotone:circles-three-plus
 ---
 
-# What is MatchBox?
-
 MatchBox is an independent Rust implementation of the BoxLang language and runtime. It brings BoxLang to native binaries, browser and server-side WebAssembly, and embedded targets without requiring a JVM for its core runtime.
 
 BoxLang is a software productivity platform for building, modernizing, and running applications, with developers and AI agents working together. MatchBox is a pillar of that platform for workloads that need a portable runtime or a target beyond the JVM.

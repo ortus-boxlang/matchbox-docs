@@ -3,8 +3,6 @@ title: Native Fusion example
 description: Rust functions and a stateful native object used from BoxLang in a single native binary.
 ---
 
-# Native Fusion Example
-
 **Native Fusion** lets you write performance-critical functions and stateful
 objects in Rust and use them directly from BoxLang. Everything is statically
 linked into a single native binary - no external libraries, no FFI boilerplate

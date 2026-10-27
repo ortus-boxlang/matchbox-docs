@@ -4,8 +4,6 @@ description: Add reusable BoxLang code, settings and native functionality to an 
 icon: phosphor-duotone:puzzle-piece
 ---
 
-# Modules
-
 A module is a reusable BoxLang package. It can provide functions, classes, components and settings, with an optional native backend for MatchBox.
 
 ## Using a module

@@ -4,8 +4,6 @@ description: Start asynchronous work, collect results and handle errors with fut
 icon: phosphor-duotone:lightning
 ---
 
-# Async and futures
-
 A future represents a result that may not be ready yet. `runAsync()` starts work and returns a future; `get()` waits for its result.
 
 ## Starting work

@@ -6,8 +6,6 @@ icon: phosphor-duotone:cloud-arrow-down
 order: 18
 ---
 
-# HTTP and Network
-
 HTTP requests, SOAP clients and local host information. 3 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 For the options and result fields of `http()`, see [HTTP requests](../../http.md).

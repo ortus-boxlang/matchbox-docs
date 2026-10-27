@@ -4,8 +4,6 @@ description: Create sets, compare collections and combine values with set algebr
 icon: phosphor-duotone:circles-three
 ---
 
-# Sets
-
 A set holds each value once. Create one with a literal, `setNew()`, `setOf()` or `toSet()`.
 
 ## Creating a set

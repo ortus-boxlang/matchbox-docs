@@ -3,8 +3,6 @@ title: WebSocket counter example
 description: The routed app server plus websocket listeners, broadcasting a shared counter to every browser tab.
 ---
 
-# MatchBox WebSocket Counter Example
-
 This example demonstrates the routed app server plus SocketBox-style websocket listeners.
 
 It serves an HTML page at `/`, opens a websocket connection to `/ws`, increments a shared counter when the button is clicked, and broadcasts the new count to every connected browser tab.

@@ -5,8 +5,6 @@ order: 6
 icon: phosphor-duotone:terminal
 ---
 
-# Build and run an application
-
 MatchBox supports a quick interpreter loop and multiple deployment targets. Start by running a source file, then select a build based on the target host.
 
 ## Run a BoxLang script

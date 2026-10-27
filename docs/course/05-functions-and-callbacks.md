@@ -5,8 +5,6 @@ icon: phosphor-duotone:function
 tags: [course]
 ---
 
-# Functions and callbacks
-
 ## Functions
 
 ```boxlang title="functions.bxs"

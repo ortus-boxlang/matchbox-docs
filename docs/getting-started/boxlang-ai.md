@@ -6,8 +6,6 @@ icon: phosphor-duotone:sparkle
 tags: [ai, boxlang, getting-started]
 ---
 
-# BoxLang AI
-
 BoxLang AI is about adding AI capabilities to an application: connecting providers, composing prompts, using tools and agents, and integrating capabilities such as memory or retrieval. That is different from **Agentic Development**, where an AI coding agent helps a developer create the application.
 
 Start with the [official BoxLang AI documentation](https://boxlang.ortusbooks.com/boxlang-ai/boxlang-ai.md) for the current feature set and supported integrations.

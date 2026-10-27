@@ -4,8 +4,6 @@ description: Mix markup and BoxLang to render pages from the CLI or web server.
 icon: phosphor-duotone:file-html
 ---
 
-# Templates (.bxm)
-
 A `.bxm` file combines markup with BoxLang tags and script blocks. Run a template with `matchbox page.bxm`, or serve a directory with `matchbox --serve --webroot www`.
 
 ## A simple template

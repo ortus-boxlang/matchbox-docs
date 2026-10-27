@@ -6,8 +6,6 @@ icon: phosphor-duotone:arrow-elbow-down-right
 order: 20
 ---
 
-# Member functions
-
 A member call such as `"abc".ucase()` or `items.map( fn )` is resolved by a fixed table in the VM (`resolve_member_method`). Each entry maps `(type, member name)` to a function and calls it with the value as the first argument. Names are matched without regard to case. A function that has no entry for a type cannot be called as a member on that type, even when the global function exists.
 
 Struct values also run any function stored under the member name in the struct itself, before the table is consulted. Class instances, native objects and Java objects use their own methods; see [Native object methods](objects.md).

@@ -5,8 +5,6 @@ icon: phosphor-duotone:cube
 tags: [course]
 ---
 
-# Classes and objects
-
 A **class** bundles data with the functions that work on it. You create an object from a class with `new`.
 
 ## A first class

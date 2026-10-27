@@ -4,8 +4,6 @@ description: Package a webroot of static files and BoxLang templates as a single
 icon: phosphor-duotone:cube
 ---
 
-# WASI HTTP
-
 !!! warning "Experimental"
     WASI HTTP packaging and host compatibility are still evolving. Test the component on your intended host before deployment.
 

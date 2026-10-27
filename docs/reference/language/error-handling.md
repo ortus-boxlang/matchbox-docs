@@ -4,8 +4,6 @@ description: Handle errors with typed catch blocks, finally, throw and rethrow.
 icon: phosphor-duotone:warning
 ---
 
-# Error handling
-
 Use `try` and `catch` to handle errors, and `finally` for cleanup. The [errors lesson](../../course/07-errors-and-control-flow.md) introduces the basics.
 
 ## try, catch, finally

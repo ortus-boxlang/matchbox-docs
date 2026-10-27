@@ -5,8 +5,6 @@ icon: phosphor-duotone:lightning
 tags: [course]
 ---
 
-# Running work at the same time
-
 A **future** stands for a value that is not ready yet. `runAsync` starts some work and hands you a future straight away. You call `get()` on it when you need the result.
 
 ## Your first future

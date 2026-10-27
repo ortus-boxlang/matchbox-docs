@@ -6,8 +6,6 @@ icon: phosphor-duotone:circles-three
 order: 15
 ---
 
-# Sets
-
 Set construction and set member functions. 21 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |
