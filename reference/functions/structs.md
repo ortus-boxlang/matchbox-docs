@@ -6,8 +6,6 @@ icon: phosphor-duotone:brackets-curly
 order: 4
 ---
 
-# Structs
-
 Struct functions and struct member functions. 33 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

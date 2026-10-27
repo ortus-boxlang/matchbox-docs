@@ -5,8 +5,6 @@ order: 5
 icon: phosphor-duotone:brackets-curly
 ---
 
-# Language essentials
-
 MatchBox runs BoxLang on a Rust VM. This tour introduces the core language; use the Run buttons to try examples in your browser.
 
 For runtime and target differences, see [BoxLang compatibility](../differences-from-boxlang.md). For the language in depth, use the [language reference](../reference/language/index.md). To learn by doing, start with the [course](../course/index.md).

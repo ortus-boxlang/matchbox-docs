@@ -3,8 +3,6 @@ title: AWS Lambda
 description: Run BoxLang on AWS Lambda with the MatchBox runtime: the handler contract, routing, Application.bx lifecycle, deploy flags and AWS CLI setup.
 ---
 
-# AWS Lambda
-
 MatchBox runs on Lambda's `provided.al2023` custom runtime. The package is a `bootstrap` executable plus your `.bx` files. On each invocation the runtime loads a BoxLang class and calls its `run` method with the event.
 
 See the [single-file Lambda example](../examples/aws_lambda_single_file/README.md) for a complete project.

@@ -4,8 +4,6 @@ description: Arithmetic, comparison, logic, bitwise operations and null handling
 icon: phosphor-duotone:plus-minus
 ---
 
-# Operators
-
 BoxLang provides symbolic and word operators for calculations, comparisons and control flow.
 
 ## Arithmetic and strings

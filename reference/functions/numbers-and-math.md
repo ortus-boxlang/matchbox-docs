@@ -6,8 +6,6 @@ icon: phosphor-duotone:calculator
 order: 5
 ---
 
-# Numbers and Math
-
 Arithmetic, rounding, trigonometry, random numbers, bit operations and number formatting. 43 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

@@ -3,8 +3,6 @@ title: Building for ESP32
 description: Build and flash MatchBox firmware for ESP32 chips, serve routes from an app directory, and use the ESP32 built-in functions.
 ---
 
-# Building for ESP32
-
 `matchbox --target esp32` cross-compiles the MatchBox ESP32 runner, flashes it, and writes your application to a flash partition. The standard runner is a small web application server: it starts Wi-Fi, listens for HTTP, and runs BoxLang files in response to requests.
 
 ## What the runner executes

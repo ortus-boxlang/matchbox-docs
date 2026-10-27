@@ -5,8 +5,6 @@ icon: phosphor-duotone:clock-counter-clockwise
 order: 3
 ---
 
-# Release history
-
 Every stable MatchBox release, newest first. Each version links to its changelog. The source of truth is [CHANGELOG.md](https://github.com/ortus-boxlang/matchbox/blob/master/CHANGELOG.md) in the repository and the [GitHub releases](https://github.com/ortus-boxlang/matchbox/releases) page.
 
 For install commands and download locations, see [releases and downloads](../releases.md). To move between versions, use `mvm install <version>` and `mvm use <version>`.

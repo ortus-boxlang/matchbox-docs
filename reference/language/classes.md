@@ -4,8 +4,6 @@ description: Create objects with constructors, methods, properties and inheritan
 icon: phosphor-duotone:cube
 ---
 
-# Classes
-
 A class groups data with the methods that work on it. Define one inside a script or in a `.bx` file, then create an instance with `new`.
 
 ## Constructor, this and variables

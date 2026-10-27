@@ -6,8 +6,6 @@ icon: phosphor-duotone:robot
 tags: [ai, agents, getting-started]
 ---
 
-# Agentic Development with MatchBox
-
 Agentic development is the practice of working with an AI coding agent that can inspect a project, make changes, and run its checks. MatchBox is one pillar of the BoxLang software productivity platform; the agent still needs clear project constraints and a way to validate its work.
 
 For BoxLang's broader approach to agentic development, see the [official Agentic Development guide](https://boxlang.ortusbooks.com/getting-started/agentic-development).

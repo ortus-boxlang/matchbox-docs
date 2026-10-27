@@ -6,8 +6,6 @@ icon: phosphor-duotone:question
 order: 9
 ---
 
-# Types and Decisions
-
 Type checks, conversions and boolean formatting. 36 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

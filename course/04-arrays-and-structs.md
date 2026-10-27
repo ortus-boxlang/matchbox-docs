@@ -5,8 +5,6 @@ icon: phosphor-duotone:brackets-square
 tags: [course]
 ---
 
-# Arrays and structs
-
 An **array** is an ordered list. A **struct** is a set of named values, like an object or a dictionary. Between them they cover most of the data you will handle.
 
 ## Arrays

@@ -5,8 +5,6 @@ icon: phosphor-duotone:compass
 tags: [course]
 ---
 
-# Where to go next
-
 You can now write and run MatchBox programs and ship them. Here is where each interest leads.
 
 ## Go deeper

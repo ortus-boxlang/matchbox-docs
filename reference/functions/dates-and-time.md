@@ -6,8 +6,6 @@ icon: phosphor-duotone:calendar
 order: 6
 ---
 
-# Dates and Time
-
 Date and time creation, parts, arithmetic, formatting and time zones. 47 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

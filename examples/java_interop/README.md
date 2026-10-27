@@ -3,8 +3,6 @@ title: Java interop example
 description: Use Java collections, strings and static methods from a native MatchBox script.
 ---
 
-# Java interop example
-
 This example uses the experimental JNI bridge to call `StringBuilder`, `ArrayList`, `HashMap` and `Math`.
 
 ## Run it

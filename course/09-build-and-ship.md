@@ -5,8 +5,6 @@ icon: phosphor-duotone:package
 tags: [course]
 ---
 
-# Build and ship
-
 Up to now you have run source files. MatchBox can also build them into something you can ship. This lesson uses a terminal, because a browser tab cannot create files.
 
 Start with this script, saved as `hello.bxs`. Run it here first to be sure it works.

@@ -5,8 +5,6 @@ order: 2
 icon: phosphor-duotone:package
 ---
 
-# Releases and downloads
-
 MatchBox publishes eight full CLI binaries and a Linux multiarchitecture Docker image. See [installation](../getting-started/installation.md) for supported platforms and MVM commands, or [Docker](../building-and-deploying/docker-image.md) for image usage.
 
 ## Stable and snapshot versions

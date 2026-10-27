@@ -6,8 +6,6 @@ icon: phosphor-duotone:cpu
 order: 19
 ---
 
-# ESP32
-
 Functions available to programs running on the ESP32 firmware. 29 entries. This page is generated from the MatchBox source; see the [function reference index](index.md) for how to read the tables and what each gate means.
 
 | Function | Forms | Gate | Notes |

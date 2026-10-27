@@ -3,8 +3,6 @@ title: WASI example (experimental)
 description: Run a BoxLang data summary and Fibonacci calculation in a WASI host.
 ---
 
-# WASI example
-
 This example runs a small data summary and Fibonacci calculation outside the browser. WASI support is experimental; see [WASI deployment](../../building-and-deploying/wasm-container.md) for setup.
 
 ## Build and run

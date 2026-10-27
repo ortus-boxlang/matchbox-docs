@@ -3,8 +3,6 @@ title: HTTP requests
 description: Make HTTP requests from MatchBox with http(): futures, request options, defaults and examples.
 ---
 
-# HTTP Requests
-
 Native MatchBox includes `http()` when built with the `bif-http` feature (enabled by default). Requests run in-process; no curl executable or shell is needed. This also works in [standalone native binaries](building-and-deploying/native-builds.md).
 
 ## Make a Request

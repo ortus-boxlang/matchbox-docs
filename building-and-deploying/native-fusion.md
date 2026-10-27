@@ -3,8 +3,6 @@ title: Native Fusion reference
 description: Expose Rust functions and classes to BoxLang as BIFs and native objects in a native build.
 ---
 
-# Native Fusion: Rust Interop Reference
-
 **Native Fusion** links Rust functions and objects into your BoxLang application. It supports every MatchBox target: native, browser/JavaScript, WASI and ESP32.
 
 Rust code and dependencies must support the selected target. Browser builds cannot use desktop OS APIs, and ESP32 code must fit the device. [WASI remains experimental](wasm-container.md).
