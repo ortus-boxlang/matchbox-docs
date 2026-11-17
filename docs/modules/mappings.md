@@ -54,7 +54,7 @@ this.mapping = {
 };
 ```
 
-With `usePrefix: false` the mapping is `/greet/`, and classes are created as `new greet.models.Counter()`.
+With `usePrefix: false` the mapping is `/greet/`, and classes are created as `new greet.models.Counter()`. The invocation path stays `bxModules.greet`, so `new bxModules.greet.models.Counter()` and relative interceptor class names keep working.
 
 ## The public folder
 
