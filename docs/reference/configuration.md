@@ -11,10 +11,70 @@ Run MatchBox from your project directory so relative paths and project settings 
 | `box.json` | Package dependencies and ESP32 build settings. |
 | `boxlang.json` | Runtime settings, including module configuration. |
 | `matchbox.toml` | Explicit module paths and datasources. |
+| `.env` | Project environment variables, loaded on every run. |
+| `.matchbox.json` | Project runtime settings, used instead of the home's `matchbox.json`. |
+| `~/.matchbox/` | The MatchBox home: `config/matchbox.json`, `logs/` and shared directories. |
+| `~/.matchbox.env` | Personal environment variables, loaded on every run. |
 | `boxlang_modules/` | Project-local modules. |
 | `BOXLANG_HOME/modules/` | Shared modules in the runtime home. |
 
 Command-line options override the relevant settings for a run. See the [CLI reference](cli.md) for commands and [environment variables](cli.md#environment-variables).
+
+## Runtime home
+
+MatchBox creates its home on first run. The default is `~/.matchbox`; choose another with `--bx-home <dir>` or `MATCHBOX_HOME`.
+
+```text
+~/.matchbox/
+  bin/  classes/  config/  global/  logs/  lib/  modules/
+  config/matchbox.json
+```
+
+`config/matchbox.json` is created once and never overwritten. It uses the BoxLang `boxlang.json` format, so comments are allowed and `${matchbox-home}` and `${user-dir}` expand in string values. MatchBox reads the first of these that exists:
+
+1. `--bx-config <file>`
+2. `MATCHBOX_CONFIG`
+3. `.matchbox.json` in the working directory
+4. `<home>/config/matchbox.json`
+
+A file named with the flag or variable must exist. Keys MatchBox does not use yet are ignored.
+
+| Key | Default | Purpose |
+| --- | --- | --- |
+| `debugMode` | `false` | Raises the log level to `DEBUG`. |
+| `logging.logsDirectory` | `${matchbox-home}/logs` | Where log files go. |
+| `logging.rootLevel` | `WARN` | `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE` or `OFF`. |
+| `logging.defaultEncoder` | `text` | `text` or `json`. |
+| `logging.maxFileSize` | `100MB` | Size that rotates `matchbox.log`. |
+| `logging.maxLogDays` | `90` | Days to keep rotated files. `0` keeps them. |
+| `logging.totalCapSize` | `5GB` | Cap for all log files; the oldest rotated files go first. |
+
+```json
+{
+  "logging": { "rootLevel": "INFO", "defaultEncoder": "json" }
+}
+```
+
+The runtime writes to `<logsDirectory>/matchbox.log`. The home and logs apply to the interpreter, the REPL, `--serve` and native binaries, not to browser, WASM or ESP32 targets.
+
+## Environment files
+
+Two files load on every run, in this order:
+
+1. `~/.matchbox.env` for your personal defaults.
+2. `.env` in the directory where you run `matchbox`.
+
+The project file wins when a key is in both, and file values win over the operating system environment. With `--serve`, `.env` in the web root loads too.
+
+```text
+# ~/.matchbox.env
+DB_HOST=localhost
+
+# .env
+DB_HOST=staging.example.com
+```
+
+Each line is `KEY=VALUE`. Lines starting with `#` are comments and quotes around a value are optional. Read values with `getSystemSetting("DB_HOST", "localhost")`. Keep real secrets out of source control and add `.env` to `.gitignore`.
 
 ## Modules
 
