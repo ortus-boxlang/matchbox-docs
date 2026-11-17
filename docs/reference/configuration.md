@@ -132,7 +132,7 @@ A module contains `ModuleConfig.bx` and can provide BoxLang code, settings and n
 }
 ```
 
-See [Modules](language/modules.md) for the package layout and lifecycle.
+See [Using Modules](../modules/using-modules.md) and [Module Development](../modules/index.md).
 
 ## matchbox.toml
 

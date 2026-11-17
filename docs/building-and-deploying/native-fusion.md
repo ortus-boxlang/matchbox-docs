@@ -323,7 +323,7 @@ semver = "1"
 
 MatchBox merges them into the generated build. Relative path dependencies resolve against `native/`. Do not redeclare crates supplied by Fusion, such as `matchbox_vm`.
 
-Reusable native functionality can also live in a [module](../reference/language/modules.md).
+Reusable native functionality can also live in a [module](../modules/native/index.md).
 
 ---
 

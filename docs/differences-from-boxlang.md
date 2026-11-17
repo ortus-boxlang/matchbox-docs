@@ -40,7 +40,7 @@ Only part of the BoxLang config format is used so far: `debugMode` and `logging`
 
 The JVM runtime has direct access to Java libraries and the broader JVM ecosystem. MatchBox uses its own host integrations and native modules. A JVM library or module may need a MatchBox backend rather than running unchanged.
 
-- [Modules](reference/language/modules.md) add shared BoxLang code and optional native functionality.
+- [Modules](modules/index.md) add shared BoxLang code and optional native functionality.
 - [Java interop](reference/language/java-interop.md) is experimental and is not available in the browser.
 - [Web development](building-and-deploying/web-server.md) provides templates, routes and request scopes on server builds.
 - [Database access](reference/language/query-and-data.md) depends on the build and driver.
