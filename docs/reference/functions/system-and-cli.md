@@ -58,5 +58,5 @@ Output, runtime information, process execution, command-line input, Java interop
 | `tui.Text` | `createObject( "rust", "tui.Text" )` | `bif-tui` | Native class; create it with createObject. |
 | `tui.TUI` | `createObject( "rust", "tui.TUI" )` | `bif-tui` | Native class; create it with createObject. |
 | `tui.VBox` | `createObject( "rust", "tui.VBox" )` | `bif-tui` | Native class; create it with createObject. |
-| `writeLog` | `writeLog( ... )` | always |  |
+| `writeLog` | `writeLog( text, type, application, log, file )` | always | Writes a message to a log file. See Logging. |
 | `writeOutput` | `writeOutput( ... )` | always |  |

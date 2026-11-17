@@ -25,16 +25,16 @@ Native Fusion lets you add Rust code on all targets. The Rust code and its depen
 
 ## Home, configuration and `.env` files
 
-MatchBox follows the BoxLang CLI, with its own names so the two runtimes never read each other's files. It does not read `~/.boxlang`, `BOXLANG_HOME` for runtime settings, `~/.box.env` or `boxlang.json` as runtime configuration.
+MatchBox follows the BoxLang CLI, with its own names so the two runtimes never read each other's files. It does not read `~/.boxlang`, `BOXLANG_HOME` for runtime settings or `~/.box.env`. The config file format is the same `boxlang.json`, layered from the home, the project and `--bx-config`.
 
 | | BoxLang | MatchBox |
 | --- | --- | --- |
 | Home | `~/.boxlang` | `~/.matchbox` |
-| Runtime config | `boxlang.json` | `matchbox.json` |
+| Runtime config | `config/boxlang.json` in the home | `config/boxlang.json` in the MatchBox home |
 | User env file | `~/.box.env` | `~/.matchbox.env` |
 | Project env file | `.env` | `.env` |
 
-Only part of the BoxLang config format is used so far. See [Configuration](reference/configuration.md#runtime-home).
+Only part of the BoxLang config format is used so far: `debugMode` and `logging`, with `writeLog()` and `bx:log` writing to those loggers. See [Configuration](reference/configuration.md#runtime-home).
 
 ## Host APIs and modules
 

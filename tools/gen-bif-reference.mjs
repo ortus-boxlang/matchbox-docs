@@ -980,6 +980,7 @@ const DESCRIPTIONS = {
   "generatesecretkey": "Generates a key for the given algorithm, for example \"AES\".",
   "getlocale": "Returns the current locale name.",
   "getlocalhostip": "Returns the local IP address as a string, or as an array holding one address when the first argument is true.",
+  "writelog": "Writes a message to a log file. See Logging.",
   "getsystemsetting": "Reads an environment variable or a value from a `.env` file, with an optional default for when it is not set.",
   "gettickcount": "Returns a millisecond counter that increases with time.",
   "gettoken": "Returns the nth token of a string split on the given delimiters.",

@@ -832,7 +832,7 @@
     {"name":"tui.Text","kind":"global","category":"system-and-cli","gate":"bif-tui","playground":false,"definedIn":"class","source":"crates/matchbox-tui/src/lib.rs:232"},
     {"name":"tui.TUI","kind":"global","category":"system-and-cli","gate":"bif-tui","playground":false,"definedIn":"class","source":"crates/matchbox-tui/src/lib.rs:231"},
     {"name":"tui.VBox","kind":"global","category":"system-and-cli","gate":"bif-tui","playground":false,"definedIn":"class","source":"crates/matchbox-tui/src/lib.rs:256"},
-    {"name":"writeLog","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:137"},
+    {"name":"writeLog","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"prelude","params":"text, type, application, log, file","source":"crates/matchbox-compiler/src/prelude.bxs:1089","description":"Writes a message to a log file. See Logging."},
     {"name":"writeOutput","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:321"},
     {"name":"booleanFormat","kind":"global","category":"types-and-decisions","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/type_format.rs:560","description":"Converts a value to the string \"true\" or \"false\"."},
     {"name":"cast","kind":"global","category":"types-and-decisions","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:472"},
