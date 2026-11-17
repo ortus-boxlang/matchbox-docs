@@ -195,6 +195,43 @@
     ]
   },
   {
+    "title": "Modules",
+    "icon": "phosphor-duotone:puzzle-piece",
+    "path": "modules/index.md",
+    "children": [
+      "modules/using-modules.md",
+      "modules/getting-started.md",
+      "modules/module-descriptor.md",
+      "modules/lifecycle.md",
+      "modules/mappings.md",
+      {
+        "title": "Capabilities",
+        "path": "modules/capabilities/index.md",
+        "icon": "phosphor-duotone:stack",
+        "children": [
+          "modules/capabilities/bifs.md",
+          "modules/capabilities/components.md",
+          "modules/capabilities/interceptors.md",
+          "modules/capabilities/class-providers.md"
+        ]
+      },
+      {
+        "title": "Native Plugins",
+        "path": "modules/native/index.md",
+        "icon": "phosphor-duotone:cpu",
+        "children": [
+          "modules/native/sdk-reference.md",
+          "modules/native/native-objects.md",
+          "modules/native/artifacts.md"
+        ]
+      },
+      "modules/dual-modules.md",
+      "modules/packaging-publishing.md",
+      "modules/jvm-differences.md",
+      "modules/troubleshooting.md"
+    ]
+  },
+  {
     "title": "Reference",
     "icon": "phosphor-duotone:book-open-text",
     "children": [

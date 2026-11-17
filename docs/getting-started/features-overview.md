@@ -183,7 +183,7 @@ See [Building MatchBox](building-matchbox.md) for custom build options.
 ## Other parts of the language
 
 - [Templates (.bxm)](../reference/language/templates-bxm.md): mix markup with BoxLang.
-- [Modules](../reference/language/modules.md): add functions and classes with `--module`.
+- [Modules](../modules/index.md): add functions, components and native code with `--module`.
 - [Queries and data](../reference/language/query-and-data.md).
 - [Java interop](../reference/language/java-interop.md): experimental.
 - [Native Fusion](../examples/native_fusion/README.md): call Rust from BoxLang.
