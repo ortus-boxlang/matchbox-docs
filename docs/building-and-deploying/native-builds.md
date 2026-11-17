@@ -33,6 +33,8 @@ Pass script arguments directly to the executable:
 
 Read them with `cliGetArgs()`. Use `cliExit(n)` to set an exit code; an unhandled runtime error exits with a failure status.
 
+The executable reads `~/.matchbox.env` and the `.env` in the directory where it runs, every time it starts. Nothing from your `.env` files is built in. On first run it creates its [MatchBox home](../reference/configuration.md#runtime-home) (`~/.matchbox`) on the machine it runs on; set `MATCHBOX_HOME` to put it elsewhere.
+
 ## Build for other hosts
 
 Choose a Rust target triple when the CLI includes a runner for that platform:

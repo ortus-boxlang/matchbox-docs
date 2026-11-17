@@ -31,6 +31,7 @@ A `.bxm` file combines markup with BoxLang tags and script blocks. Run a templat
 | `<bx:if>`, `<bx:elseif>`, `<bx:else>` | Choose a branch. |
 | `<bx:loop>` | Repeat template content. |
 | `<bx:include>` | Include another template. |
+| `<bx:log>` | Write a message to a [log file](../configuration.md#logging). |
 | `<bx:script>` | Use script syntax within a template. |
 | `<!--- comment --->` | Add a comment that is not rendered. |
 

@@ -23,6 +23,19 @@ Start with the [course](course/index.md) or browse the [language reference](refe
 
 Native Fusion lets you add Rust code on all targets. The Rust code and its dependencies must support the chosen target.
 
+## Home, configuration and `.env` files
+
+MatchBox follows the BoxLang CLI, with its own names so the two runtimes never read each other's files. It does not read `~/.boxlang`, `BOXLANG_HOME` for runtime settings or `~/.box.env`. The config file format is the same `boxlang.json`, layered from the home, the project and `--bx-config`.
+
+| | BoxLang | MatchBox |
+| --- | --- | --- |
+| Home | `~/.boxlang` | `~/.matchbox` |
+| Runtime config | `config/boxlang.json` in the home | `config/boxlang.json` in the MatchBox home |
+| User env file | `~/.box.env` | `~/.matchbox.env` |
+| Project env file | `.env` | `.env` |
+
+Only part of the BoxLang config format is used so far: `debugMode` and `logging`, with `writeLog()` and `bx:log` writing to those loggers. See [Configuration](reference/configuration.md#runtime-home).
+
 ## Host APIs and modules
 
 The JVM runtime has direct access to Java libraries and the broader JVM ecosystem. MatchBox uses its own host integrations and native modules. A JVM library or module may need a MatchBox backend rather than running unchanged.

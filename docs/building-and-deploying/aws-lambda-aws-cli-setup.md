@@ -66,6 +66,10 @@ An `Application.bx` in the package root or in `src/main/bx/` is optional. On **e
 
 Hooks you do not define are skipped. After a failure the runtime posts `{ "errorMessage": ..., "errorType": "MatchBoxLambdaError" }` to the Runtime API error endpoint.
 
+## Environment
+
+A deployed function does not read `.env` files or create a MatchBox home. Set values as Lambda environment variables and read them with `getSystemSetting()`.
+
 ## Local invoke
 
 ```sh

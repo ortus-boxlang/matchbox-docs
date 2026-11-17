@@ -38,7 +38,7 @@ Output, runtime information, process execution, command-line input, Java interop
 | `getFunctionList` | `getFunctionList( ... )` | always |  |
 | `getModuleInfo` | `getModuleInfo( ... )` | always |  |
 | `getModuleList` | `getModuleList( ... )` | always |  |
-| `getSystemSetting` | `getSystemSetting( ... )` | always | Reads an environment variable, with an optional default for when it is not set. |
+| `getSystemSetting` | `getSystemSetting( ... )` | always | Reads an environment variable or a value from a `.env` file, with an optional default for when it is not set. |
 | `invoke` | `invoke( ... )` | always |  |
 | `print` | `print( ... )` | always |  |
 | `println` | `println( ... )` | always |  |
@@ -58,5 +58,5 @@ Output, runtime information, process execution, command-line input, Java interop
 | `tui.Text` | `createObject( "rust", "tui.Text" )` | `bif-tui` | Native class; create it with createObject. |
 | `tui.TUI` | `createObject( "rust", "tui.TUI" )` | `bif-tui` | Native class; create it with createObject. |
 | `tui.VBox` | `createObject( "rust", "tui.VBox" )` | `bif-tui` | Native class; create it with createObject. |
-| `writeLog` | `writeLog( ... )` | always |  |
+| `writeLog` | `writeLog( text, type, application, log, file )` | always | Writes a message to a log file. See Logging. |
 | `writeOutput` | `writeOutput( ... )` | always |  |

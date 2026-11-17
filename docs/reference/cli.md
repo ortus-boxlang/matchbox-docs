@@ -44,7 +44,7 @@ Put MatchBox options **before** the file or directory. Arguments after it belong
 | `--no-std-lib` | Omit the prelude. |
 | `--verbose` | Enable additional build logging. |
 | `--bx-home <dir>` | Use this [runtime home](configuration.md#runtime-home) instead of `~/.matchbox`. |
-| `--bx-config <file>` | Use this runtime config file instead of the default `matchbox.json`. |
+| `--bx-config <file>` | Layer this `boxlang.json` over the home and project config. |
 
 For example:
 
@@ -134,7 +134,7 @@ Deployment uses the AWS CLI. `--public` creates an unauthenticated function URL;
 | `WASM_BINDGEN` | Path to the `wasm-bindgen` executable. |
 | `BOXLANG_HOME` | Runtime home, including shared modules. |
 | `MATCHBOX_HOME` | MatchBox home directory. Default `~/.matchbox`. |
-| `MATCHBOX_CONFIG` | Runtime config file. See [Configuration](configuration.md#runtime-home). |
+| `MATCHBOX_CONFIG` | A config file layered over the home and project config. See [Configuration](configuration.md#runtime-home). |
 | `MATCHBOX_DEBUG` | Compiler and tree-shaking diagnostics. |
 | `BX_TRACE` | Detailed VM instruction tracing. |
 

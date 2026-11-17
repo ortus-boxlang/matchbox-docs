@@ -9,11 +9,10 @@ Run MatchBox from your project directory so relative paths and project settings 
 | File or directory | Purpose |
 | --- | --- |
 | `box.json` | Package dependencies and ESP32 build settings. |
-| `boxlang.json` | Runtime settings, including module configuration. |
+| `boxlang.json` | Settings in the BoxLang format: mappings, module settings, web server options and logging. |
 | `matchbox.toml` | Explicit module paths and datasources. |
 | `.env` | Project environment variables, loaded on every run. |
-| `.matchbox.json` | Project runtime settings, used instead of the home's `matchbox.json`. |
-| `~/.matchbox/` | The MatchBox home: `config/matchbox.json`, `logs/` and shared directories. |
+| `~/.matchbox/` | The MatchBox home: `config/boxlang.json`, `logs/` and shared directories. |
 | `~/.matchbox.env` | Personal environment variables, loaded on every run. |
 | `boxlang_modules/` | Project-local modules. |
 | `BOXLANG_HOME/modules/` | Shared modules in the runtime home. |
@@ -27,35 +26,70 @@ MatchBox creates its home on first run. The default is `~/.matchbox`; choose ano
 ```text
 ~/.matchbox/
   bin/  classes/  config/  global/  logs/  lib/  modules/
-  config/matchbox.json
+  config/boxlang.json
 ```
 
-`config/matchbox.json` is created once and never overwritten. It uses the BoxLang `boxlang.json` format, so comments are allowed and `${matchbox-home}` and `${user-dir}` expand in string values. MatchBox reads the first of these that exists:
+`config/boxlang.json` is created once and never overwritten. MatchBox uses one config format, the BoxLang `boxlang.json`. Comments are allowed, and `${matchbox-home}` (also `${boxlang-home}`) and `${user-dir}` expand in string values. Three layers merge, each overriding the one before it:
 
-1. `--bx-config <file>`
-2. `MATCHBOX_CONFIG`
-3. `.matchbox.json` in the working directory
-4. `<home>/config/matchbox.json`
+1. `<home>/config/boxlang.json`: your defaults.
+2. `boxlang.json` in the working directory: the project. This is the same file that holds mappings, module settings and web server options.
+3. `--bx-config <file>` or `MATCHBOX_CONFIG`: this run only. The file must exist.
 
-A file named with the flag or variable must exist. Keys MatchBox does not use yet are ignored.
+Objects merge key by key and any other value replaces the earlier one, so a project can change one logger's level and keep the rest. Keys MatchBox does not use yet are ignored.
+
+If the home cannot be created or a config file cannot be read, MatchBox prints a warning and still runs your script, without file logging. A bad `--bx-home` or `--bx-config` value stops the run with an error. The home and logs apply to the interpreter, the REPL, `--serve` and native binaries. They do not apply to the browser, WASM, ESP32 or Lambda targets.
+
+## Logging
+
+The `logging` block follows BoxLang. A logger is a named destination: `runtime` is the runtime's own log, `application` is where `writeLog()` and `bx:log` write by default, and any other name writes `<logsDirectory>/<name>.log`.
 
 | Key | Default | Purpose |
 | --- | --- | --- |
-| `debugMode` | `false` | Raises the log level to `DEBUG`. |
+| `debugMode` | `false` | Raises log levels to `DEBUG`. |
 | `logging.logsDirectory` | `${matchbox-home}/logs` | Where log files go. |
-| `logging.rootLevel` | `WARN` | `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE` or `OFF`. |
+| `logging.rootLevel` | `WARN` | Level for loggers without their own: `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE` or `OFF`. |
 | `logging.defaultEncoder` | `text` | `text` or `json`. |
-| `logging.maxFileSize` | `100MB` | Size that rotates `matchbox.log`. |
+| `logging.maxFileSize` | `100MB` | Size that rotates a log file (`KB`, `MB`, `GB`). |
 | `logging.maxLogDays` | `90` | Days to keep rotated files. `0` keeps them. |
-| `logging.totalCapSize` | `5GB` | Cap for all log files; the oldest rotated files go first. |
+| `logging.totalCapSize` | `5GB` | Cap for one logger's files; the oldest rotated files go first. |
+| `logging.loggers.<name>` | | `level`, `appender` (`file` or `console`) and `encoder` for one logger. |
+
+The seeded file sets `runtime` to `INFO` and `application` to `WARN`:
 
 ```json
 {
-  "logging": { "rootLevel": "INFO", "defaultEncoder": "json" }
+  "logging": {
+    "rootLevel": "WARN",
+    "loggers": {
+      "runtime": { "level": "INFO" },
+      "application": { "level": "WARN" },
+      "orders": { "level": "INFO", "encoder": "json" }
+    }
+  }
 }
 ```
 
-The runtime writes to `<logsDirectory>/matchbox.log`. The home and logs apply to the interpreter, the REPL, `--serve` and native binaries, not to browser, WASM or ESP32 targets.
+Write from a script with `writeLog()` or the `bx:log` tag:
+
+```javascript
+writeLog( text = "Order #id# shipped", type = "information", log = "orders" );
+```
+
+```html
+<bx:log text="Payment failed" type="error" log="orders" />
+```
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `text` | | The message. An empty message writes nothing. |
+| `type` | `information` | `information`, `warning`, `error`, `fatal`, `debug` or `trace`. |
+| `log` | `application` | A logger name, or an absolute path to a log file. A name cannot contain `/`, `\` or `..`. Names are case-insensitive, and `orders` and `orders.log` are the same logger, written to `orders.log` in lower case. |
+| `application` | `true` | Put the application name in front of the message. |
+| `file` | | Compatibility only. Used instead of `log` when set. |
+
+Each line is written as `[application] text`, and the application is `no-application` when there is none. It is the `this.name` of an `Application.bx` next to your program. An entry is dropped when its `type` is below the target logger's level, so with the default `application` level of `WARN`, `information` and `debug` entries are not written until you lower that level. `writeLog()` and `bx:log` also work inside `--serve` requests. `--verbose` and `--bx-debug` still print to the terminal.
+
+An unknown `type` raises `Invalid log level`. The JVM settings `appenderArguments`, `additive` and `categories` are ignored.
 
 ## Environment files
 
@@ -73,6 +107,8 @@ DB_HOST=localhost
 # .env
 DB_HOST=staging.example.com
 ```
+
+On Windows the user file is `%USERPROFILE%\.matchbox.env`. A `MATCHBOX_HOME` or `MATCHBOX_CONFIG` line in these files is honored, so a project can choose its own home.
 
 Each line is `KEY=VALUE`. Lines starting with `#` are comments and quotes around a value are optional. Read values with `getSystemSetting("DB_HOST", "localhost")`. Keep real secrets out of source control and add `.env` to `.gitignore`.
 
