@@ -83,11 +83,11 @@ writeLog( text = "Order #id# shipped", type = "information", log = "orders" );
 | --- | --- | --- |
 | `text` | | The message. An empty message writes nothing. |
 | `type` | `information` | `information`, `warning`, `error`, `fatal`, `debug` or `trace`. |
-| `log` | `application` | A logger name, or an absolute path to a log file. A name cannot contain `/`, `\` or `..`. |
+| `log` | `application` | A logger name, or an absolute path to a log file. A name cannot contain `/`, `\` or `..`. Names are case-insensitive, and `orders` and `orders.log` are the same logger, written to `orders.log` in lower case. |
 | `application` | `true` | Put the application name in front of the message. |
 | `file` | | Compatibility only. Used instead of `log` when set. |
 
-Each line is written as `[application] text`, and the application is `no-application` when there is none. It is the `this.name` of an `Application.bx` next to your program. An entry is dropped when its `type` is below the target logger's level, so with the default `application` level of `WARN`, `information` and `debug` entries are not written until you lower that level. `--verbose` and `--bx-debug` still print to the terminal.
+Each line is written as `[application] text`, and the application is `no-application` when there is none. It is the `this.name` of an `Application.bx` next to your program. An entry is dropped when its `type` is below the target logger's level, so with the default `application` level of `WARN`, `information` and `debug` entries are not written until you lower that level. `writeLog()` and `bx:log` also work inside `--serve` requests. `--verbose` and `--bx-debug` still print to the terminal.
 
 An unknown `type` raises `Invalid log level`. The JVM settings `appenderArguments`, `additive` and `categories` are ignored.
 
