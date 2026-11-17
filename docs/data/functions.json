@@ -812,7 +812,7 @@
     {"name":"getFunctionList","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:154"},
     {"name":"getModuleInfo","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:155"},
     {"name":"getModuleList","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:156"},
-    {"name":"getSystemSetting","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:569","description":"Reads an environment variable, with an optional default for when it is not set."},
+    {"name":"getSystemSetting","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:569","description":"Reads an environment variable or a value from a `.env` file, with an optional default for when it is not set."},
     {"name":"invoke","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"native","source":"crates/matchbox-vm/src/bifs/mod.rs:157"},
     {"name":"print","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"intrinsic","source":"crates/matchbox-compiler/src/compiler/mod.rs:2055"},
     {"name":"println","kind":"global","category":"system-and-cli","gate":"always","playground":true,"definedIn":"intrinsic","source":"crates/matchbox-compiler/src/compiler/mod.rs:2046"},

@@ -9,10 +9,10 @@ Run MatchBox from your project directory so relative paths and project settings 
 | File or directory | Purpose |
 | --- | --- |
 | `box.json` | Package dependencies and ESP32 build settings. |
-| `boxlang.json` | Runtime settings, including module configuration. |
+| `boxlang.json` | Application settings in the BoxLang format: mappings, module settings and web server options. |
 | `matchbox.toml` | Explicit module paths and datasources. |
 | `.env` | Project environment variables, loaded on every run. |
-| `.matchbox.json` | Project runtime settings, used instead of the home's `matchbox.json`. |
+| `.matchbox.json` | Project runtime settings (logging), used instead of the home's `matchbox.json`. |
 | `~/.matchbox/` | The MatchBox home: `config/matchbox.json`, `logs/` and shared directories. |
 | `~/.matchbox.env` | Personal environment variables, loaded on every run. |
 | `boxlang_modules/` | Project-local modules. |
@@ -39,6 +39,8 @@ MatchBox creates its home on first run. The default is `~/.matchbox`; choose ano
 
 A file named with the flag or variable must exist. Keys MatchBox does not use yet are ignored.
 
+`matchbox.json` holds runtime settings. Mappings, module settings and web server options stay in `boxlang.json` next to your project.
+
 | Key | Default | Purpose |
 | --- | --- | --- |
 | `debugMode` | `false` | Raises the log level to `DEBUG`. |
@@ -55,7 +57,11 @@ A file named with the flag or variable must exist. Keys MatchBox does not use ye
 }
 ```
 
-The runtime writes to `<logsDirectory>/matchbox.log`. The home and logs apply to the interpreter, the REPL, `--serve` and native binaries, not to browser, WASM or ESP32 targets.
+The runtime writes to `<logsDirectory>/matchbox.log`. `--verbose` and `--bx-debug` still print to the terminal. Scripts cannot write to this file yet: `writeLog()` does nothing.
+
+The home, config and logs apply to the interpreter, the REPL, `--serve` and native binaries. They do not apply to the browser, WASM, ESP32 or Lambda targets.
+
+If the home cannot be created or `matchbox.json` cannot be read, MatchBox prints a warning and still runs your script, without file logging. A missing `--bx-home` directory is created. A bad `--bx-home` or `--bx-config` value stops the run with an error.
 
 ## Environment files
 
@@ -73,6 +79,8 @@ DB_HOST=localhost
 # .env
 DB_HOST=staging.example.com
 ```
+
+On Windows the user file is `%USERPROFILE%\.matchbox.env`. A `MATCHBOX_HOME` or `MATCHBOX_CONFIG` line in these files is honored, so a project can choose its own home.
 
 Each line is `KEY=VALUE`. Lines starting with `#` are comments and quotes around a value are optional. Read values with `getSystemSetting("DB_HOST", "localhost")`. Keep real secrets out of source control and add `.env` to `.gitignore`.
 

@@ -29,6 +29,8 @@ matchbox --serve --webroot ./site --port 8080
 
 `matchbox --serve` accepts only these three flags and reads `boxlang.json` from the webroot. The `--config <file>` flag exists only on the `matchbox_server` binary, which you build from the MatchBox source tree with `cargo build --release -p matchbox_server`.
 
+The server loads `.env` from the webroot (and from the directory you started it in) before it starts, and never serves it: a request for `/.env` or any other hidden path is refused with `403`. Values are read with `getSystemSetting()`. See [environment files](../reference/configuration.md#environment-files).
+
 On startup the server prints the address, the resolved webroot and whether rewrites are enabled. Files are read on every request, so edits appear without a restart.
 
 ### What gets served

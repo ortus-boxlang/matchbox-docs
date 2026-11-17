@@ -97,6 +97,15 @@ docker run --rm \
 
 Then open `http://localhost:8080`.
 
+## Environment and home
+
+The image runs in `/app`, so a `.env` in the mounted directory is loaded like it is on a host. The [MatchBox home](../reference/configuration.md#runtime-home) is created inside the container and is lost with `--rm`. To keep the config and logs, point it at the mount:
+
+```bash
+docker run --rm -e MATCHBOX_HOME=/app/.matchbox -v "$PWD:/app" \
+  ghcr.io/ortus-boxlang/matchbox:latest my_script.bxs
+```
+
 ---
 
 ## CI Example

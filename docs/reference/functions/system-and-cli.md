@@ -38,7 +38,7 @@ Output, runtime information, process execution, command-line input, Java interop
 | `getFunctionList` | `getFunctionList( ... )` | always |  |
 | `getModuleInfo` | `getModuleInfo( ... )` | always |  |
 | `getModuleList` | `getModuleList( ... )` | always |  |
-| `getSystemSetting` | `getSystemSetting( ... )` | always | Reads an environment variable, with an optional default for when it is not set. |
+| `getSystemSetting` | `getSystemSetting( ... )` | always | Reads an environment variable or a value from a `.env` file, with an optional default for when it is not set. |
 | `invoke` | `invoke( ... )` | always |  |
 | `print` | `print( ... )` | always |  |
 | `println` | `println( ... )` | always |  |
