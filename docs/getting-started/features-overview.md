@@ -171,7 +171,7 @@ MatchBox ships built-in functions for strings, arrays, structs, dates, JSON, reg
 | Group | Needs the build feature | In the browser |
 | --- | --- | --- |
 | Files and directories | `bif-io` (default) | No |
-| `http()` | `bif-http` (default) | Not tested, see [HTTP](../http.md) |
+| `http()` | `bif-http` (default) | In `--target js` builds that enable it, on `fetch`; not in the playground. See [HTTP](../http.md#in-the-browser) |
 | Hashing and encryption | `bif-crypto` (default) | No (`hash` is not defined) |
 | Terminal helpers | `bif-cli` (default) | No (`cliClear` is not defined) |
 | Java interop | `bif-jni` (default) | No |

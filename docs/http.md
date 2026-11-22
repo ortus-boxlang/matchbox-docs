@@ -95,4 +95,6 @@ The positional forms remain available with default controls: `http(url)`, `http(
 
 This page describes **native MatchBox**, not the JVM HTTP client or browser fetch. MatchBox's request struct, future, and JSON result are distinct from JVM BoxLang's fluent HTTP client. The `timeout`, `connectionTimeout`, and `redirect` names follow BoxLang terminology; `noProxy` and `ipv4Only` are native MatchBox extensions. Do not assume these examples are drop-in JVM code.
 
-Successful HTTP future completion is not implemented for WASM/browser builds. These options do not add WASM HTTP support. See [Differences from BoxLang](differences-from-boxlang.md).
+## In the browser
+
+Browser builds that include `bif-http` run `http()` on `fetch`, with the same future and JSON result as native. `url`, `method`, `headers`, `body` and `timeout` work. `redirect: false`, `path`, `connectionTimeout`, `noProxy` and `ipv4Only` throw instead of being ignored. CORS applies, and `headers` only lists the response headers the server exposes. For streaming a response, use `js.fetch`. See [JavaScript and WebAssembly](building-and-deploying/javascript-and-wasm.md#http-in-the-browser).
